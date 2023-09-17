@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     fontFamily: {
       inter: 'Inter, sans-serif',
-      quicksand: 'Quicksand, sans-serif',
+      noto: 'Noto Sans Display, sans-serif',
     },
     extend: {
       screens: {
