@@ -1,6 +1,10 @@
 {
   "extends": [
-    // "prettier",
+    "prettier",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript",
     "plugin:prettier/recommended",
     "plugin:import/recommended",
     "plugin:tailwindcss/recommended"
@@ -46,5 +50,12 @@
       }
     ],
     "tailwindcss/no-custom-classname": "off"
-  }
+  },
+  "parser": "@typescript-eslint/parser",
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
+  "plugins": ["import"]
 }
