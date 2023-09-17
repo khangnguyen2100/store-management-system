@@ -1,0 +1,50 @@
+{
+  "extends": [
+    // "prettier",
+    "plugin:prettier/recommended",
+    "plugin:import/recommended",
+    "plugin:tailwindcss/recommended"
+  ],
+  "rules": {
+    "prettier/prettier": [
+      "warn",
+      {
+        "arrowParens": "avoid",
+        "semi": true,
+        "singleQuote": true,
+        "trailingComma": "all",
+        "tabWidth": 2,
+        "useTabs": false,
+        "printWidth": 80,
+        "jsxSingleQuote": true,
+        "endOfLine": "crlf",
+        "bracketSpacing": true,
+        "proseWrap": "preserve",
+        "bracketSameLine": false
+      }
+    ],
+    "no-unused-vars": "warn",
+    "import/order": [
+      "warn",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
+        "newlines-between": "always"
+      }
+    ],
+    "react-hooks/exhaustive-deps": "off",
+    "tailwindcss/classnames-order": [
+      "warn",
+      {
+        "officialSorting": true
+      }
+    ],
+    "tailwindcss/no-custom-classname": "off"
+  }
+}
