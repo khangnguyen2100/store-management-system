@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { Home, NotFound, Login, Protected } from 'src/pages';
+import { Home, NotFound, Login, Protected, Products } from 'src/pages';
 
 import ProtectedRoute from './ProtectedRoute';
 
@@ -18,6 +18,7 @@ function MainRoutes() {
         }
       ></Route>
       <Route path='/dang-nhap' element={<Login />}></Route>
+      <Route path='/san-pham' element={<Products />}></Route>
       <Route path='*' element={<NotFound />} />
     </Routes>
   );
