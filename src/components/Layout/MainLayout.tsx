@@ -7,13 +7,13 @@ type Props = {
 
 const MainLayout = (props: Props) => {
   return (
-    <div>
+    <div className='container flex flex-col'>
       <nav className='flex-center my-6 gap-4'>
         <Link to='/'>Home</Link>
         <Link to='/login'>Login</Link>
         <Link to='/protected'>Protected</Link>
       </nav>
-      <div>{props.children}</div>
+      <main className='w-full'>{props.children}</main>
     </div>
   );
 };
