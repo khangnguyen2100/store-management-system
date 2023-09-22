@@ -4,7 +4,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 
-import MainLayout from 'src/components/Layout/MainLayout';
+import MainLayout from 'src/Layout/MainLayout';
 import MainRoutes from 'src/routes/routes';
 
 import { AuthProvider } from './routes/AuthContext';

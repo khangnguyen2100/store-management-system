@@ -24,7 +24,7 @@
         "bracketSameLine": false
       }
     ],
-    "no-unused-vars": "warn",
+    "no-unused-vars": "off",
     "import/order": [
       "warn",
       {
