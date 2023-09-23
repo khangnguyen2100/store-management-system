@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import Filters, { FilterProps } from 'src/components/pages/Products/Filters';
-import { productsFake } from 'src/mocks/products';
 import ProductList from 'src/components/pages/Products/ProductList';
+import { productsFake } from 'src/mocks/products';
 
 export type ProductProps = {
   id: string;

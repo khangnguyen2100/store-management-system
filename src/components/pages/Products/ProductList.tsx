@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import { Button, Image, Space } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
-import { Image } from 'antd';
 
+import BasicTable from 'src/components/BasicTable/BasicTable';
 import { ProductProps } from 'src/pages/Products';
 import { formatPrice } from 'src/utils/format';
 
 import TableAction from '../../GroupButton/TableAction';
-import ResizeTable from '../../ResizeTable/ResizeTable';
+
+import AddModal from './AddModal';
 
 type Props = {
   productsFake: ProductProps[];
@@ -17,28 +19,41 @@ const ProductList = (props: Props) => {
   const [productsData, setProductsData] = useState<ProductProps[]>(
     props.productsFake,
   );
-  const columnsData: ColumnsType<ProductProps> = [
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const columns: ColumnsType<ProductProps> = [
     {
+      key: 1,
+      title: 'STT',
+      width: 50,
+      render: (text, record, index) => index + 1,
+    },
+    {
+      key: 2,
       title: 'ID',
       dataIndex: 'id',
       width: 50,
     },
     {
+      key: 3,
       title: 'Danh mục',
       dataIndex: 'category',
       width: 100,
     },
     {
+      key: 4,
       title: 'Thương hiệu',
       dataIndex: 'brand',
       width: 100,
     },
     {
+      key: 5,
       title: 'Mã hàng',
       dataIndex: 'code',
       width: 80,
     },
     {
+      key: 6,
       title: 'Ảnh',
       dataIndex: 'thumbnail',
       width: 70,
@@ -54,11 +69,13 @@ const ProductList = (props: Props) => {
       align: 'center',
     },
     {
+      key: 7,
       title: 'Tên hàng',
       dataIndex: 'name',
       width: 150,
     },
     {
+      key: 8,
       title: 'Giá bán',
       dataIndex: 'salePrice',
       width: 120,
@@ -68,6 +85,7 @@ const ProductList = (props: Props) => {
       ),
     },
     {
+      key: 9,
       title: 'Giá vốn',
       dataIndex: 'costPrice',
       width: 120,
@@ -77,6 +95,7 @@ const ProductList = (props: Props) => {
       ),
     },
     {
+      key: 10,
       title: 'Tồn kho',
       dataIndex: 'availableItem',
       width: 80,
@@ -91,14 +110,44 @@ const ProductList = (props: Props) => {
       align: 'center',
     },
   ];
+
   const handleDeleteProduct = (id: string) => {
-    const newProducts = props.productsFake.filter(product => product.id !== id);
+    const newProducts = productsData.filter(product => product.id !== id);
     setProductsData(newProducts);
   };
+  const handleAddProduct = () => {
+    console.log('add product');
+    setIsModalOpen(true);
+  };
+
+  const handleModalOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <div className='w-full'>
-      <ResizeTable columns={columnsData} data={productsData} />
-    </div>
+    <Space className='w-full' direction='vertical'>
+      <BasicTable
+        columns={columns}
+        data={productsData}
+        extra={
+          <>
+            <Button type='default'>Export</Button>
+            <Button>Import</Button>
+            <Button type='primary' onClick={handleAddProduct}>
+              Thêm hàng
+            </Button>
+          </>
+        }
+      />
+      <AddModal
+        isOpen={isModalOpen}
+        onSuccess={handleModalOk}
+        onCancel={handleModalCancel}
+      />
+    </Space>
   );
 };
 
