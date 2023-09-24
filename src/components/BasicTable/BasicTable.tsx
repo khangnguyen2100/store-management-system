@@ -12,14 +12,19 @@ import { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 import { FaTable } from 'react-icons/fa';
 import React from 'react';
+import { TablePaginationConfig } from 'antd/lib';
 
 interface Props<T> {
   columns: ColumnsType<T>;
   data: T[];
   extra: React.ReactNode;
+  onChange: (pagination: any, filters: any, sorter: any) => void;
+  pagination?: TablePaginationConfig;
 }
 
-const BasicTable = <T extends object>({ columns, data, extra }: Props<T>) => {
+const BasicTable = <T extends object>(props: Props<T>) => {
+  const { columns, data, extra, onChange, pagination: paginationInit } = props;
+
   const optionsDisplay = columns.map(column => ({
     label: column.title,
     value: column.key,
@@ -34,12 +39,19 @@ const BasicTable = <T extends object>({ columns, data, extra }: Props<T>) => {
   const [selectedColumns, setSelectedColumns] =
     useState<CheckboxValueType[]>(visibleColumns);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    showSizeChanger: true,
+    pageSizeOptions: ['10', '15', '20'],
+    total: 10,
+    ...paginationInit,
+  });
 
   const handleOkColumn = () => {
     setVisibleColumns(selectedColumns);
     setDropdownVisible(false);
   };
-
   const handleResetColumn = () => {
     setSelectedColumns(
       columns.map(column => column.key) as CheckboxValueType[],
@@ -50,6 +62,13 @@ const BasicTable = <T extends object>({ columns, data, extra }: Props<T>) => {
   };
   const handleDropdownVisibleChange = (visible: boolean) => {
     setDropdownVisible(visible);
+  };
+  const handleTableChange = (pagination: any, filters: any, sorter: any) => {
+    console.log('sorter:', sorter);
+    console.log('filters:', filters);
+    console.log('pagination:', pagination);
+    setPagination(pagination);
+    // onChange(pagination, filters, sorter);
   };
 
   const MenuList = (
@@ -75,7 +94,6 @@ const BasicTable = <T extends object>({ columns, data, extra }: Props<T>) => {
       </Menu.Item>
     </Menu>
   );
-
   return (
     <Space className='w-full' direction='vertical'>
       {/* action */}
@@ -96,7 +114,13 @@ const BasicTable = <T extends object>({ columns, data, extra }: Props<T>) => {
         </Dropdown>
         <Space>{extra}</Space>
       </div>
-      <Table bordered columns={visibleColumnsData} dataSource={data} />
+      <Table
+        bordered
+        columns={visibleColumnsData}
+        dataSource={data}
+        onChange={handleTableChange}
+        pagination={pagination}
+      />
     </Space>
   );
 };

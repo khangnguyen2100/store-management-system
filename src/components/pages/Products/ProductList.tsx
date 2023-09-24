@@ -127,6 +127,10 @@ const ProductList = (props: Props) => {
     setIsModalOpen(false);
   };
 
+  const handleTableChange = (pagination: any) => {
+    console.log('product list call');
+  };
+
   return (
     <Space className='w-full' direction='vertical'>
       <BasicTable
@@ -141,6 +145,14 @@ const ProductList = (props: Props) => {
             </Button>
           </>
         }
+        onChange={handleTableChange}
+        pagination={{
+          current: 1,
+          pageSize: 10,
+          showSizeChanger: true,
+          pageSizeOptions: ['10', '15', '20'],
+          total: 48,
+        }}
       />
       <AddModal
         isOpen={isModalOpen}

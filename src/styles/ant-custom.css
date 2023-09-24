@@ -1,3 +1,14 @@
 .ant-table-cell {
   padding: 4px 6px !important;
 }
+.filters-container .ant-collapse-header {
+  padding: 8px !important;
+}
+.filters-container .ant-collapse-content {
+  margin: 8px !important;
+  margin-top: 4px !important;
+}
+.filters-container .ant-collapse-content-box {
+  padding: 0 !important;
+  display: flex;
+}

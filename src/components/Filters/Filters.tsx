@@ -129,7 +129,7 @@ const Filters = (props: Props) => {
     <div className='w-full max-w-[234px] shrink-0'>
       <h3 className='mb-6 block text-xl font-bold text-typo-1'>{title}</h3>
       <Collapse
-        className='flex w-full flex-col bg-transparent'
+        className='filters-container flex w-full flex-col bg-transparent'
         items={items}
         defaultActiveKey={items.map(item => item.key) as string[]}
         bordered={false}
