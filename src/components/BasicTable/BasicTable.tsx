@@ -79,7 +79,7 @@ const BasicTable = <T extends object>({ columns, data, extra }: Props<T>) => {
   return (
     <Space className='w-full' direction='vertical'>
       {/* action */}
-      <div className='mb-6 flex items-center justify-between gap-x-2'>
+      <div className='mb-3 flex items-center justify-between gap-x-2'>
         <Dropdown
           overlay={MenuList}
           trigger={['click']}
