@@ -46,7 +46,8 @@
         "officialSorting": true
       }
     ],
-    "tailwindcss/no-custom-classname": "off"
+    "tailwindcss/no-custom-classname": "off",
+    "@typescript-eslint/no-unused-vars": "warn"
   },
   "parser": "@typescript-eslint/parser",
   "settings": {

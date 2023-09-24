@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import Filters, { FilterProps } from 'src/components/pages/Products/Filters';
+import Filters, { FilterProps } from 'src/components/Filters/Filters';
 import ProductList from 'src/components/pages/Products/ProductList';
 import { productsFake } from 'src/mocks/products';
 
@@ -20,6 +20,7 @@ const filters: FilterProps[] = [
   {
     title: 'Loại hàng',
     type: 'checkbox',
+    name: 'category',
     options: [
       {
         label: 'Hàng hóa',
@@ -38,6 +39,7 @@ const filters: FilterProps[] = [
   {
     title: 'Tồn kho',
     type: 'radio',
+    name: 'availableItem',
     options: [
       {
         label: 'Dưới định mức tồn',
@@ -60,6 +62,7 @@ const filters: FilterProps[] = [
   {
     title: 'Thương hiệu',
     type: 'select',
+    name: 'brand',
     options: [
       {
         label: 'Indomie',
@@ -71,16 +74,27 @@ const filters: FilterProps[] = [
       },
     ],
   },
+  {
+    title: 'Nhà cung cấp',
+    type: 'text',
+    name: 'supplier',
+  },
+  {
+    title: 'Thời gian',
+    type: 'pick-time',
+    name: 'date',
+  },
 ];
 const Products = () => {
   const [products, setProducts] = useState<ProductProps[]>(productsFake);
 
-  const handleFilterChange = (newProducts: ProductProps[]) => {
-    setProducts(newProducts);
+  const handleFilterChange = (filters: any) => {
+    console.log('filters:', filters);
+    // call filter api
   };
 
   return (
-    <div className='flex items-start gap-5'>
+    <div className='flex w-full items-start gap-5'>
       <Filters
         title='Hàng hóa'
         filters={filters}
