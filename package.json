@@ -47,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "@ant-design/icons": "^5.2.6",
     "@types/antd": "^1.0.0",
     "@types/react-resizable": "^3.0.4",
     "@typescript-eslint/parser": "^6.7.2",

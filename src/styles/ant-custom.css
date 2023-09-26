@@ -12,3 +12,21 @@
   padding: 0 !important;
   display: flex;
 }
+.add-product-modal .file-uploaded .ant-upload-drag {
+  transition: all 0.3s ease;
+}
+.add-product-modal .file-uploaded .ant-upload-drag {
+  height: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.ant-form-item {
+  margin-bottom: 12px !important;
+}
+.ant-card-small .ant-card-head-title {
+  font-size: 16px;
+}
+.ant-modal-title {
+  font-size: 20px !important;
+  margin-bottom: 20px !important;
+}

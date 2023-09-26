@@ -2,6 +2,7 @@
 import { Button, Image, Space } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
+import { enqueueSnackbar } from 'notistack';
 
 import BasicTable from 'src/components/BasicTable/BasicTable';
 import { ProductProps } from 'src/pages/Products';
@@ -20,7 +21,10 @@ const ProductList = (props: Props) => {
     props.productsFake,
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [modalType, setModalType] = useState<'add' | 'edit' | null>(null);
+  const [editingProduct, setEditingProduct] = useState<ProductProps | null>(
+    null,
+  );
   const columns: ColumnsType<ProductProps> = [
     {
       key: 1,
@@ -105,7 +109,12 @@ const ProductList = (props: Props) => {
       key: 'action',
       width: 80,
       render: (record: ProductProps) => {
-        return <TableAction onDelete={() => handleDeleteProduct(record.id)} />;
+        return (
+          <TableAction
+            onDelete={() => handleDeleteProduct(record.id)}
+            onEdit={() => handleEditProduct(record)}
+          />
+        );
       },
       align: 'center',
     },
@@ -115,12 +124,33 @@ const ProductList = (props: Props) => {
     const newProducts = productsData.filter(product => product.id !== id);
     setProductsData(newProducts);
   };
+  const handleEditProduct = (record: ProductProps) => {
+    setModalType('edit');
+    setEditingProduct(record);
+    setIsModalOpen(true);
+  };
   const handleAddProduct = () => {
     console.log('add product');
+    setModalType('add');
     setIsModalOpen(true);
   };
 
-  const handleModalOk = () => {
+  const handleModalOk = async (values: any) => {
+    try {
+      if (modalType === 'add') {
+        console.log('newProduct', values);
+        enqueueSnackbar('Thêm sản phẩm thành công', { variant: 'success' });
+        return;
+      }
+      if (modalType === 'edit') {
+        console.log('newProduct', values);
+        enqueueSnackbar('Sửa sản phẩm thành công', { variant: 'success' });
+        return;
+      }
+    } catch (error) {
+      console.log('error:', error);
+      enqueueSnackbar('Có lỗi xảy ra', { variant: 'error' });
+    }
     setIsModalOpen(false);
   };
   const handleModalCancel = () => {
@@ -158,6 +188,8 @@ const ProductList = (props: Props) => {
         isOpen={isModalOpen}
         onSuccess={handleModalOk}
         onCancel={handleModalCancel}
+        modalType={modalType}
+        editingProduct={editingProduct}
       />
     </Space>
   );
