@@ -1,3 +1,5 @@
+import { Dropdown } from 'antd';
+import { IconType } from 'react-icons';
 import {
   MdOutlineAccountBalanceWallet,
   MdOutlineSavings,
@@ -11,18 +13,141 @@ import {
   MdLanguage,
   MdSettings,
 } from 'react-icons/md';
-import { IconType } from 'react-icons';
-
+import type { MenuProps } from 'antd';
 type NavbarLinkType = {
   title: string;
   linkTo: string;
+  subMenu?: MenuProps['items'];
 };
 import { Link } from 'react-router-dom';
 
 const NavbarLinks: NavbarLinkType[] = [
-  { title: 'Tổng quan', linkTo: '#!' },
-  { title: 'Hàng hóa', linkTo: '#!' },
-  { title: 'Giao dịch', linkTo: '#!' },
+  {
+    title: 'Tổng quan',
+    linkTo: '#!',
+    subMenu: [
+      {
+        key: '1',
+        label: (
+          <a
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://www.antgroup.com'
+          >
+            1st menu item
+          </a>
+        ),
+      },
+      {
+        key: '2',
+        label: (
+          <a
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://www.aliyun.com'
+          >
+            2nd menu item
+          </a>
+        ),
+      },
+      {
+        key: '3',
+        label: (
+          <a
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://www.luohanacademy.com'
+          >
+            3rd menu item
+          </a>
+        ),
+      },
+    ],
+  },
+  {
+    title: 'Hàng hóa',
+    linkTo: '#!',
+    subMenu: [
+      {
+        key: '1',
+        label: (
+          <a
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://www.antgroup.com'
+          >
+            1st menu item
+          </a>
+        ),
+      },
+      {
+        key: '2',
+        label: (
+          <a
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://www.aliyun.com'
+          >
+            2nd menu item
+          </a>
+        ),
+      },
+      {
+        key: '3',
+        label: (
+          <a
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://www.luohanacademy.com'
+          >
+            3rd menu item
+          </a>
+        ),
+      },
+    ],
+  },
+  {
+    title: 'Giao dịch',
+    linkTo: '#!',
+    subMenu: [
+      {
+        key: '1',
+        label: (
+          <a
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://www.antgroup.com'
+          >
+            1st menu item
+          </a>
+        ),
+      },
+      {
+        key: '2',
+        label: (
+          <a
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://www.aliyun.com'
+          >
+            2nd menu item
+          </a>
+        ),
+      },
+      {
+        key: '3',
+        label: (
+          <a
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://www.luohanacademy.com'
+          >
+            3rd menu item
+          </a>
+        ),
+      },
+    ],
+  },
   { title: 'Đối tác', linkTo: '#!' },
   { title: 'Nhân viên', linkTo: '#!' },
   { title: 'Sổ quỹ', linkTo: '#!' },
@@ -70,7 +195,17 @@ function AdminHeader() {
       <div className='w-full bg-[#0090DA] xld:px-0'>
         <div className='mx-auto flex max-w-xl'>
           {NavbarLinks.map((item, index) => {
-            return (
+            return item.subMenu ? (
+              <Dropdown menu={{ items: item.subMenu }} key={index}>
+                <Link
+                  to={item.linkTo}
+                  key={index}
+                  className='px-5 py-3 text-white hover:bg-[#0078b6]'
+                >
+                  {item.title}
+                </Link>
+              </Dropdown>
+            ) : (
               <Link
                 to={item.linkTo}
                 key={index}

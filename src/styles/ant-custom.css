@@ -30,3 +30,17 @@
   font-size: 20px !important;
   margin-bottom: 20px !important;
 }
+.ant-dropdown-menu {
+  background-color: unset !important;
+  box-shadow: unset !important;
+}
+.ant-dropdown-menu-item {
+  padding: 12px 24px !important;
+  background-color: #0070f4;
+  color: white !important;
+  border-radius: 0 !important;
+}
+.ant-dropdown-menu-item:hover {
+  background-color: #005ac3 !important ;
+}
+
