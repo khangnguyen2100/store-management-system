@@ -1,0 +1,61 @@
+.ant-table-cell {
+  padding: 4px 6px !important;
+}
+.filters-container {
+  .ant-collapse-header {
+    padding: 8px !important;
+  }
+  .ant-collapse-content {
+    margin: 8px !important;
+    margin-top: 4px !important;
+  }
+  .ant-collapse-content-box {
+    padding: 0 !important;
+    display: flex;
+  }
+}
+.add-product-modal .file-uploaded .ant-upload-drag {
+  transition: all 0.3s ease;
+}
+.add-product-modal .file-uploaded .ant-upload-drag {
+  height: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.ant-form-item {
+  margin-bottom: 12px !important;
+}
+.ant-card-small .ant-card-head-title {
+  font-size: 16px;
+}
+.ant-modal-title {
+  font-size: 20px !important;
+  margin-bottom: 20px !important;
+}
+.sale-container {
+  .ant-tabs-nav {
+    background-color: #6b77e5 !important;
+    padding: 10px 20px 0 20px;
+    align-items: start;
+  }
+  .ant-tabs-tab,
+  .ant-tabs-nav-add {
+    margin-left: 5px !important;
+  }
+  .ant-tabs-nav::before {
+    // border: 1px solid #efefef;
+    display: none;
+  }
+  .ant-tabs-tab-with-remove {
+    background-color: #e8e8e8 !important;
+    border: 1px solid #e8e8e8 !important;
+    border-bottom: 0 !important;
+  }
+  .ant-tabs-tab-active,
+  .ant-tabs-nav-add {
+    background-color: #fff !important;
+  }
+  .ant-tabs-extra-content:first-child {
+    width: 30%;
+  }
+}
