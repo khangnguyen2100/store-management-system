@@ -1,16 +1,18 @@
 .ant-table-cell {
   padding: 4px 6px !important;
 }
-.filters-container .ant-collapse-header {
-  padding: 8px !important;
-}
-.filters-container .ant-collapse-content {
-  margin: 8px !important;
-  margin-top: 4px !important;
-}
-.filters-container .ant-collapse-content-box {
-  padding: 0 !important;
-  display: flex;
+.filters-container {
+  .ant-collapse-header {
+    padding: 8px !important;
+  }
+  .ant-collapse-content {
+    margin: 8px !important;
+    margin-top: 4px !important;
+  }
+  .ant-collapse-content-box {
+    padding: 0 !important;
+    display: flex;
+  }
 }
 .add-product-modal .file-uploaded .ant-upload-drag {
   transition: all 0.3s ease;

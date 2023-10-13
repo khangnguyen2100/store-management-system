@@ -21,8 +21,8 @@ module.exports = {
         xl: '1570px',
       },
       colors: {
-        primary: '#6B77E5',
-        secondary: '#40DDB6',
+        primary: '#6B77E5', // rgba(107, 119, 229, 1)
+        secondary: '#40DDB6', // rgba(64, 221, 182, 1)
         typo: {
           1: '#37393F',
           2: '#B9B9B9',

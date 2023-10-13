@@ -1,16 +1,14 @@
-import React from 'react';
+import { Outlet } from 'react-router-dom';
 
 import AdminHeader from 'src/components/Header/Header';
 
-type Props = {
-  children: React.JSX.Element;
-};
-
-const MainLayout = (props: Props) => {
+const MainLayout = () => {
   return (
     <div className='flex flex-col'>
       <AdminHeader></AdminHeader>
-      <main className='container my-4 w-full'>{props.children}</main>
+      <main className='container my-4 w-full'>
+        <Outlet />
+      </main>
     </div>
   );
 };
