@@ -174,7 +174,7 @@ const TopHeaderLinks: TopHeaderLinksType[] = [
 function AdminHeader() {
   return (
     <>
-      <div className='container flex items-center justify-between px-4 py-5 xld:px-0'>
+      <div className='container flex items-center justify-between px-10 py-5 xld:px-0'>
         <div>
           <img src='/logo.png' className='h-8 w-auto' />
         </div>
@@ -193,10 +193,14 @@ function AdminHeader() {
         </div>
       </div>
       <div className='w-full bg-[#0090DA] xld:px-0'>
-        <div className='mx-auto flex max-w-xl'>
+        <div className='mx-auto flex max-w-xl px-10'>
           {NavbarLinks.map((item, index) => {
             return item.subMenu ? (
-              <Dropdown menu={{ items: item.subMenu }} key={index}>
+              <Dropdown
+                menu={{ items: item.subMenu }}
+                key={index}
+                placement='bottomLeft'
+              >
                 <Link
                   to={item.linkTo}
                   key={index}

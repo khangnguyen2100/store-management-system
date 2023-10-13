@@ -10,7 +10,7 @@ const MainLayout = (props: Props) => {
   return (
     <div className='flex flex-col'>
       <AdminHeader></AdminHeader>
-      <main className='container my-4 w-full'>{props.children}</main>
+      <main className='w-large container my-4 px-10'>{props.children}</main>
     </div>
   );
 };
