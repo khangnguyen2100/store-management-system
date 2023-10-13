@@ -1,4 +1,4 @@
-import { ProductProps } from 'src/pages/Products';
+import { ProductProps } from 'src/constants/types/product';
 
 export const productsFake: ProductProps[] = [
   {
@@ -10,7 +10,7 @@ export const productsFake: ProductProps[] = [
     name: 'Organic Apples',
     salePrice: '30005000',
     costPrice: '2900000',
-    availableItem: '100',
+    availableItem: '3',
     description: 'Fresh organic apples from local farms',
   },
   {

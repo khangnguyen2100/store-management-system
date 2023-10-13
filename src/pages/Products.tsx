@@ -2,20 +2,9 @@ import { useState } from 'react';
 
 import Filters, { FilterProps } from 'src/components/Filters/Filters';
 import ProductList from 'src/components/pages/Products/ProductList';
+import { ProductProps } from 'src/constants/types/product';
 import { productsFake } from 'src/mocks/products';
 
-export type ProductProps = {
-  id: string;
-  category: string;
-  brand: string;
-  code: string;
-  thumbnail: string;
-  name: string;
-  salePrice: string;
-  costPrice: string;
-  availableItem: string;
-  description: string;
-};
 const filters: FilterProps[] = [
   {
     title: 'Loại hàng',

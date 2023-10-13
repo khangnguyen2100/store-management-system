@@ -13,11 +13,10 @@ import {
   message,
 } from 'antd';
 import clsx from 'clsx';
-import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 
+import { ProductProps } from 'src/constants/types/product';
 import useDebounce from 'src/hooks/useDebounce';
-import { ProductProps } from 'src/pages/Products';
 import { formatPrice, formatPriceInput } from 'src/utils/format';
 import { randomString } from 'src/utils/randomString';
 
@@ -207,7 +206,7 @@ const AddModal = (props: Props) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} md={12} className='flex flex-col gap-y-2 mt-3'>
+            <Col xs={24} md={12} className='mt-3 flex flex-col gap-y-2'>
               {showProfit ? (
                 <>
                   <div className='text-typo-3'>

@@ -7,8 +7,8 @@ import { useState } from 'react';
 import * as xlsx from 'xlsx';
 
 import BasicTable from 'src/components/BasicTable/BasicTable';
-import { ProductProps } from 'src/pages/Products';
 import { formatPrice } from 'src/utils/format';
+import { ProductProps } from 'src/constants/types/product';
 
 import TableAction from '../../GroupButton/TableAction';
 
@@ -203,7 +203,7 @@ const ProductList = (props: Props) => {
       }
     },
     beforeUpload(file: any) {
-      console.log('file:', file)
+      console.log('file:', file);
       const isExcel =
         file.type === 'application/vnd.ms-excel' ||
         file.type ===
