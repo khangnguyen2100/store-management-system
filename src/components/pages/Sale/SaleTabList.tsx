@@ -5,61 +5,65 @@ import {
   ZoomInOutlined,
 } from '@ant-design/icons';
 import { Button, Input, Space, Tabs, Tooltip } from 'antd';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
+
+import { randomString } from 'src/utils/randomString';
+
+import SaleTabItem from './SaleTabItem';
+import './style.scss';
 
 type TargetKey = React.MouseEvent | React.KeyboardEvent | string;
 
 const initialItems = [
-  { label: 'Hóa đơn 1', children: 'Content of Tab 1', key: '1' },
-  { label: 'Hóa đơn 2', children: 'Content of Tab 2', key: '2' },
   {
-    label: 'Hóa đơn 3',
-    children: 'Content of Tab 3',
-    key: '3',
-    closable: false,
-    className: 'text-red-500',
+    label: 'Hóa đơn 1',
+    children: <SaleTabItem label={'Hóa đơn 1'} />,
+    key: randomString('TAB-'),
+    index: 1,
   },
 ];
 
 const SaleTabList: React.FC = () => {
   const [activeKey, setActiveKey] = useState(initialItems[0].key);
   const [items, setItems] = useState(initialItems);
-  const newTabIndex = useRef(0);
 
   const onChange = (newActiveKey: string) => {
     setActiveKey(newActiveKey);
   };
 
-  const add = () => {
-    const newActiveKey = `newTab${newTabIndex.current++}`;
-    const newPanes = [...items];
-    newPanes.push({
-      label: 'New Tab',
-      children: 'Content of new Tab',
-      key: newActiveKey,
+  const handleAddNewTab = () => {
+    const newActiveKey = randomString('TAB-');
+    const keys = items.map(item => item.index).sort((a, b) => a - b);
+    let newIndex = 1;
+    keys.forEach(key => {
+      if (newIndex < key) {
+        return;
+      }
+      newIndex++;
     });
-    setItems(newPanes);
+
+    setItems(prev => [
+      ...prev,
+      {
+        label: `Hóa đơn ${newIndex}`,
+        children: <SaleTabItem label={`Hóa đơn ${newIndex}`} />,
+        key: newActiveKey,
+        index: newIndex,
+      },
+    ]);
     setActiveKey(newActiveKey);
   };
 
-  const remove = (targetKey: TargetKey) => {
-    let newActiveKey = activeKey;
-    let lastIndex = -1;
-    items.forEach((item, i) => {
-      if (item.key === targetKey) {
-        lastIndex = i - 1;
-      }
-    });
-    const newPanes = items.filter(item => item.key !== targetKey);
-    if (newPanes.length && newActiveKey === targetKey) {
-      if (lastIndex >= 0) {
-        newActiveKey = newPanes[lastIndex].key;
-      } else {
-        newActiveKey = newPanes[0].key;
-      }
+  const handleRemoveTab = (targetKey: TargetKey) => {
+    if (items.length === 1) {
+      return;
     }
-    setItems(newPanes);
-    setActiveKey(newActiveKey);
+    if (targetKey === items[0].key) {
+      setActiveKey(items[1].key);
+    } else if (activeKey === targetKey) {
+      setActiveKey(items[0].key);
+    }
+    setItems(prev => prev.filter(item => item.key !== targetKey));
   };
 
   const onEdit = (
@@ -67,20 +71,20 @@ const SaleTabList: React.FC = () => {
     action: 'add' | 'remove',
   ) => {
     if (action === 'add') {
-      add();
+      handleAddNewTab();
     } else {
-      remove(targetKey);
+      handleRemoveTab(targetKey);
     }
   };
 
   return (
     <Tabs
       type='editable-card'
-      className='w-full'
+      className='sale-container w-full'
       tabBarExtraContent={{
         left: (
           <div className='mr-4'>
-            <Input.Search placeholder='Tìm kiếm sản phẩm' />
+            <Input.Search className='w-full' placeholder='Tìm kiếm sản phẩm' />
           </div>
         ),
         right: (
