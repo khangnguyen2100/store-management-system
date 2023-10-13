@@ -5,6 +5,7 @@ import * as authRoutes from 'src/routes/routes.auth';
 import * as publicRoutes from 'src/routes/routes.public';
 import Sale from 'src/pages/Sale';
 import MainLayout from 'src/Layout/MainLayout';
+import Suppilers from 'src/pages/Suppliers';
 
 import ProtectedRoute from './ProtectedRoute';
 
@@ -29,6 +30,7 @@ function MainRoutes() {
       <Route path={authRoutes.SALE} element={<Sale />}></Route>
 
       <Route path='*' element={<NotFound />} />
+      <Route path='/nha-cung-cap' element={<Suppilers />}></Route>
     </Routes>
   );
 }
