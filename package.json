@@ -21,9 +21,11 @@
     "react-resizable": "^3.0.5",
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
+    "sass": "^1.68.0",
     "swr": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^4.9.5",
+    "xlsx": "^0.18.5",
     "zustand": "^4.4.1"
   },
   "scripts": {

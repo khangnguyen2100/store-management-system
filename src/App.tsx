@@ -33,9 +33,7 @@ function App() {
                 </div>
               }
             >
-              <MainLayout>
-                <MainRoutes />
-              </MainLayout>
+              <MainRoutes />
             </React.Suspense>
           </AuthProvider>
         </SnackbarProvider>

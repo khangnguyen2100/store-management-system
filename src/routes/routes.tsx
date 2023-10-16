@@ -1,7 +1,10 @@
-
 import { Route, Routes } from 'react-router-dom';
 
-import { Home, NotFound, Login, Protected, Products } from 'src/pages';
+import { Home, Login, NotFound, Products, Protected } from 'src/pages';
+import * as authRoutes from 'src/routes/routes.auth';
+import * as publicRoutes from 'src/routes/routes.public';
+import Sale from 'src/pages/Sale';
+import MainLayout from 'src/Layout/MainLayout';
 import Suppilers from 'src/pages/Suppliers';
 
 import ProtectedRoute from './ProtectedRoute';
@@ -9,7 +12,6 @@ import ProtectedRoute from './ProtectedRoute';
 function MainRoutes() {
   return (
     <Routes>
-      <Route path='/' element={<Home />}></Route>
       <Route
         path='/protected'
         element={
@@ -18,8 +20,15 @@ function MainRoutes() {
           </ProtectedRoute>
         }
       ></Route>
-      <Route path='/dang-nhap' element={<Login />}></Route>
-      <Route path='/san-pham' element={<Products />}></Route>
+
+      <Route element={<MainLayout />}>
+        <Route path={authRoutes.HOME} element={<Home />}></Route>
+        <Route path={authRoutes.PRODUCTS} element={<Products />}></Route>
+        <Route path={publicRoutes.LOGIN} element={<Login />}></Route>
+      </Route>
+
+      <Route path={authRoutes.SALE} element={<Sale />}></Route>
+
       <Route path='*' element={<NotFound />} />
       <Route path='/nha-cung-cap' element={<Suppilers />}></Route>
     </Routes>

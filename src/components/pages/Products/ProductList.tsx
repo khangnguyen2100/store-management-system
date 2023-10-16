@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Button, Image, Space } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import { Button, Image, Space, Upload, UploadProps, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
+import { useState } from 'react';
+import * as xlsx from 'xlsx';
 
 import BasicTable from 'src/components/BasicTable/BasicTable';
-import { ProductProps } from 'src/pages/Products';
 import { formatPrice } from 'src/utils/format';
+import { ProductProps } from 'src/constants/types/product';
 
 import TableAction from '../../GroupButton/TableAction';
 
@@ -161,6 +163,64 @@ const ProductList = (props: Props) => {
     console.log('product list call');
   };
 
+  const [uploading, setUploading] = useState(false);
+
+  const handleUpload = (json: any) => {
+    setUploading(true);
+    fetch('https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188', {
+      method: 'POST',
+      body: JSON.stringify(json),
+    })
+      .then(res => res.json())
+      .then(() => {
+        message.success('upload successfully.');
+      })
+      .catch(() => {
+        message.error('upload failed.');
+      })
+      .finally(() => {
+        setUploading(false);
+      });
+  };
+  const uploadProps: UploadProps = {
+    name: 'excel-file',
+    accept: '.xlsx, .xls',
+    showUploadList: false,
+    multiple: false,
+
+    onChange(info) {
+      if (info.file.status !== 'uploading') {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const data = e.target?.result;
+          const workbook = xlsx.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const json = xlsx.utils.sheet_to_json(worksheet);
+          handleUpload(json);
+        };
+        reader.readAsArrayBuffer(info.fileList[0].originFileObj as Blob);
+      }
+    },
+    beforeUpload(file: any) {
+      console.log('file:', file);
+      const isExcel =
+        file.type === 'application/vnd.ms-excel' ||
+        file.type ===
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const isSize = file.size / 1024 / 1024 < 100;
+      if (!isExcel) {
+        message.error('Vui lòng chỉ nhập file Excel (định dạng XLS/XLSX)!');
+        return false;
+      }
+      if (!isSize) {
+        message.error('Nhập file dung lượng nhỏ hơn 100MB!');
+        return false;
+      }
+      return false;
+    },
+  };
+
   return (
     <Space className='w-full' direction='vertical'>
       <BasicTable
@@ -170,6 +230,11 @@ const ProductList = (props: Props) => {
           <>
             <Button type='default'>Export</Button>
             <Button>Import</Button>
+            <Upload {...uploadProps}>
+              <Button icon={<UploadOutlined />} loading={uploading}>
+                Import
+              </Button>
+            </Upload>
             <Button type='primary' onClick={handleAddProduct}>
               Thêm hàng
             </Button>
