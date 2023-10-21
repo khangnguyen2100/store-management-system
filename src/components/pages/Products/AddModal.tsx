@@ -186,6 +186,8 @@ const AddModal = (props: Props) => {
                   onBlur={handleShowProfit}
                 />
               </Form.Item>
+            </Col>
+            <Col xs={24} md={12}>
               <Form.Item
                 label='Giá bán'
                 name='salePrice'
@@ -206,30 +208,27 @@ const AddModal = (props: Props) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} md={12} className='mt-3 flex flex-col gap-y-2'>
-              {showProfit ? (
-                <>
-                  <div className='text-typo-3'>
-                    Biên lợi nhuận:
-                    <span className='font-bold text-typo-1'>
-                      {(((priceValue - costValue) / priceValue) * 100).toFixed(
-                        2,
-                      )}
-                      %
-                    </span>
-                  </div>
-                  <div className='text-typo-3'>
-                    Lợi nhuận:{' '}
-                    <span className='font-bold text-typo-1'>
-                      {formatPrice((priceValue - costValue).toString())}/sản
-                      phẩm
-                    </span>
-                  </div>
-                </>
-              ) : (
-                <></>
-              )}
-            </Col>
+          </Row>
+          <Row gutter={[16, 16]} className='mt-3'>
+            {showProfit ? (
+              <>
+                <div className='text-typo-3'>
+                  Biên lợi nhuận:
+                  <span className='font-bold text-typo-1'>
+                    {(((priceValue - costValue) / priceValue) * 100).toFixed(2)}
+                    %
+                  </span>
+                </div>
+                <div className='ml-3 text-typo-3'>
+                  Lợi nhuận:{' '}
+                  <span className='font-bold text-typo-1'>
+                    {formatPrice((priceValue - costValue).toString())}/sản phẩm
+                  </span>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
           </Row>
         </Card>
         <Card
