@@ -17,6 +17,7 @@ const SaleTabItem = (props: Props) => {
     handleIncrementProduct,
     totalItems,
     totalPrice,
+    handleDelete,
   } = useCart([]);
   return (
     <div className='flex h-full bg-gray-200 p-2'>
@@ -28,6 +29,7 @@ const SaleTabItem = (props: Props) => {
             onIncrement={handleIncrementProduct}
             totalItems={totalItems}
             totalPrice={totalPrice}
+            onDelete={handleDelete}
           />
         </Col>
         <Col sm={24} md={11} className='!pr-0'>

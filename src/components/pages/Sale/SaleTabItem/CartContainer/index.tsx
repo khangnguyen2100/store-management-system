@@ -4,17 +4,21 @@ import { Button, Card, Empty, Input } from 'antd';
 import { CartType } from 'src/constants/types/cart';
 import { formatPrice } from 'src/utils/format';
 
+import CartItemToolsMenu from './CartItemToolsMenu';
+
 type Props = {
   data: CartType[];
   onDecrement: (cartId: string) => void;
   onIncrement: (cartId: string) => void;
+  onDelete: (cartId: string) => void;
   totalItems: number;
   totalPrice: number;
 };
 const { TextArea } = Input;
 
 const CartContainer = (props: Props) => {
-  const { data, onDecrement, onIncrement, totalItems, totalPrice } = props;
+  const { data, onDecrement, onIncrement, totalItems, totalPrice, onDelete } =
+    props;
 
   return (
     <Card
@@ -30,16 +34,16 @@ const CartContainer = (props: Props) => {
               return (
                 <div
                   key={index}
-                  className='flex items-center justify-between rounded-sm border border-typo-2/30 bg-[#fbfbfb] p-2 transition-all hover:shadow-md'
+                  className='relative flex items-center justify-between rounded-sm border border-typo-2/30 bg-[#fbfbfb] p-2 transition-all hover:shadow-md'
                 >
                   <div className='flex items-center justify-between'>
                     <h4 className='text-base font-bold'>{name}</h4>
                   </div>
-                  <div className='flex flex-col justify-end'>
+                  <div className='mr-10 flex flex-col justify-end'>
                     <p className='text-base font-medium text-red-600'>
                       {formatPrice((Number(salePrice) * quantity).toString())}
                     </p>
-                    <div className='flex items-center gap-x-2'>
+                    <div className='flex items-center justify-center gap-x-2'>
                       <Button
                         type='text'
                         icon={<MinusOutlined />}
@@ -54,6 +58,12 @@ const CartContainer = (props: Props) => {
                         onClick={() => onIncrement(item.id)}
                       />
                     </div>
+                  </div>
+                  <div className='absolute right-2 top-1/2 -translate-y-1/2'>
+                    <CartItemToolsMenu
+                      onDelete={() => onDelete(item.id)}
+                      onAddNote={() => {}}
+                    />
                   </div>
                 </div>
               );

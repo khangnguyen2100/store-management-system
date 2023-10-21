@@ -1,7 +1,9 @@
-import { Card, Image } from 'antd';
+import { Button, Card } from 'antd';
+import { ArrowRightOutlined } from '@ant-design/icons';
 
 import { ProductProps } from 'src/constants/types/product';
-import { formatPrice } from 'src/utils/format';
+
+import ProductItem from './ProductItem';
 
 type Props = {
   data: ProductProps[];
@@ -13,34 +15,28 @@ const ProductsContainer = (props: Props) => {
   return (
     <Card
       title='Danh sách sản phẩm'
-      className='product-list-container w-full'
+      className='product-list-container relative w-full'
       size='small'
     >
       <div className='h-[calc(100vh-50px-16px-38px-12px)] overflow-y-auto'>
         <div className='grid h-full w-full grid-cols-1 gap-2 px-2 sm:grid-cols-2 lg:grid-cols-3'>
           {data.map(product => (
-            <div
+            <ProductItem
               key={product.id}
-              className='transition-sm col-span-1 flex w-full cursor-pointer items-center gap-x-2 rounded-md border border-transparent p-1 shadow-sm hover:border-primary'
-              onClick={() => onAddToCart(product)}
-            >
-              <div className='overflow-hidden rounded-md'>
-                <Image
-                  src={product.thumbnail}
-                  width={70}
-                  height={50}
-                  className='object-cover'
-                  alt={product.name}
-                />
-              </div>
-              <div className='flex flex-col'>
-                <h4 className='text-sm font-bold'>{product.name}</h4>
-                <p className='font-medium text-red-600'>
-                  {formatPrice(product.salePrice)}
-                </p>
-              </div>
-            </div>
+              product={product}
+              onAdd={onAddToCart}
+            />
           ))}
+        </div>
+      </div>
+      <div className='absolute inset-x-0 bottom-0 h-[80px] rounded-b-md border border-primary/40 bg-white px-4 py-2'>
+        <div className='flex h-full items-center justify-between'>
+          <div></div>
+          <div className='flex items-center justify-end'>
+            <Button type='primary' icon={<ArrowRightOutlined />}>
+              Thanh toán
+            </Button>
+          </div>
         </div>
       </div>
     </Card>

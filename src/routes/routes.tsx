@@ -25,12 +25,12 @@ function MainRoutes() {
         <Route path={authRoutes.HOME} element={<Home />}></Route>
         <Route path={authRoutes.PRODUCTS} element={<Products />}></Route>
         <Route path={publicRoutes.LOGIN} element={<Login />}></Route>
+        <Route path='/nha-cung-cap' element={<Suppilers />}></Route>
       </Route>
 
       <Route path={authRoutes.SALE} element={<Sale />}></Route>
 
       <Route path='*' element={<NotFound />} />
-      <Route path='/nha-cung-cap' element={<Suppilers />}></Route>
     </Routes>
   );
 }
