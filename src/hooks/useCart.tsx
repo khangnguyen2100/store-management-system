@@ -30,6 +30,9 @@ function useCart(value: CartType[]) {
       });
     }
   };
+  const handleDelete = (id: string) => {
+    setCartList(prev => prev.filter(item => item.id !== id));
+  };
 
   const handleIncrementProduct = (cartId: string) => {
     const updatedData = cartList.map(item => {
@@ -69,6 +72,7 @@ function useCart(value: CartType[]) {
     totalPrice,
     cartList,
     handleAddToCart,
+    handleDelete,
   };
 }
 export default useCart;
