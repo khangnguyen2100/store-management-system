@@ -8,7 +8,7 @@ function useCart(value: CartType[]) {
   const [cartList, setCartList] = useState<CartType[]>(value);
 
   const isCanIncrement = (cartItem: CartType) => {
-    if (Number(cartItem.availableItem) <= cartItem.quantity) {
+    if (Number(cartItem.quantity) <= cartItem.quantity) {
       enqueueSnackbar('Số lượng sản phẩm không đủ', { variant: 'error' });
       return false;
     }
@@ -61,7 +61,7 @@ function useCart(value: CartType[]) {
 
   const totalItems = cartList.reduce((acc, cur) => acc + cur.quantity, 0);
   const totalPrice = cartList.reduce(
-    (acc, cur) => acc + Number(cur.salePrice) * cur.quantity,
+    (acc, cur) => acc + Number(cur.sellPrice) * cur.quantity,
     0,
   );
 

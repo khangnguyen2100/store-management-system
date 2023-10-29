@@ -3,6 +3,7 @@ import vnVN from 'antd/lib/locale/vi_VN';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
+import { SWRConfig } from 'swr';
 
 import MainLayout from 'src/Layout/MainLayout';
 import MainRoutes from 'src/routes/routes';

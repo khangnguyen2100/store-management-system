@@ -18,7 +18,7 @@ const ProductItem = (props: Props) => {
     >
       <div className='overflow-hidden rounded-md'>
         <Image
-          src={product.thumbnail}
+          src={product.img}
           width={70}
           height={50}
           className='object-cover'
@@ -28,7 +28,7 @@ const ProductItem = (props: Props) => {
       <div className='flex flex-col'>
         <h4 className='text-sm font-bold'>{product.name}</h4>
         <p className='font-medium text-red-600'>
-          {formatPrice(product.salePrice)}
+          {formatPrice(product.sellPrice)}
         </p>
       </div>
     </div>

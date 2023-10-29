@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
+import { Spin } from 'antd';
 
 import Filters, { FilterProps } from 'src/components/Filters/Filters';
 import ProductList from 'src/components/pages/Products/ProductList';
 import { ProductProps } from 'src/constants/types/product';
-import { productsFake } from 'src/mocks/products';
+import { getAPI } from 'src/components/api/Apiconfig';
 
 const filters: FilterProps[] = [
   {
@@ -74,24 +76,26 @@ const filters: FilterProps[] = [
     name: 'date',
   },
 ];
+const APIURL = process.env.REACT_APP_API_URL;
+const URLENDPOINT = 'san-pham';
 const Products = () => {
-  const [products, setProducts] = useState<ProductProps[]>(productsFake);
-
+  const { data: productsData, mutate, error } = useSWR(URLENDPOINT, getAPI);
   const handleFilterChange = (filters: any) => {
     console.log('filters:', filters);
     // call filter api
   };
-
-  return (
-    <div className='flex w-full items-start gap-5'>
-      <Filters
-        title='Hàng hóa'
-        filters={filters}
-        onFilterChange={handleFilterChange}
-      />
-      <ProductList productsFake={products} />
-    </div>
-  );
+  if (productsData)
+    return (
+      <div className='flex w-full items-start gap-5'>
+        <Filters
+          title='Hàng hóa'
+          filters={filters}
+          onFilterChange={handleFilterChange}
+        />
+        <ProductList productsFake={productsData.data} />
+      </div>
+    );
+  return <Spin size='large' />;
 };
 
 export default Products;

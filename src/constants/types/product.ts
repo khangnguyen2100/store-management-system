@@ -1,12 +1,18 @@
 export type ProductProps = {
-  id: string;
-  category: string;
-  brand: string;
-  code: string;
-  thumbnail: string;
+  id: number;
   name: string;
-  salePrice: string;
-  costPrice: string;
-  availableItem: string;
-  description: string;
+  productCode: string;
+  img?: string;
+  costPrice: number;
+  sellPrice: number;
+  discount?: number;
+  quantity: number;
+  capacity?: number;
+  weight?: number;
+  isShowing?: boolean;
+  idStore: number;
+  idBrand: number;
+  idCategory: number;
+  idSupplier: number;
+  idType: number;
 };

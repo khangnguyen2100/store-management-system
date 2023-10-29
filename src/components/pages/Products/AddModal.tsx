@@ -81,7 +81,14 @@ const AddModal = (props: Props) => {
     try {
       const values = await form.validateFields();
       console.log('values:', values);
-      onSuccess(values);
+      onSuccess({
+        ...values,
+        idCh: 1,
+        idTh: 1,
+        idDm: 1,
+        idNcc: 1,
+        idLoai: 1,
+      });
     } catch (error) {}
   };
   useEffect(() => {
@@ -114,7 +121,7 @@ const AddModal = (props: Props) => {
                 rules={[
                   { required: true, message: 'Vui lòng nhập tên sản phẩm' },
                 ]}
-                name={'name'}
+                name={'ten'}
               >
                 <Input placeholder='Tên sản phẩm' tabIndex={1} />
               </Form.Item>
@@ -123,13 +130,13 @@ const AddModal = (props: Props) => {
                 rules={[
                   { required: true, message: 'Vui lòng nhập mã sản phẩm' },
                 ]}
-                name={'code'}
+                name={'maSp'}
               >
                 <Input placeholder='Mã sản phẩm' tabIndex={3} />
               </Form.Item>
               <Form.Item
                 label='Cửa hàng'
-                name={'storeId'}
+                name={'idCh'}
                 // rules={[{ required: true, message: 'Vui lòng chọn cửa hàng' }]}
               >
                 <Select placeholder='Cửa hàng' tabIndex={5} />
@@ -138,7 +145,7 @@ const AddModal = (props: Props) => {
             <Col xs={24} md={12}>
               <Form.Item
                 label='Loại sản phẩm'
-                name={'productTypeId'}
+                name={'idLoai'}
                 // rules={[
                 //   { required: true, message: 'Vui lòng chọn loại sản phẩm' },
                 // ]}
@@ -147,14 +154,21 @@ const AddModal = (props: Props) => {
               </Form.Item>
               <Form.Item
                 label='Danh mục'
-                name={'category'}
+                name={'idDm'}
+                // rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
+              >
+                <Select placeholder='Danh mục' tabIndex={4} />
+              </Form.Item>
+              <Form.Item
+                label='Nhà cung cấp'
+                name={'idSupplier'}
                 // rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
               >
                 <Select placeholder='Danh mục' tabIndex={4} />
               </Form.Item>
               <Form.Item
                 label='Thương hiệu'
-                name={'brand'}
+                name={'idTh'}
                 // rules={[
                 //   { required: true, message: 'Vui lòng chọn thương hiệu' },
                 // ]}
@@ -169,7 +183,7 @@ const AddModal = (props: Props) => {
             <Col xs={24} md={12}>
               <Form.Item
                 label='Giá vốn'
-                name='costPrice'
+                name='giaVon'
                 rules={[{ required: true, message: 'Vui lòng nhập giá vốn' }]}
               >
                 <InputNumber
@@ -190,7 +204,7 @@ const AddModal = (props: Props) => {
             <Col xs={24} md={12}>
               <Form.Item
                 label='Giá bán'
-                name='salePrice'
+                name='giaBan'
                 rules={[{ required: true, message: 'Vui lòng nhập giá bán' }]}
               >
                 <InputNumber
@@ -258,7 +272,7 @@ const AddModal = (props: Props) => {
                   addonAfter={selectWeight}
                 />
               </Form.Item>
-              <Form.Item label='Thể tích' name={'volume'}>
+              <Form.Item label='Thể tích' name={'capacity'}>
                 <Input
                   placeholder='Thể tích'
                   tabIndex={11}
@@ -267,7 +281,7 @@ const AddModal = (props: Props) => {
               </Form.Item>
             </Col>
             <Col xs={24} md={12}>
-              <Form.Item label='Tồn kho' name={'availableItem'}>
+              <Form.Item label='Tồn kho' name={'quantity'}>
                 <InputNumber
                   placeholder='Tồn kho'
                   tabIndex={10}

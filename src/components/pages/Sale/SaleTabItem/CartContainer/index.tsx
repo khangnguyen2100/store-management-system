@@ -30,7 +30,7 @@ const CartContainer = (props: Props) => {
         {data.length > 0 ? (
           <div className='flex h-full w-full flex-col gap-y-2 px-2'>
             {data.map((item, index) => {
-              const { name, salePrice, quantity } = item;
+              const { name, sellPrice, quantity } = item;
               return (
                 <div
                   key={index}
@@ -41,7 +41,7 @@ const CartContainer = (props: Props) => {
                   </div>
                   <div className='mr-10 flex flex-col justify-end'>
                     <p className='text-base font-medium text-red-600'>
-                      {formatPrice((Number(salePrice) * quantity).toString())}
+                      {formatPrice((Number(sellPrice) * quantity).toString())}
                     </p>
                     <div className='flex items-center justify-center gap-x-2'>
                       <Button

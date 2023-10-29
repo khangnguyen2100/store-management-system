@@ -102,7 +102,7 @@ const BasicTable = <T extends object>(props: Props<T>) => {
           overlay={MenuList}
           trigger={['click']}
           open={dropdownVisible}
-          onVisibleChange={handleDropdownVisibleChange}
+          onOpenChange={handleDropdownVisibleChange}
         >
           <Button
             type='default'

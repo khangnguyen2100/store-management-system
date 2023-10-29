@@ -9,6 +9,7 @@ import * as xlsx from 'xlsx';
 import BasicTable from 'src/components/BasicTable/BasicTable';
 import { formatPrice } from 'src/utils/format';
 import { ProductProps } from 'src/constants/types/product';
+import { postAPI } from 'src/components/api/Apiconfig';
 
 import TableAction from '../../GroupButton/TableAction';
 
@@ -85,7 +86,7 @@ const ProductList = (props: Props) => {
       title: 'Giá bán',
       dataIndex: 'salePrice',
       width: 120,
-      sorter: (a, b) => Number(a.salePrice) - Number(b.salePrice),
+      sorter: (a, b) => Number(a.sellPrice) - Number(b.sellPrice),
       render: (salePrice: string) => (
         <span className='text-red-500'>{formatPrice(salePrice)}</span>
       ),
@@ -95,7 +96,7 @@ const ProductList = (props: Props) => {
       title: 'Giá vốn',
       dataIndex: 'costPrice',
       width: 120,
-      sorter: (a, b) => Number(a.salePrice) - Number(b.salePrice),
+      sorter: (a, b) => Number(a.costPrice) - Number(b.costPrice),
       render: (costPrice: string) => (
         <span className='text-blue-500'>{formatPrice(costPrice)}</span>
       ),
@@ -122,7 +123,7 @@ const ProductList = (props: Props) => {
     },
   ];
 
-  const handleDeleteProduct = (id: string) => {
+  const handleDeleteProduct = (id: number) => {
     const newProducts = productsData.filter(product => product.id !== id);
     setProductsData(newProducts);
   };
@@ -136,11 +137,11 @@ const ProductList = (props: Props) => {
     setModalType('add');
     setIsModalOpen(true);
   };
-
-  const handleModalOk = async (values: any) => {
+  const handleModalOk = async (values: ProductProps) => {
     try {
       if (modalType === 'add') {
         console.log('newProduct', values);
+        await postAPI<ProductProps>('san-pham', values);
         enqueueSnackbar('Thêm sản phẩm thành công', { variant: 'success' });
         return;
       }
@@ -158,7 +159,6 @@ const ProductList = (props: Props) => {
   const handleModalCancel = () => {
     setIsModalOpen(false);
   };
-
   const handleTableChange = (pagination: any) => {
     console.log('product list call');
   };
