@@ -14,7 +14,7 @@ function App() {
     <BrowserRouter basename='/'>
       <SWRConfig
         value={{
-          refreshInterval: 3000,
+          refreshInterval: 10000,
           refreshWhenHidden: true,
           fetcher: (resource, init) =>
             fetch(resource, init).then(res => res.json()),

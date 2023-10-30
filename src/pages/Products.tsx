@@ -76,7 +76,6 @@ const filters: FilterProps[] = [
     name: 'date',
   },
 ];
-const APIURL = process.env.REACT_APP_API_URL;
 const URLENDPOINT = 'san-pham';
 const Products = () => {
   const { data: productsData, mutate, error } = useSWR(URLENDPOINT, getAPI);
