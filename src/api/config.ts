@@ -1,6 +1,6 @@
 import axios from 'axios';
 const beesmartAPI = axios.create({
-  baseURL: 'https://www.beesmart.io.vn/api',
+  baseURL: process.env.REACT_APP_API_URL,
 });
 export const getAPI = (url: string) =>
   beesmartAPI.get(url).then(res => res.data);

@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { Spin } from 'antd';
 
+import { getAPI } from 'src/api/config';
 import Filters, { FilterProps } from 'src/components/Filters/Filters';
 import ProductList from 'src/components/pages/Products/ProductList';
 import { ProductProps } from 'src/constants/types/product';
-import { getAPI } from 'src/components/api/Apiconfig';
 
 const filters: FilterProps[] = [
   {

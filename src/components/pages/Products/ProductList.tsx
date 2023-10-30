@@ -6,10 +6,10 @@ import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import * as xlsx from 'xlsx';
 
+import { postAPI } from 'src/api/config';
 import BasicTable from 'src/components/BasicTable/BasicTable';
 import { formatPrice } from 'src/utils/format';
 import { ProductProps } from 'src/constants/types/product';
-import { postAPI } from 'src/components/api/Apiconfig';
 
 import TableAction from '../../GroupButton/TableAction';
 
