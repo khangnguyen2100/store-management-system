@@ -161,7 +161,7 @@ const AddModal = (props: Props) => {
               </Form.Item>
               <Form.Item
                 label='Nhà cung cấp'
-                name={'idSupplier'}
+                name={'idNcc'}
                 // rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
               >
                 <Select placeholder='Danh mục' tabIndex={4} />
@@ -265,14 +265,14 @@ const AddModal = (props: Props) => {
         <Card size='small' title='Thông tin khác'>
           <Row gutter={[16, 16]}>
             <Col xs={24} md={12}>
-              <Form.Item label='Khối lượng' name={'weight'}>
+              <Form.Item label='Khối lượng' name={'khoiLuong'}>
                 <Input
                   placeholder='Khối lượng'
                   tabIndex={9}
                   addonAfter={selectWeight}
                 />
               </Form.Item>
-              <Form.Item label='Thể tích' name={'capacity'}>
+              <Form.Item label='Thể tích' name={'theTich'}>
                 <Input
                   placeholder='Thể tích'
                   tabIndex={11}
@@ -281,7 +281,7 @@ const AddModal = (props: Props) => {
               </Form.Item>
             </Col>
             <Col xs={24} md={12}>
-              <Form.Item label='Tồn kho' name={'quantity'}>
+              <Form.Item label='Tồn kho' name={'soLuong'}>
                 <InputNumber
                   placeholder='Tồn kho'
                   tabIndex={10}

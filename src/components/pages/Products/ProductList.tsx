@@ -86,7 +86,7 @@ const ProductList = (props: Props) => {
       title: 'Giá bán',
       dataIndex: 'salePrice',
       width: 120,
-      sorter: (a, b) => Number(a.sellPrice) - Number(b.sellPrice),
+      sorter: (a, b) => Number(a.giaBan) - Number(b.giaBan),
       render: (salePrice: string) => (
         <span className='text-red-500'>{formatPrice(salePrice)}</span>
       ),
@@ -94,11 +94,11 @@ const ProductList = (props: Props) => {
     {
       key: 9,
       title: 'Giá vốn',
-      dataIndex: 'costPrice',
+      dataIndex: 'giaVon',
       width: 120,
-      sorter: (a, b) => Number(a.costPrice) - Number(b.costPrice),
-      render: (costPrice: string) => (
-        <span className='text-blue-500'>{formatPrice(costPrice)}</span>
+      sorter: (a, b) => Number(a.giaVon) - Number(b.giaVon),
+      render: (giaVon: string) => (
+        <span className='text-blue-500'>{formatPrice(giaVon)}</span>
       ),
     },
     {
@@ -114,7 +114,7 @@ const ProductList = (props: Props) => {
       render: (record: ProductProps) => {
         return (
           <TableAction
-            onDelete={() => handleDeleteProduct(record.id)}
+            onDelete={() => handleDeleteProduct(record.id!)}
             onEdit={() => handleEditProduct(record)}
           />
         );
@@ -123,7 +123,7 @@ const ProductList = (props: Props) => {
     },
   ];
 
-  const handleDeleteProduct = (id: number) => {
+  const handleDeleteProduct = (id: string) => {
     const newProducts = productsData.filter(product => product.id !== id);
     setProductsData(newProducts);
   };

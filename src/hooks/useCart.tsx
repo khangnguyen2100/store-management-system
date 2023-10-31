@@ -61,7 +61,7 @@ function useCart(value: CartType[]) {
 
   const totalItems = cartList.reduce((acc, cur) => acc + cur.quantity, 0);
   const totalPrice = cartList.reduce(
-    (acc, cur) => acc + Number(cur.sellPrice) * cur.quantity,
+    (acc, cur) => acc + Number(cur.giaBan) * cur.quantity,
     0,
   );
 
