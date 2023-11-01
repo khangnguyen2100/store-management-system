@@ -30,14 +30,14 @@ const CartContainer = (props: Props) => {
         {data.length > 0 ? (
           <div className='flex h-full w-full flex-col gap-y-2 px-2'>
             {data.map((item, index) => {
-              const { name, giaBan, quantity } = item;
+              const { ten, giaBan, quantity } = item;
               return (
                 <div
                   key={index}
                   className='relative flex items-center justify-between rounded-sm border border-typo-2/30 bg-[#fbfbfb] p-2 transition-all hover:shadow-md'
                 >
                   <div className='flex items-center justify-between'>
-                    <h4 className='text-base font-bold'>{name}</h4>
+                    <h4 className='text-base font-bold'>{ten}</h4>
                   </div>
                   <div className='mr-10 flex flex-col justify-end'>
                     <p className='text-base font-medium text-red-600'>

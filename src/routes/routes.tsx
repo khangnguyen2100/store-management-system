@@ -24,7 +24,7 @@ function MainRoutes() {
       <Route element={<MainLayout />}>
         <Route path={authRoutes.HOME} element={<Home />}></Route>
         <Route path={authRoutes.PRODUCTS} element={<Products />}></Route>
-        <Route path='/nha-cung-cap' element={<Suppilers />}></Route>
+        <Route path={authRoutes.SUPPILERS} element={<Suppilers />}></Route>
       </Route>
       <Route path={publicRoutes.LOGIN} element={<Login />}></Route>
       <Route path={authRoutes.SALE} element={<Sale />}></Route>

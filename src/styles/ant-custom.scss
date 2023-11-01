@@ -47,4 +47,23 @@
     background-color: #005ac3 !important ;
   }
 }
-
+.ant-table-content table {
+  border: 1px solid #d9d9d9 !important;
+}
+.ant-table-cell:not(.table-cell-img, .table-cell-action) {
+  padding-left: 12px !important;
+}
+.ant-table-thead {
+  .ant-table-cell {
+    background-color: #cee0f5 !important;
+    font-size: 16px !important;
+  }
+}
+.ant-table-tbody {
+  .ant-table-row:nth-child(even) {
+    background-color: #f7f8f9 !important;
+  }
+  .ant-table-cell-row-hover {
+    background-color: #e6f8ec !important;
+  }
+}

@@ -14,7 +14,7 @@ import TableAction from '../../GroupButton/TableAction';
 
 type Props = {
   data: SupplierProps[];
-}; 
+};
 
 const SupplierList = (props: Props) => {
   const [productsData, setProductsData] = useState<SupplierProps[]>(props.data);
@@ -75,6 +75,7 @@ const SupplierList = (props: Props) => {
         />
       ),
       align: 'center',
+      className: 'table-cell-img',
     },
     {
       key: 8,
@@ -95,6 +96,7 @@ const SupplierList = (props: Props) => {
         );
       },
       align: 'center',
+      className: 'table-cell-action'
     },
   ];
 

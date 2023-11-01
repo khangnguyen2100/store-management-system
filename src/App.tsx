@@ -36,6 +36,7 @@ function App() {
             theme={{
               token: {
                 colorPrimary: '#6B77E5',
+                
               },
             }}
           >
