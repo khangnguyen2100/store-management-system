@@ -80,9 +80,9 @@ const ProductList = (props: Props) => {
       title: 'Giá vốn',
       dataIndex: 'giaVon',
       width: 150,
-      sorter: (a, b) => Number(a.costPrice) - Number(b.costPrice),
-      render: (costPrice: string) => (
-        <span className='text-blue-500'>{formatPrice(costPrice)}</span>
+      sorter: (a, b) => Number(a.giaVon) - Number(b.giaVon),
+      render: (giaVon: string) => (
+        <span className='text-blue-500'>{formatPrice(giaVon)}</span>
       ),
     },
     {
@@ -97,11 +97,6 @@ const ProductList = (props: Props) => {
     },
     {
       key: 9,
-<<<<<<< HEAD
-      title: 'Khuyến mãi',
-      dataIndex: 'khuyenMai',
-      width: 120,
-=======
       title: 'Giá vốn',
       dataIndex: 'giaVon',
       width: 120,
@@ -109,7 +104,6 @@ const ProductList = (props: Props) => {
       render: (giaVon: string) => (
         <span className='text-blue-500'>{formatPrice(giaVon)}</span>
       ),
->>>>>>> 4461ad53137d75139fc89fe95e76d28f60a63411
     },
     {
       key: 10,
