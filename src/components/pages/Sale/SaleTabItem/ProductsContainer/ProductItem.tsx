@@ -10,6 +10,7 @@ type Props = {
 
 const ProductItem = (props: Props) => {
   const { onAdd, product } = props;
+  if (!product) return null;
   return (
     <div
       key={product.id}
@@ -18,17 +19,17 @@ const ProductItem = (props: Props) => {
     >
       <div className='overflow-hidden rounded-md'>
         <Image
-          src={product.img}
+          src={product?.img || ''}
           width={70}
           height={50}
           className='object-cover'
-          alt={product.name}
+          alt={product.ten}
         />
       </div>
       <div className='flex flex-col'>
-        <h4 className='text-sm font-bold'>{product.name}</h4>
+        <h4 className='text-sm font-bold'>{product.ten}</h4>
         <p className='font-medium text-red-600'>
-          {formatPrice(product.sellPrice)}
+          {formatPrice(product.giaBan)}
         </p>
       </div>
     </div>

@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { Spin } from 'antd';
 
+import { getAPI } from 'src/api/config';
 import Filters, { FilterProps } from 'src/components/Filters/Filters';
 import ProductList from 'src/components/pages/Products/ProductList';
 import { ProductProps } from 'src/constants/types/product';
-import { getAPI } from 'src/components/api/Apiconfig';
 
 const filters: FilterProps[] = [
   {
@@ -76,8 +76,12 @@ const filters: FilterProps[] = [
     name: 'date',
   },
 ];
+<<<<<<< HEAD
 const APIURL = process.env.REACT_APP_API_URL;
 const URLENDPOINT = 'san-pham?idCh=1';
+=======
+const URLENDPOINT = 'san-pham';
+>>>>>>> 4461ad53137d75139fc89fe95e76d28f60a63411
 const Products = () => {
   const { data: productsData, mutate, error } = useSWR(URLENDPOINT, getAPI);
   const handleFilterChange = (filters: any) => {

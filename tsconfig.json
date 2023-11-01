@@ -16,7 +16,7 @@
     "incremental": true,
     "baseUrl": "./",
 
-    "noImplicitOverride": true,
+    "noImplicitOverride" : false,
     "noImplicitReturns": false,
     "strictNullChecks": true,
 

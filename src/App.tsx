@@ -1,45 +1,65 @@
 import { ConfigProvider, Spin } from 'antd';
 import vnVN from 'antd/lib/locale/vi_VN';
+import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { SnackbarProvider } from 'notistack';
 import { SWRConfig } from 'swr';
 
-import MainLayout from 'src/Layout/MainLayout';
 import MainRoutes from 'src/routes/routes';
 
+import { request } from './api/config';
 import { AuthProvider } from './routes/AuthContext';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 
+const fetcher = (url: string) => request(url).then(res => res.data);
 function App() {
   return (
-    <BrowserRouter basename='/'>
-      <ConfigProvider
-        locale={vnVN}
-        theme={{
-          token: {
-            colorPrimary: '#6B77E5',
-          },
-        }}
-      >
-        <SnackbarProvider
-          maxSnack={3}
-          autoHideDuration={4000}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+    <ErrorBoundary>
+      <BrowserRouter basename='/'>
+        <SWRConfig
+          value={{
+            refreshInterval: 10000,
+            refreshWhenHidden: true,
+            fetcher: fetcher,
+            onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+              if (error.status === 404) return;
+              if (error.status === 403) return;
+
+              if (retryCount >= 0) return;
+
+              setTimeout(() => revalidate({ retryCount }), 5000);
+            },
+          }}
         >
-          <AuthProvider>
-            <React.Suspense
-              fallback={
-                <div className='flex-center min-h-screen'>
-                  <Spin size='large' />
-                </div>
-              }
+          <ConfigProvider
+            locale={vnVN}
+            theme={{
+              token: {
+                colorPrimary: '#6B77E5',
+              },
+            }}
+          >
+            <SnackbarProvider
+              maxSnack={3}
+              autoHideDuration={4000}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             >
-              <MainRoutes />
-            </React.Suspense>
-          </AuthProvider>
-        </SnackbarProvider>
-      </ConfigProvider>
-    </BrowserRouter>
+              <AuthProvider>
+                <React.Suspense
+                  fallback={
+                    <div className='flex-center min-h-screen'>
+                      <Spin size='large' />
+                    </div>
+                  }
+                >
+                  <MainRoutes />
+                </React.Suspense>
+              </AuthProvider>
+            </SnackbarProvider>
+          </ConfigProvider>
+        </SWRConfig>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

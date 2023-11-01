@@ -1,18 +1,30 @@
 export type ProductProps = {
-  id: number;
-  name: string;
-  productCode: string;
-  img?: string;
-  costPrice: number;
-  sellPrice: number;  
-  discount?: number;
-  quantity: number;
-  capacity?: number;
-  weight?: number;
-  isShowing?: boolean;
-  idStore: number;
-  idBrand: number;
-  idCategory: number;
-  idSupplier: number;
-  idType: number;
+  id: string | null;
+  ten: string;
+  maSp: string;
+  img: string | null;
+  giaVon: string;
+  giaBan: string;
+  khuyenMai: string;
+  soLuong: string;
+  theTich: string;
+  khoiLuong: string;
+  donVi: string;
+  anHien: string;
+
+  idCh: string;
+  idTh: string;
+  idDm: string;
+  idNcc: string;
+  idLoai: string;
+
+  tenCh: string;
+  tenDm: string;
+  tenLoaiSp: string;
+  tenNcc: string;
+  tenTh: string;
+
+  ngayTao: string;
+  created_at: string;
+  updated_at: string;
 };

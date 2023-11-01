@@ -6,10 +6,10 @@ import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import * as xlsx from 'xlsx';
 
+import { postAPI } from 'src/api/config';
 import BasicTable from 'src/components/BasicTable/BasicTable';
 import { formatPrice } from 'src/utils/format';
 import { ProductProps } from 'src/constants/types/product';
-import { postAPI } from 'src/components/api/Apiconfig';
 
 import TableAction from '../../GroupButton/TableAction';
 
@@ -90,16 +90,26 @@ const ProductList = (props: Props) => {
       title: 'Giá bán',
       dataIndex: 'giaBan',
       width: 120,
-      sorter: (a, b) => Number(a.sellPrice) - Number(b.sellPrice),
+      sorter: (a, b) => Number(a.giaBan) - Number(b.giaBan),
       render: (salePrice: string) => (
         <span className='text-red-500'>{formatPrice(salePrice)}</span>
       ),
     },
     {
       key: 9,
+<<<<<<< HEAD
       title: 'Khuyến mãi',
       dataIndex: 'khuyenMai',
       width: 120,
+=======
+      title: 'Giá vốn',
+      dataIndex: 'giaVon',
+      width: 120,
+      sorter: (a, b) => Number(a.giaVon) - Number(b.giaVon),
+      render: (giaVon: string) => (
+        <span className='text-blue-500'>{formatPrice(giaVon)}</span>
+      ),
+>>>>>>> 4461ad53137d75139fc89fe95e76d28f60a63411
     },
     {
       key: 10,
@@ -156,7 +166,7 @@ const ProductList = (props: Props) => {
       render: (record: ProductProps) => {
         return (
           <TableAction
-            onDelete={() => handleDeleteProduct(record.id)}
+            onDelete={() => handleDeleteProduct(record.id!)}
             onEdit={() => handleEditProduct(record)}
           />
         );
@@ -165,7 +175,7 @@ const ProductList = (props: Props) => {
     },
   ];
 
-  const handleDeleteProduct = (id: number) => {
+  const handleDeleteProduct = (id: string) => {
     const newProducts = productsData.filter(product => product.id !== id);
     setProductsData(newProducts);
   };
