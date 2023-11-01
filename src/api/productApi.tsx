@@ -1,5 +1,7 @@
 import useSWR from 'swr';
 
+import { serialize } from 'src/utils/format';
+
 import { request } from './config';
 
 type Props = {
@@ -14,9 +16,13 @@ const productApi = {
   },
 };
 
-const useProducts = (props: Props) => {
-  const { idCh } = props;
-  const { data, error, isLoading, mutate } = useSWR(`/api/san-pham/${idCh}`);
+const useProducts = (params: Props) => {
+  const {
+    data = [],
+    error,
+    isLoading,
+    mutate,
+  } = useSWR(`/api/san-pham?${serialize(params)}`);
 
   return {
     data,

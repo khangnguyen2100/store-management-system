@@ -1,30 +1,16 @@
-import { Dropdown, Image } from 'antd';
-import { IconType } from 'react-icons';
-import {
-  MdOutlineAccountBalanceWallet,
-  MdOutlineSavings,
-  MdOutlineColorLens,
-  MdOutlineLiveHelp,
-  MdOutlineFeedback,
-  MdOutlineMail,
-  MdOutlineAccountCircle,
-  MdDeliveryDining,
-  MdOutlineShoppingBag,
-  MdLanguage,
-  MdSettings,
-} from 'react-icons/md';
 import type { MenuProps } from 'antd';
+import { Dropdown, Image } from 'antd';
+import { Link } from 'react-router-dom';
 type NavbarLinkType = {
   title: string;
   linkTo: string;
   subMenu?: MenuProps['items'];
 };
-import { Link } from 'react-router-dom';
 
 const NavbarLinks: NavbarLinkType[] = [
   {
     title: 'Tổng quan',
-    linkTo: '#!',
+    linkTo: '/',
     subMenu: [
       {
         key: '1',
@@ -35,116 +21,26 @@ const NavbarLinks: NavbarLinkType[] = [
             href='https://www.antgroup.com'
           >
             1st menu item
-          </a>
-        ),
-      },
-      {
-        key: '2',
-        label: (
-          <a
-            target='_blank'
-            rel='noopener noreferrer'
-            href='https://www.aliyun.com'
-          >
-            2nd menu item
-          </a>
-        ),
-      },
-      {
-        key: '3',
-        label: (
-          <a
-            target='_blank'
-            rel='noopener noreferrer'
-            href='https://www.luohanacademy.com'
-          >
-            3rd menu item
           </a>
         ),
       },
     ],
   },
   {
-    title: 'Hàng hóa',
-    linkTo: '#!',
+    title: 'Bán hàng',
+    linkTo: '/ban-hang',
     subMenu: [
       {
         key: '1',
-        label: (
-          <a
-            target='_blank'
-            rel='noopener noreferrer'
-            href='https://www.antgroup.com'
-          >
-            1st menu item
-          </a>
-        ),
+        label: <Link to={'/ban-hang'}>Bán hàng</Link>,
       },
       {
         key: '2',
-        label: (
-          <a
-            target='_blank'
-            rel='noopener noreferrer'
-            href='https://www.aliyun.com'
-          >
-            2nd menu item
-          </a>
-        ),
+        label: <Link to={'/lich-su-ban-hang'}>Lịch sử bán hàng</Link>,
       },
       {
         key: '3',
-        label: (
-          <a
-            target='_blank'
-            rel='noopener noreferrer'
-            href='https://www.luohanacademy.com'
-          >
-            3rd menu item
-          </a>
-        ),
-      },
-    ],
-  },
-  {
-    title: 'Giao dịch',
-    linkTo: '#!',
-    subMenu: [
-      {
-        key: '1',
-        label: (
-          <a
-            target='_blank'
-            rel='noopener noreferrer'
-            href='https://www.antgroup.com'
-          >
-            1st menu item
-          </a>
-        ),
-      },
-      {
-        key: '2',
-        label: (
-          <a
-            target='_blank'
-            rel='noopener noreferrer'
-            href='https://www.aliyun.com'
-          >
-            2nd menu item
-          </a>
-        ),
-      },
-      {
-        key: '3',
-        label: (
-          <a
-            target='_blank'
-            rel='noopener noreferrer'
-            href='https://www.luohanacademy.com'
-          >
-            3rd menu item
-          </a>
-        ),
+        label: <Link to={'/danh-sach-khach-hang'}>Danh sách khách hàng</Link>,
       },
     ],
   },
@@ -152,24 +48,6 @@ const NavbarLinks: NavbarLinkType[] = [
   { title: 'Nhân viên', linkTo: '#!' },
   { title: 'Sổ quỹ', linkTo: '#!' },
   { title: 'Báo cáo', linkTo: '#!' },
-];
-type TopHeaderLinksType = {
-  icon: IconType;
-  title?: string;
-  linkTo: string;
-};
-const TopHeaderLinks: TopHeaderLinksType[] = [
-  { icon: MdOutlineShoppingBag, title: 'Bán online', linkTo: '#!' },
-  { icon: MdDeliveryDining, title: 'Giao hàng', linkTo: '#!' },
-  { icon: MdLanguage, title: 'Website', linkTo: '#!' },
-  { icon: MdOutlineAccountBalanceWallet, title: 'Tài chính', linkTo: '#!' },
-  { icon: MdOutlineSavings, title: 'Nguồn hàng giá tốt', linkTo: '#!' },
-  { icon: MdOutlineColorLens, title: 'Chủ đề', linkTo: '#!' },
-  { icon: MdOutlineLiveHelp, title: 'Hỗ trợ', linkTo: '#!' },
-  { icon: MdOutlineFeedback, title: 'Góp ý', linkTo: '#!' },
-  { icon: MdOutlineMail, linkTo: '#!' },
-  { icon: MdSettings, linkTo: '#!' },
-  { icon: MdOutlineAccountCircle, title: '0335702367', linkTo: '#!' },
 ];
 function AdminHeader() {
   return (
@@ -187,7 +65,11 @@ function AdminHeader() {
         <div className='header-nav flex max-w-xl'>
           {NavbarLinks.map((item, index) => {
             return item.subMenu ? (
-              <Dropdown menu={{ items: item.subMenu }} key={index} overlayClassName={'header-nav-dropdown'}>
+              <Dropdown
+                menu={{ items: item.subMenu }}
+                key={index}
+                overlayClassName={'header-nav-dropdown'}
+              >
                 <Link
                   to={item.linkTo}
                   key={index}
