@@ -43,31 +43,31 @@ const ProductList = (props: Props) => {
     },
     {
       key: 3,
-      title: 'Danh mục',
-      dataIndex: 'category',
+      title: 'Tên',
+      dataIndex: 'ten',
       width: 100,
     },
     {
       key: 4,
-      title: 'Thương hiệu',
-      dataIndex: 'brand',
+      title: 'Mã sản phẩm',
+      dataIndex: 'maSp',
       width: 100,
     },
     {
       key: 5,
-      title: 'Mã hàng',
-      dataIndex: 'code',
-      width: 80,
+      title: 'Số lượng',
+      dataIndex: 'soLuong',
+      width: 70,
     },
     {
       key: 6,
       title: 'Ảnh',
-      dataIndex: 'thumbnail',
+      dataIndex: 'img',
       width: 70,
       render: (thumbnail: string) => (
         <Image
           src={thumbnail}
-          alt='product thumbnail'
+          alt='product img'
           width={50}
           height={50}
           className='rounded-md'
@@ -77,14 +77,18 @@ const ProductList = (props: Props) => {
     },
     {
       key: 7,
-      title: 'Tên hàng',
-      dataIndex: 'name',
+      title: 'Giá vốn',
+      dataIndex: 'giaVon',
       width: 150,
+      sorter: (a, b) => Number(a.costPrice) - Number(b.costPrice),
+      render: (costPrice: string) => (
+        <span className='text-blue-500'>{formatPrice(costPrice)}</span>
+      ),
     },
     {
       key: 8,
       title: 'Giá bán',
-      dataIndex: 'salePrice',
+      dataIndex: 'giaBan',
       width: 120,
       sorter: (a, b) => Number(a.sellPrice) - Number(b.sellPrice),
       render: (salePrice: string) => (
@@ -93,18 +97,56 @@ const ProductList = (props: Props) => {
     },
     {
       key: 9,
-      title: 'Giá vốn',
-      dataIndex: 'costPrice',
+      title: 'Khuyến mãi',
+      dataIndex: 'khuyenMai',
       width: 120,
-      sorter: (a, b) => Number(a.costPrice) - Number(b.costPrice),
-      render: (costPrice: string) => (
-        <span className='text-blue-500'>{formatPrice(costPrice)}</span>
-      ),
     },
     {
       key: 10,
-      title: 'Tồn kho',
-      dataIndex: 'availableItem',
+      title: 'Thể tích',
+      dataIndex: 'theTich',
+      width: 80,
+    },
+    {
+      key: 11,
+      title: 'Đơn vị',
+      dataIndex: 'donVi',
+      width: 80,
+    },
+    {
+      key: 12,
+      title: 'Ẩn hiện',
+      dataIndex: 'anHien',
+      width: 80,
+    },
+    {
+      key: 13,
+      title: 'Tên cửa hàng',
+      dataIndex: 'tenCh',
+      width: 80,
+    },
+    {
+      key: 14,
+      title: 'Tên danh mục',
+      dataIndex: 'tenDm',
+      width: 80,
+    },
+    {
+      key: 15,
+      title: 'Tên loại sản phẩm',
+      dataIndex: 'tenLoaiSp',
+      width: 80,
+    },
+    {
+      key: 16,
+      title: 'Tên nhà cung cấp',
+      dataIndex: 'tenNcc',
+      width: 80,
+    },
+    {
+      key: 17,
+      title: 'Tên thương hiệu',
+      dataIndex: 'tenTh',
       width: 80,
     },
     {
@@ -141,7 +183,7 @@ const ProductList = (props: Props) => {
     try {
       if (modalType === 'add') {
         console.log('newProduct', values);
-        await postAPI<ProductProps>('san-pham', values);
+        await postAPI('san-pham', values);
         enqueueSnackbar('Thêm sản phẩm thành công', { variant: 'success' });
         return;
       }

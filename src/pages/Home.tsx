@@ -13,6 +13,7 @@ const Home = () => {
         <HoriziontalBarChart></HoriziontalBarChart>
       </div>
       <div className='col-span-3 h-full shadow-lg'></div>
+      
     </div>
   );
 };

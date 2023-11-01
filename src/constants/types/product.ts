@@ -4,7 +4,7 @@ export type ProductProps = {
   productCode: string;
   img?: string;
   costPrice: number;
-  sellPrice: number;
+  sellPrice: number;  
   discount?: number;
   quantity: number;
   capacity?: number;

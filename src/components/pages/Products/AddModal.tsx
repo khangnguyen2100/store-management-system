@@ -80,15 +80,7 @@ const AddModal = (props: Props) => {
   const handleSubmitForm = async () => {
     try {
       const values = await form.validateFields();
-      console.log('values:', values);
-      onSuccess({
-        ...values,
-        idCh: 1,
-        idTh: 1,
-        idDm: 1,
-        idNcc: 1,
-        idLoai: 1,
-      });
+      onSuccess({ ...values });
     } catch (error) {}
   };
   useEffect(() => {

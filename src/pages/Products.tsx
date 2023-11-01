@@ -77,13 +77,15 @@ const filters: FilterProps[] = [
   },
 ];
 const APIURL = process.env.REACT_APP_API_URL;
-const URLENDPOINT = 'san-pham';
+const URLENDPOINT = 'san-pham?idCh=1';
 const Products = () => {
   const { data: productsData, mutate, error } = useSWR(URLENDPOINT, getAPI);
   const handleFilterChange = (filters: any) => {
     console.log('filters:', filters);
     // call filter api
   };
+  console.log(productsData);
+
   if (productsData)
     return (
       <div className='flex w-full items-start gap-5'>
@@ -92,7 +94,7 @@ const Products = () => {
           filters={filters}
           onFilterChange={handleFilterChange}
         />
-        <ProductList productsFake={productsData.data} />
+        <ProductList productsFake={productsData.datalink} />
       </div>
     );
   return <Spin size='large' />;
