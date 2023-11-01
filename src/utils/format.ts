@@ -16,5 +16,13 @@ const formatPriceInput = (value?: valueType) => {
   if (!value) return '';
   return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
-
-export { formatPrice, formatPriceInput };
+const serialize = (obj: any) => {
+  const str: string[] = [];
+  for (const p in obj)
+    if (obj.hasOwnProperty(p)) {
+      if (obj[p] || obj[p] === 0)
+        str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+    }
+  return str.join('&');
+};
+export { formatPrice, formatPriceInput, serialize };
