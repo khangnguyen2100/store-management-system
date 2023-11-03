@@ -10,15 +10,15 @@ export const getAPI = (url: string) =>
   beesmartAPI.get(url).then(res => res.data);
 
 export const postAPI = async <T>(key: string, newData: T) => {
-  const response = await beesmartAPI.post(key, { ...newData });
+  const response = await beesmartAPI.post(`${key}`, { ...newData });
   return response?.data;
 };
-export const patchAPI = async <T>(key: string, id: string, newData: T) => {
-  const response = await beesmartAPI.patch(`${key}/${id}`, { ...newData });
+export const patchAPI = async <T>(key: string, newData: T) => {
+  const response = await beesmartAPI.patch(`${key}`, { ...newData });
   return response?.data;
 };
-export const DeleteAPI = async (key: string, id: string) => {
-  const response = await beesmartAPI.delete(`${key}/${id}`);
+export const DeleteAPI = async (key: string) => {
+  const response = await beesmartAPI.delete(`${key}`);
   return response?.data;
 };
 

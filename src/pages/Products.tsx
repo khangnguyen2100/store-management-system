@@ -6,8 +6,9 @@ import { getAPI } from 'src/api/config';
 import Filters, { FilterProps } from 'src/components/Filters/Filters';
 import ProductList from 'src/components/pages/Products/ProductList';
 import { ProductProps } from 'src/constants/types/product';
+import MyFilters, { MyFilterProps } from 'src/components/Filters/MyFilters';
 
-const filters: FilterProps[] = [
+const filters: MyFilterProps[] = [
   {
     title: 'Loại hàng',
     type: 'checkbox',
@@ -75,20 +76,34 @@ const filters: FilterProps[] = [
     type: 'pick-time',
     name: 'date',
   },
+  { title: 'Nhà cung cấp', type: 'list', name: 'test', apiURL: 'nha-cung-cap' },
+  {
+    title: 'Thương Hiệu',
+    type: 'list',
+    name: 'test',
+    apiURL: 'thuong-hieu',
+  },
 ];
-const URLENDPOINT = 'san-pham';
+const PRODUCSTENDPOINT = 'san-pham?idCh=1';
 const Products = () => {
-  const { data: productsData, mutate, error } = useSWR(URLENDPOINT, getAPI);
+  const {
+    data: productsData,
+    mutate,
+    error,
+  } = useSWR(PRODUCSTENDPOINT, getAPI);
+  // const {
+  //   data: supplierData,
+  //   mutate,
+  //   error,
+  // } = useSWR(SUPPLIERSENDPOINT, getAPI);
   const handleFilterChange = (filters: any) => {
     console.log('filters:', filters);
     // call filter api
   };
-  console.log(productsData);
-
   if (productsData)
     return (
       <div className='flex w-full items-start gap-5'>
-        <Filters
+        <MyFilters
           title='Hàng hóa'
           filters={filters}
           onFilterChange={handleFilterChange}

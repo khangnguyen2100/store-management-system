@@ -1,4 +1,4 @@
-export interface CategoryProp  {
+export type BrandProps = {
   id: string;
   name: string;
 };

@@ -74,7 +74,7 @@ const ProductList = (props: Props) => {
         />
       ),
       align: 'center',
-      className: 'table-cell-img'
+      className: 'table-cell-img',
     },
     {
       key: 7,
