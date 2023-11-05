@@ -1,9 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 
-import MainLayout from 'src/Layout/MainLayout';
 import { Home, Login, NotFound, Products, Protected } from 'src/pages';
-import Sale from 'src/pages/Sale';
-import Suppilers from 'src/pages/Suppliers';
 import * as authRoutes from 'src/routes/routes.auth';
 import * as publicRoutes from 'src/routes/routes.public';
 import Sale from 'src/pages/Sale';
@@ -36,14 +33,6 @@ function MainRoutes() {
           element={
             <ProtectedRoute>
               <Products />
-            </ProtectedRoute>
-          }
-        ></Route>
-        <Route
-          path={authRoutes.SUPPILERS}
-          element={
-            <ProtectedRoute>
-              <Suppilers />
             </ProtectedRoute>
           }
         ></Route>
