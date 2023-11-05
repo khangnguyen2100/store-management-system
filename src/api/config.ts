@@ -23,8 +23,8 @@ export const DeleteAPI = async (key: string) => {
 };
 
 export const getToken = () =>
-  localStorage.getItem('access_token')
-    ? localStorage.getItem('access_token')
+  localStorage.getItem('beesmart_token')
+    ? localStorage.getItem('beesmart_token')
     : null;
 
 const getAuthorizationHeader = () => `Bearer ${getToken()}`;
@@ -60,7 +60,7 @@ request.interceptors.response.use(
     if (error.code === 'ERR_NETWORK' && !originalRequest._retry) {
       originalRequest._retry = true;
       const response = await authApi.refresh();
-      localStorage.setItem('access_token', response.data.refreshToken);
+      localStorage.setItem('beesmart_token', response.data.refreshToken);
       request.defaults.headers.common[
         'Authorization'
       ] = `Bearer ${response.data.refreshToken}`;

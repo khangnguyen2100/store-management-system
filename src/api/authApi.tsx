@@ -4,9 +4,9 @@ import { request } from './config';
 
 const authApi = {
   login: (data: any) => {
-    return request(`/authentication/api/v1/login`, {
+    return request(`/api/login`, {
       method: 'POST',
-      data,
+      data: JSON.stringify(data),
     });
   },
   checkToken: () => {
@@ -19,7 +19,7 @@ const authApi = {
       `${process.env.REACT_APP_SERVER_URL}/authentication/api/v1/refreshtoken`,
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${localStorage.getItem('beesmart_token')}`,
         },
       },
     );

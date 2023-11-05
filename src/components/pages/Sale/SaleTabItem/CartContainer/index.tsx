@@ -13,12 +13,22 @@ type Props = {
   onDelete: (cartId: string) => void;
   totalItems: number;
   totalPrice: number;
+  noteValue: string;
+  setNoteValue: (value: string) => void;
 };
 const { TextArea } = Input;
 
 const CartContainer = (props: Props) => {
-  const { data, onDecrement, onIncrement, totalItems, totalPrice, onDelete } =
-    props;
+  const {
+    data,
+    onDecrement,
+    onIncrement,
+    totalItems,
+    totalPrice,
+    onDelete,
+    noteValue,
+    setNoteValue,
+  } = props;
 
   return (
     <Card
@@ -37,10 +47,10 @@ const CartContainer = (props: Props) => {
                   className='relative flex items-center justify-between rounded-sm border border-typo-2/30 bg-[#fbfbfb] p-2 transition-all hover:shadow-md'
                 >
                   <div className='flex items-center justify-between'>
-                    <h4 className='text-base font-bold'>{ten}</h4>
+                    <h4 className='text-center text-base font-bold'>{ten}</h4>
                   </div>
                   <div className='mr-10 flex flex-col justify-end'>
-                    <p className='text-base font-medium text-red-600'>
+                    <p className='text-center text-base font-medium text-red-600'>
                       {formatPrice((Number(giaBan) * quantity).toString())}
                     </p>
                     <div className='flex items-center justify-center gap-x-2'>
@@ -77,7 +87,13 @@ const CartContainer = (props: Props) => {
         <div className='absolute bottom-4 left-4 right-8 flex translate-x-[-2px] flex-col  rounded-lg border border-primary bg-section-5 px-3 py-2'>
           <div className=' flex  items-center justify-between gap-x-8'>
             <div className='grow'>
-              <TextArea rows={3} placeholder='Ghi chú đơn hàng' maxLength={4} />
+              <TextArea
+                rows={3}
+                placeholder='Ghi chú đơn hàng'
+                maxLength={1000}
+                value={noteValue}
+                onChange={e => setNoteValue(e.target.value)}
+              />
             </div>
 
             <div className='flex flex-col gap-y-3'>

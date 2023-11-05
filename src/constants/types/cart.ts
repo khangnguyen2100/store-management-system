@@ -6,3 +6,10 @@ export type CartType = ProductProps & {
   totalPrice: number;
   note: string;
 };
+export type CartStatus =
+  | 'pending'
+  | 'confirmCart'
+  | 'confirmInfo'
+  | 'payment'
+  | 'success'
+  | 'cancel';
