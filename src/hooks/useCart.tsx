@@ -6,9 +6,11 @@ import { ProductProps } from 'src/constants/types/product';
 
 function useCart(value: CartType[]) {
   const [cartList, setCartList] = useState<CartType[]>(value);
+  const [noteValue, setNoteValue] = useState<string>('');
+  const [discountPrice, setDiscountPrice] = useState<number>(0);
 
   const isCanIncrement = (cartItem: CartType) => {
-    if (Number(cartItem.quantity) <= cartItem.quantity) {
+    if (Number(cartItem.soLuong) <= cartItem.quantity) {
       enqueueSnackbar('Số lượng sản phẩm không đủ', { variant: 'error' });
       return false;
     }
@@ -71,8 +73,13 @@ function useCart(value: CartType[]) {
     totalItems,
     totalPrice,
     cartList,
+    setCartList,
     handleAddToCart,
     handleDelete,
+    noteValue,
+    setNoteValue,
+    discountPrice,
+    setDiscountPrice,
   };
 }
 export default useCart;

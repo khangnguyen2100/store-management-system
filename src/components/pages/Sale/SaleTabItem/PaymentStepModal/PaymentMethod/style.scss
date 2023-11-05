@@ -1,0 +1,14 @@
+.ant-form-item-row {
+  width: 100%;
+  input {
+    font-weight: 600px;
+  }
+  input#totalPrice {
+    color: orangered;
+    font-weight: bold;
+  }
+  input:disabled {
+    background-color: #fff;
+    color: #666;
+  }
+}
