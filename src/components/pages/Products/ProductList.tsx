@@ -5,8 +5,9 @@ import { ColumnsType } from 'antd/es/table';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import * as xlsx from 'xlsx';
+import { mutate } from 'swr';
 
-import { postAPI } from 'src/api/config';
+import { DeleteAPI, postAPI } from 'src/api/config';
 import BasicTable from 'src/components/BasicTable/BasicTable';
 import { formatPrice } from 'src/utils/format';
 import { ProductProps } from 'src/constants/types/product';
@@ -37,12 +38,6 @@ const ProductList = (props: Props) => {
     },
     {
       key: 2,
-      title: 'ID',
-      dataIndex: 'id',
-      width: 50,
-    },
-    {
-      key: 3,
       title: 'Tên',
       dataIndex: 'ten',
       width: 100,
@@ -97,64 +92,6 @@ const ProductList = (props: Props) => {
       ),
     },
     {
-      key: 9,
-      title: 'Giá vốn',
-      dataIndex: 'giaVon',
-      width: 120,
-      sorter: (a, b) => Number(a.giaVon) - Number(b.giaVon),
-      render: (giaVon: string) => (
-        <span className='text-blue-500'>{formatPrice(giaVon)}</span>
-      ),
-    },
-    {
-      key: 10,
-      title: 'Thể tích',
-      dataIndex: 'theTich',
-      width: 80,
-    },
-    {
-      key: 11,
-      title: 'Đơn vị',
-      dataIndex: 'donVi',
-      width: 80,
-    },
-    {
-      key: 12,
-      title: 'Ẩn hiện',
-      dataIndex: 'anHien',
-      width: 80,
-    },
-    {
-      key: 13,
-      title: 'Tên cửa hàng',
-      dataIndex: 'tenCh',
-      width: 80,
-    },
-    {
-      key: 14,
-      title: 'Tên danh mục',
-      dataIndex: 'tenDm',
-      width: 80,
-    },
-    {
-      key: 15,
-      title: 'Tên loại sản phẩm',
-      dataIndex: 'tenLoaiSp',
-      width: 80,
-    },
-    {
-      key: 16,
-      title: 'Tên nhà cung cấp',
-      dataIndex: 'tenNcc',
-      width: 80,
-    },
-    {
-      key: 17,
-      title: 'Tên thương hiệu',
-      dataIndex: 'tenTh',
-      width: 80,
-    },
-    {
       title: 'Action',
       key: 'action',
       width: 80,
@@ -171,8 +108,9 @@ const ProductList = (props: Props) => {
   ];
 
   const handleDeleteProduct = (id: string) => {
-    const newProducts = productsData.filter(product => product.id !== id);
-    setProductsData(newProducts);
+    console.log(DeleteAPI(`/api/san-pham/${id}?idCh=4`));
+    mutate(`/api/san-pham?idCh=4`);
+    enqueueSnackbar('Xóa sản phẩm thành công', { variant: 'success' });
   };
   const handleEditProduct = (record: ProductProps) => {
     setModalType('edit');
@@ -187,13 +125,14 @@ const ProductList = (props: Props) => {
   const handleModalOk = async (values: ProductProps) => {
     try {
       if (modalType === 'add') {
-        console.log('newProduct', values);
-        await postAPI('san-pham', values);
+        await postAPI('/api/san-pham?idCh=4', values);
+        mutate('/api/san-pham?idCh=4');
         enqueueSnackbar('Thêm sản phẩm thành công', { variant: 'success' });
         return;
       }
       if (modalType === 'edit') {
-        console.log('newProduct', values);
+        console.log(values);
+        await postAPI(`/api/san-pham/${values.id}?idCh=4`, values);
         enqueueSnackbar('Sửa sản phẩm thành công', { variant: 'success' });
         return;
       }

@@ -24,6 +24,7 @@ import { randomString } from 'src/utils/randomString';
 import { DeleteAPI } from 'src/api/config';
 
 import BrandForm from '../Forms/BrandForm';
+import SupplierForm from '../Forms/SupplierForm';
 
 type Props = {
   isOpen: boolean;
@@ -107,11 +108,9 @@ const ChangeModal = (props: Props) => {
         );
       }}
     >
-      {modalFor && modalFor === 'Thương Hiệu' ? (
-        <BrandForm form={form}></BrandForm>
-      ) : (
-        <></>
-      )}
+      {modalFor === 'Thương Hiệu' && <BrandForm form={form}></BrandForm>}
+      {modalFor === 'Nhà cung cấp' && <SupplierForm form={form}></SupplierForm>}
+      {/* {modalFor === 'Thương Hiệu' && <BrandForm form={form}></BrandForm>} */}
     </Modal>
   );
 };

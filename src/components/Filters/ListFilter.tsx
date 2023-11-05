@@ -12,7 +12,7 @@ type Props = {
   forField?: string;
 };
 function ListFilter({ apiURL, forField }: Props) {
-  const { data, mutate, error } = useSWR(`${apiURL}?id=4`, getAPI);
+  const { data, mutate, error } = useSWR(`${apiURL}?idCh=4`, getAPI);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState('');
   const [edittingItem, setEdittingItem] = useState(null);
@@ -30,6 +30,7 @@ function ListFilter({ apiURL, forField }: Props) {
     enqueueSnackbar('Xóa thành công', { variant: 'success' });
   };
   const handleModalOk = async (values: any) => {
+    console.log(values);
     try {
       if (modalType === 'add') {
         console.log('new Item', values);
@@ -37,7 +38,10 @@ function ListFilter({ apiURL, forField }: Props) {
         enqueueSnackbar('Thêm thành công', { variant: 'success' });
       }
       if (modalType === 'edit') {
-        await patchAPI(`${apiURL}/${values.id}?idCh=4`, { ...values });
+        const abc = await patchAPI(`${apiURL}/${values.id}?idCh=4`, {
+          ...values,
+        });
+        console.log(abc);
         await mutate(`${apiURL}?id=4`);
         enqueueSnackbar('Sửa thành công', { variant: 'success' });
       }
