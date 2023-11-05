@@ -1,11 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
 
+import MainLayout from 'src/Layout/MainLayout';
 import { Home, Login, NotFound, Products, Protected } from 'src/pages';
+import Sale from 'src/pages/Sale';
+import Suppilers from 'src/pages/Suppliers';
 import * as authRoutes from 'src/routes/routes.auth';
 import * as publicRoutes from 'src/routes/routes.public';
-import Sale from 'src/pages/Sale';
-import MainLayout from 'src/Layout/MainLayout';
-import Suppilers from 'src/pages/Suppliers';
 
 import ProtectedRoute from './ProtectedRoute';
 
@@ -20,14 +20,42 @@ function MainRoutes() {
           </ProtectedRoute>
         }
       ></Route>
-
       <Route element={<MainLayout />}>
-        <Route path={authRoutes.HOME} element={<Home />}></Route>
-        <Route path={authRoutes.PRODUCTS} element={<Products />}></Route>
-        <Route path={authRoutes.SUPPILERS} element={<Suppilers />}></Route>
+        <Route
+          path={authRoutes.HOME}
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path={authRoutes.PRODUCTS}
+          element={
+            <ProtectedRoute>
+              <Products />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path={authRoutes.SUPPILERS}
+          element={
+            <ProtectedRoute>
+              <Suppilers />
+            </ProtectedRoute>
+          }
+        ></Route>
       </Route>
+      <Route
+        path={authRoutes.SALE}
+        element={
+          <ProtectedRoute>
+            <Sale />
+          </ProtectedRoute>
+        }
+      ></Route>
+
       <Route path={publicRoutes.LOGIN} element={<Login />}></Route>
-      <Route path={authRoutes.SALE} element={<Sale />}></Route>
       <Route path='*' element={<NotFound />} />
     </Routes>
   );

@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React, { createContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LOGIN } from './routes.public';
+import { message } from 'antd';
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -27,20 +29,26 @@ export const AuthProvider = ({ children }: Props) => {
     try {
       // Call the logout API
       // await authApi.logout();
-      localStorage.setItem('loggedIn', 'false');
+      localStorage.removeItem('beesmart_token');
       setIsAuthenticated(false);
       console.log('Logout successful', isAuthenticated);
 
       // Navigate to the login page
-      navigate('/dang-nhap');
+      navigate(LOGIN);
     } catch (error) {
       console.error('Logout failed', error);
     }
   };
   const checkLoggedIn = () => {
-    const loggedIn = JSON.parse(localStorage.getItem('loggedIn') || '');
-    setIsAuthenticated(loggedIn);
-    return loggedIn;
+    const token = localStorage.getItem('beesmart_token');
+    if (token) {
+      setIsAuthenticated(true);
+      return true;
+    } else {
+      setIsAuthenticated(false);
+      message.info('Vui lòng đăng nhập');
+      return false;
+    }
   };
 
   return (
