@@ -108,7 +108,7 @@ const ProductList = (props: Props) => {
   ];
 
   const handleDeleteProduct = (id: string) => {
-    console.log(DeleteAPI(`/api/san-pham/${id}?idCh=4`));
+    console.log(DeleteAPI(`/api/san-pham/${id}`));
     mutate(`/api/san-pham?idCh=4`);
     enqueueSnackbar('Xóa sản phẩm thành công', { variant: 'success' });
   };
