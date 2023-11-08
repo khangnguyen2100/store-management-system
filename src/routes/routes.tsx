@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 
-import MainLayout from 'src/Layout/MainLayout';
 import { Home, Login, NotFound, Products, Protected } from 'src/pages';
 import * as authRoutes from 'src/routes/routes.auth';
 import * as publicRoutes from 'src/routes/routes.public';
