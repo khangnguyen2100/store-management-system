@@ -9,17 +9,20 @@ import {
   Typography,
   message,
 } from 'antd';
+import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
 
 import authApi from 'src/api/authApi';
 import Logo from 'src/components/Logo/Logo';
+import { fireBaseAuth } from 'src/configs/firebase';
 import { HOME } from 'src/routes/routes.auth';
-
-const { Header, Footer, Content } = Layout;
+const { Footer, Content } = Layout;
 
 export default function AntSignInSideTemplate() {
   const navigate = useNavigate();
   const [form] = Form.useForm();
+
+  const [signInWithGoogle] = useSignInWithGoogle(fireBaseAuth);
 
   const handleSubmitForm = async () => {
     try {
@@ -114,7 +117,11 @@ export default function AntSignInSideTemplate() {
         >
           Đăng nhập
         </Button>
-        <Button className='flex-center w-full gap-x-3' size='large'>
+        <Button
+          className='flex-center w-full gap-x-3'
+          size='large'
+          onClick={() => signInWithGoogle()}
+        >
           <Image
             src={require('src/assets/images/google-icon.png')}
             width={32}

@@ -1,6 +1,10 @@
+import { LockOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Dropdown, Image } from 'antd';
-import { Link } from 'react-router-dom';
+import { Avatar, Button, Dropdown, Image, Space, Typography } from 'antd';
+import { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
+import AuthContext from 'src/routes/AuthContext';
 type NavbarLinkType = {
   title: string;
   linkTo: string;
@@ -44,12 +48,47 @@ const NavbarLinks: NavbarLinkType[] = [
       },
     ],
   },
-  { title: 'Đối tác', linkTo: '#!' },
   { title: 'Nhân viên', linkTo: '#!' },
-  { title: 'Sổ quỹ', linkTo: '#!' },
   { title: 'Báo cáo', linkTo: '#!' },
 ];
 function AdminHeader() {
+  const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
+
+  const action: MenuProps['items'] = [
+    {
+      key: 'detail',
+      label: (
+        <Space onClick={() => navigate('/thong-tin-tai-khoan')}>
+          <UserOutlined />
+          <Typography className='header-accountAction'>
+            Chi tiết tài khoản
+          </Typography>
+        </Space>
+      ),
+    },
+    {
+      key: 'change-password',
+      label: (
+        <Space onClick={() => navigate('/thay-doi-mat-khau')}>
+          <LockOutlined />
+          <Typography className='header-accountAction'>Đổi mật khẩu</Typography>
+        </Space>
+      ),
+    },
+    {
+      key: 'logout',
+      label: (
+        <Space onClick={logout} style={{ width: '100%' }}>
+          <LogoutOutlined />
+          <Typography className='header-accountAction'>Đăng xuất</Typography>
+        </Space>
+      ),
+    },
+  ];
+  const username = localStorage.getItem('userInfo')
+    ? JSON.parse(localStorage.getItem('userInfo') as string).HoTen
+    : '';
   return (
     <div className='sticky inset-x-0 top-0 z-[100] h-[60px] w-full bg-[#0090DA] shadow-md'>
       <div className='mx-auto flex h-full w-full max-w-xl items-center justify-between px-4 xld:px-0'>
@@ -88,6 +127,31 @@ function AdminHeader() {
               </Link>
             );
           })}
+
+          <Dropdown
+            menu={{ items: action }}
+            trigger={['click']}
+            placement='bottomLeft'
+          >
+            <Space size={'small'} className='cursor-pointer'>
+              <Typography className='ml-8 text-base font-semibold text-white'>
+                {username}
+              </Typography>
+              <Button
+                shape='circle'
+                style={{
+                  backgroundColor: 'transparent',
+                  padding: '0',
+                  border: 'none',
+                }}
+              >
+                <Avatar
+                  className='account-avatar'
+                  src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=1'
+                />
+              </Button>
+            </Space>
+          </Dropdown>
         </div>
       </div>
     </div>
