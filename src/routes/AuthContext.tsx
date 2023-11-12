@@ -89,8 +89,6 @@ export const AuthProvider = ({ children }: Props) => {
     if (token) {
       setIsAuthenticated(true);
       return true;
-    } else if (user) {
-      return handleLoginWithGoogle();
     } else {
       setIsAuthenticated(false);
       message.info('Vui lòng đăng nhập');
@@ -98,9 +96,12 @@ export const AuthProvider = ({ children }: Props) => {
     }
   };
   useEffect(() => {
-    if (user) {
-      checkLoggedIn();
-    }
+    const checkGoogleAccount = async () => {
+      if (user) {
+        await handleLoginWithGoogle();
+      }
+    };
+    checkGoogleAccount();
   }, [user]);
 
   return (

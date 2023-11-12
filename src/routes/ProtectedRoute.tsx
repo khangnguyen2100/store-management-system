@@ -9,10 +9,10 @@ type Props = {
 };
 
 const ProtectedRoute = ({ children }: Props) => {
-  const { isAuthenticated, checkLoggedIn } = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
   useEffect(() => {
-    if (!checkLoggedIn()) {
+    if (!isAuthenticated) {
       navigate(LOGIN, { replace: true });
     }
   }, [isAuthenticated, navigate]);
