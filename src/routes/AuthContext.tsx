@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React, { createContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LOGIN } from './routes.public';
 import { message } from 'antd';
+
+import { LOGIN } from './routes.public';
 
 interface AuthContextProps {
   isAuthenticated: boolean;

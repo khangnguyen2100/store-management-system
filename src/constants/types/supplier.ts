@@ -1,5 +1,5 @@
 export type SupplierProps = {
-  id:string;
+  id: string;
   ten: string;
   diaChi: string;
   sdt: string;

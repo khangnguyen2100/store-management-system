@@ -1,4 +1,4 @@
-export interface CategoryProp  {
+export interface CategoryProp {
   id: string;
   ten: string;
-};
+}

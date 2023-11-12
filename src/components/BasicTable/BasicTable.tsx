@@ -120,7 +120,6 @@ const BasicTable = <T extends object>(props: Props<T>) => {
         dataSource={data}
         onChange={handleTableChange}
         pagination={pagination}
-        
       />
     </Space>
   );
