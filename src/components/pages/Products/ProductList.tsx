@@ -24,8 +24,6 @@ const ProductList = (props: Props) => {
   const [productsData, setProductsData] = useState<ProductProps[]>(
     props.products,
   );
-  console.log(props.products);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'add' | 'edit' | null>(null);
   const [editingProduct, setEditingProduct] = useState<ProductProps | null>(
@@ -120,7 +118,6 @@ const ProductList = (props: Props) => {
     setIsModalOpen(true);
   };
   const handleAddProduct = () => {
-    console.log('add product');
     setModalType('add');
     setIsModalOpen(true);
   };

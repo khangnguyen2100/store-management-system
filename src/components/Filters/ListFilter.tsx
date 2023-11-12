@@ -26,7 +26,7 @@ function ListFilter({ apiURL, forField }: Props) {
   };
   const handleDelete = async (values: any) => {
     await DeleteAPI(`${apiURL}/${values.id}?idCh=4`);
-    await mutate(`${apiURL}?id=4`);
+    await mutate();
     enqueueSnackbar('Xóa thành công', { variant: 'success' });
   };
   const handleModalOk = async (values: any) => {
@@ -38,11 +38,10 @@ function ListFilter({ apiURL, forField }: Props) {
         enqueueSnackbar('Thêm thành công', { variant: 'success' });
       }
       if (modalType === 'edit') {
-        const abc = await patchAPI(`${apiURL}/${values.id}?idCh=4`, {
+        await patchAPI(`${apiURL}/${values.id}?idCh=4`, {
           ...values,
         });
-        console.log(abc);
-        await mutate(`${apiURL}?id=4`);
+        await mutate();
         enqueueSnackbar('Sửa thành công', { variant: 'success' });
       }
     } catch (error) {
@@ -55,8 +54,7 @@ function ListFilter({ apiURL, forField }: Props) {
     return (
       <>
         <List
-          dataSource={data?.data}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          dataSource={data}
           renderItem={(item: any, index) => {
             if (index > 5) return;
             return (

@@ -45,7 +45,6 @@ const AddModal = (props: Props) => {
   const { data: categoriesData } = useSWR(CATEGORIESENDPOINT, getAPI);
   const { data: brandsData } = useSWR(BRANDSENDPOINT, getAPI);
   const { data: productTypeData } = useSWR(PRODUCTTYPEENDPOINT, getAPI);
-
   const [costValue, setCostValue] = useState<number>(0);
   const [priceValue, setPriceValue] = useState<number>(0);
   const [showProfit, setShowProfit] = useState<boolean>(false);
@@ -89,7 +88,6 @@ const AddModal = (props: Props) => {
     if (costValue && priceValue) setShowProfit(true);
   }, 500);
   const handleSubmitForm = async () => {
-    console.log('subtting');
     try {
       const values = await form.validateFields();
       onSuccess({ ...values });
@@ -103,7 +101,6 @@ const AddModal = (props: Props) => {
       setShowProfit(true);
     }
   }, [modalType, editingProduct?.id]);
-
   return (
     <Modal
       title={`${modalType === 'edit' ? 'Sửa' : 'Thêm'} sản phẩm`}
@@ -120,6 +117,12 @@ const AddModal = (props: Props) => {
         <Card size='small' title='Thông tin chung'>
           <Row gutter={[16, 16]}>
             <Col xs={24} md={12}>
+              {modalType === 'edit' ? (
+                <Form.Item label='Id sản phẩm' name={'id'}>
+                  <Input placeholder='Id sản phẩm' tabIndex={3} disabled />
+                </Form.Item>
+              ) : null}
+
               <Form.Item
                 label='Tên sản phẩm'
                 rules={[
@@ -138,13 +141,6 @@ const AddModal = (props: Props) => {
               >
                 <Input placeholder='Mã sản phẩm' tabIndex={3} />
               </Form.Item>
-              {/* <Form.Item
-                label='Cửa hàng'
-                name={'idCh'}
-                // rules={[{ required: true, message: 'Vui lòng chọn cửa hàng' }]}
-              >
-                <Select placeholder='Cửa hàng' tabIndex={5} />
-              </Form.Item> */}
               <Form.Item
                 label='Danh mục'
                 name={'idDm'}
@@ -152,15 +148,13 @@ const AddModal = (props: Props) => {
               >
                 <Select placeholder='Danh mục' tabIndex={4}>
                   {categoriesData &&
-                    categoriesData?.data?.map(
-                      (item: CategoryProp, index: number) => {
-                        return (
-                          <Select.Option value={item.id} key={index}>
-                            {item.ten}
-                          </Select.Option>
-                        );
-                      },
-                    )}
+                    categoriesData?.map((item: CategoryProp, index: number) => {
+                      return (
+                        <Select.Option value={item.id} key={index}>
+                          {item.ten}
+                        </Select.Option>
+                      );
+                    })}
                 </Select>
               </Form.Item>
             </Col>
@@ -174,7 +168,7 @@ const AddModal = (props: Props) => {
               >
                 <Select placeholder='Loại sản phẩm' tabIndex={2}>
                   {productTypeData &&
-                    productTypeData?.data?.map(
+                    productTypeData?.map(
                       (item: productTypeProps, index: number) => {
                         return (
                           <Select.Option value={item.id} key={index}>
@@ -193,15 +187,13 @@ const AddModal = (props: Props) => {
               >
                 <Select placeholder='Nhà cung cấp' tabIndex={4}>
                   {suppliersData &&
-                    suppliersData?.data?.map(
-                      (item: SupplierProps, index: number) => {
-                        return (
-                          <Select.Option value={item.id} key={index}>
-                            {item.ten}
-                          </Select.Option>
-                        );
-                      },
-                    )}
+                    suppliersData?.map((item: SupplierProps, index: number) => {
+                      return (
+                        <Select.Option value={item.id} key={index}>
+                          {item.ten}
+                        </Select.Option>
+                      );
+                    })}
                 </Select>
               </Form.Item>
               <Form.Item
@@ -213,7 +205,7 @@ const AddModal = (props: Props) => {
               >
                 <Select placeholder='Thương hiệu' tabIndex={6}>
                   {brandsData &&
-                    brandsData?.data?.map((item: BrandProps, index: number) => {
+                    brandsData?.map((item: BrandProps, index: number) => {
                       return (
                         <Select.Option value={item.id} key={index}>
                           {item.ten}

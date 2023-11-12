@@ -1,4 +1,4 @@
 export type productTypeProps = {
-  id:string;
-  ten:string
-}
+  id: string;
+  ten: string;
+};

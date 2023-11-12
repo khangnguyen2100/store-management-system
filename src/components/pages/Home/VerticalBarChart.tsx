@@ -35,8 +35,6 @@ export const labels = [
   '10',
 ];
 const abc = labels.map(() => faker.datatype.number({ min: 0, max: 1000 }));
-console.log(abc);
-
 export const data = {
   labels,
   datasets: [

@@ -14,6 +14,9 @@ const productApi = {
       method: 'GET',
     });
   },
+  postProducts: () =>{
+    
+  }
 };
 
 const useProducts = (params: Props) => {

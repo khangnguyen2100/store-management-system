@@ -9,6 +9,12 @@ const authApi = {
       data: JSON.stringify(data),
     });
   },
+  loginWithGoogle: (data: any) => {
+    return request(`/api/loginWithGoogle`, {
+      method: 'POST',
+      data: JSON.stringify(data),
+    });
+  },
   checkToken: () => {
     return request('/auth/check-token', {
       method: 'GET',
