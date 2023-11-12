@@ -17,13 +17,15 @@ import TableAction from '../../GroupButton/TableAction';
 import AddModal from './AddModal';
 
 type Props = {
-  productsFake: ProductProps[];
+  products: ProductProps[];
 };
 
 const ProductList = (props: Props) => {
   const [productsData, setProductsData] = useState<ProductProps[]>(
-    props.productsFake,
+    props.products,
   );
+  console.log(props.products);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'add' | 'edit' | null>(null);
   const [editingProduct, setEditingProduct] = useState<ProductProps | null>(

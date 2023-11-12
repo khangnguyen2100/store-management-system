@@ -11,20 +11,6 @@ const NavbarLinks: NavbarLinkType[] = [
   {
     title: 'Tổng quan',
     linkTo: '/',
-    subMenu: [
-      {
-        key: '1',
-        label: (
-          <a
-            target='_blank'
-            rel='noopener noreferrer'
-            href='https://www.antgroup.com'
-          >
-            1st menu item
-          </a>
-        ),
-      },
-    ],
   },
   {
     title: 'Bán hàng',
@@ -44,7 +30,7 @@ const NavbarLinks: NavbarLinkType[] = [
       },
     ],
   },
-  { title: 'Đối tác', linkTo: '#!' },
+  { title: 'Sản phẩm', linkTo: '/san-pham' },
   { title: 'Nhân viên', linkTo: '#!' },
   { title: 'Sổ quỹ', linkTo: '#!' },
   { title: 'Báo cáo', linkTo: '#!' },

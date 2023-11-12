@@ -7,6 +7,7 @@ import Filters, { FilterProps } from 'src/components/Filters/Filters';
 import ProductList from 'src/components/pages/Products/ProductList';
 import { ProductProps } from 'src/constants/types/product';
 import MyFilters, { MyFilterProps } from 'src/components/Filters/MyFilters';
+import useProducts from 'src/api/productApi';
 
 const filters: MyFilterProps[] = [
   // {
@@ -89,18 +90,13 @@ const filters: MyFilterProps[] = [
     apiURL: '/api/thuong-hieu',
   },
 ];
-const PRODUCSTENDPOINT = '/api/san-pham?idCh=4';
 const Products = () => {
-  const {
-    data: productsData,
-    mutate,
-    error,
-  } = useSWR(PRODUCSTENDPOINT, getAPI);
+  const { data: productsData, mutate, error } = useProducts({ idCh: '4' });
   const handleFilterChange = (filters: any) => {
     console.log('filters:', filters);
     // call filter api
   };
-  if (productsData)
+  if (productsData && productsData.datalink)
     return (
       <div className='flex w-full items-start gap-5'>
         <MyFilters
@@ -108,7 +104,7 @@ const Products = () => {
           filters={filters}
           onFilterChange={handleFilterChange}
         />
-        <ProductList productsFake={productsData.datalink} />
+        <ProductList products={productsData.datalink} />
       </div>
     );
   return <Spin size='large' />;

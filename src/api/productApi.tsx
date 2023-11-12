@@ -23,7 +23,6 @@ const useProducts = (params: Props) => {
     isLoading,
     mutate,
   } = useSWR(`/api/san-pham?${serialize(params)}`);
-
   return {
     data,
     error,

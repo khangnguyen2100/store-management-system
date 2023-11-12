@@ -6,6 +6,7 @@ import * as publicRoutes from 'src/routes/routes.public';
 import Sale from 'src/pages/Sale';
 
 import ProtectedRoute from './ProtectedRoute';
+import MainLayout from 'src/Layout/MainLayout';
 
 function MainRoutes() {
   return (
