@@ -70,7 +70,7 @@ function ListFilter({ apiURL, forField }: Props) {
               </div>
             );
           }}
-        ></List>
+        />
         <ChangeModal
           isOpen={isModalOpen}
           onSuccess={handleModalOk}

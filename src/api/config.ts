@@ -11,7 +11,11 @@ export const getAPI = async (url: string) => {
   return response?.data;
 };
 export const postAPI = async <T>(key: string, newData: T) => {
-  const response = await beesmartAPI.post(`${key}`, { ...newData });
+  const response = await beesmartAPI.post(`${key}`, newData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response?.data;
 };
 export const patchAPI = async <T>(key: string, newData: T) => {

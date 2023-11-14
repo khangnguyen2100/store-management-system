@@ -119,6 +119,18 @@ const MyFilters = (props: Props) => {
     borderRadius: 4,
     border: '1px solid #f0f0f0',
   };
+  const getExtraIcon = (filter: MyFilterProps) => {
+    if (filter.type === 'list')
+      return (
+        <i
+          className='fa-regular fa-plus text-md rounded-full p-1 hover:bg-[#e6f8ec]'
+          onClick={e => {
+            e.stopPropagation();
+            console.log('Clicked');
+          }}
+        ></i>
+      );
+  };
   const items: CollapseProps['items'] = filters.map((filter, i) => {
     return {
       key: i + 1,
@@ -127,9 +139,9 @@ const MyFilters = (props: Props) => {
         <FilterItem item={filter} onFilterChange={handleFilterChange} key={i} />
       ),
       style: panelStyle,
+      extra: getExtraIcon(filter),
     };
   });
-
   return (
     <div className='w-full max-w-[234px] shrink-0'>
       <h3 className='mb-6 block text-xl font-bold text-typo-1'>{title}</h3>

@@ -15,6 +15,7 @@ import {
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
+import { RcFile } from 'antd/es/upload';
 
 import { getAPI } from 'src/api/config';
 import { ProductProps } from 'src/constants/types/product';
@@ -69,16 +70,19 @@ const AddModal = (props: Props) => {
     listType: 'picture',
     fileList,
     onChange(info) {
-      const { status } = info.file;
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-      setFileList([...info.fileList]);
+      // const { status } = info.file;
+      // if (status !== 'uploading') {
+      //   console.log(info.file, info.fileList);
+      // }
+      // if (status === 'done') {
+      //   message.success(`${info.file.name} file uploaded successfully.`);
+      // } else if (status === 'error') {
+      //   message.error(`${info.file.name} file upload failed.`);
+      // }
+      setFileList([info.file]);
+    },
+    beforeUpload() {
+      return false;
     },
     onDrop(e) {
       console.log('Dropped files', e.dataTransfer.files);
@@ -87,10 +91,23 @@ const AddModal = (props: Props) => {
   const handleShowProfit = useDebounce(() => {
     if (costValue && priceValue) setShowProfit(true);
   }, 500);
+  // const convertImageToBase64 = (imageFile: any) => {
+  //   return new Promise(resolve => {
+  //     const reader = new FileReader();
+  //     reader.onload = e => {
+  //       if (e.target) {
+  //         const base64String = btoa(e.target.result);
+  //         resolve(base64String);
+  //       }
+  //     };
+  //     reader.readAsBinaryString(imageFile);
+  //   });
+  // };
   const handleSubmitForm = async () => {
     try {
       const values = await form.validateFields();
-      onSuccess({ ...values });
+      const image = fileList[0];
+      onSuccess({ ...values, img: image, anHien: 1 });
     } catch (error) {}
   };
   useEffect(() => {
@@ -166,7 +183,11 @@ const AddModal = (props: Props) => {
                   { required: true, message: 'Vui lòng chọn loại sản phẩm' },
                 ]}
               >
-                <Select placeholder='Loại sản phẩm' tabIndex={2}>
+                <Select
+                  placeholder='Loại sản phẩm'
+                  tabIndex={2}
+                  value={'tenLoaiSp'}
+                >
                   {productTypeData &&
                     productTypeData?.map(
                       (item: productTypeProps, index: number) => {

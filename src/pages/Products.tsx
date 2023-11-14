@@ -101,7 +101,7 @@ const Products = () => {
           filters={filters}
           onFilterChange={handleFilterChange}
         />
-        <ProductList products={productsData.datalink} />
+        <ProductList products={productsData.datalink} mutate={mutate} />
       </div>
     );
   return <Spin size='large' />;
