@@ -5,7 +5,7 @@ import { ColumnsType } from 'antd/es/table';
 import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import * as xlsx from 'xlsx';
-import { mutate } from 'swr';
+import { KeyedMutator } from 'swr';
 
 import { DeleteAPI, postAPI } from 'src/api/config';
 import BasicTable from 'src/components/BasicTable/BasicTable';
@@ -17,13 +17,13 @@ import TableAction from '../../GroupButton/TableAction';
 import AddModal from './AddModal';
 
 type Props = {
-  productsFake: ProductProps[];
+  products: ProductProps[];
+  mutate: KeyedMutator<any>;
 };
 
 const ProductList = (props: Props) => {
-  const [productsData, setProductsData] = useState<ProductProps[]>(
-    props.productsFake,
-  );
+  const { mutate, products } = props;
+  const [productsData, setProductsData] = useState<ProductProps[]>(products);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'add' | 'edit' | null>(null);
   const [editingProduct, setEditingProduct] = useState<ProductProps | null>(
@@ -106,10 +106,9 @@ const ProductList = (props: Props) => {
       align: 'center',
     },
   ];
-
-  const handleDeleteProduct = (id: string) => {
-    console.log(DeleteAPI(`/api/san-pham/${id}?idCh=4`));
-    mutate(`/api/san-pham?idCh=4`);
+  const handleDeleteProduct = async (id: string) => {
+    await DeleteAPI(`/api/san-pham/${id}`);
+    mutate('/api/san-pham?idCh=4');
     enqueueSnackbar('Xóa sản phẩm thành công', { variant: 'success' });
   };
   const handleEditProduct = (record: ProductProps) => {
@@ -118,22 +117,34 @@ const ProductList = (props: Props) => {
     setIsModalOpen(true);
   };
   const handleAddProduct = () => {
-    console.log('add product');
     setModalType('add');
     setIsModalOpen(true);
   };
   const handleModalOk = async (values: ProductProps) => {
+    console.log('add');
+
     try {
       if (modalType === 'add') {
-        await postAPI('/api/san-pham?idCh=4', values);
+        const newData = new FormData();
+        for (const [key, value] of Object.entries(values)) {
+          if (value !== undefined && value !== null) {
+            newData.append(key, value);
+          }
+        }
+        console.log(await postAPI('/api/san-pham?idCh=4', newData));
         mutate('/api/san-pham?idCh=4');
         enqueueSnackbar('Thêm sản phẩm thành công', { variant: 'success' });
-        return;
+        setIsModalOpen(false);
       }
       if (modalType === 'edit') {
-        console.log(values);
-        await postAPI(`/api/san-pham/${values.id}?idCh=4`, values);
+        await postAPI(`/api/san-pham/${values.id}?idCh=4`, {
+          ...values,
+          idCh: '4',
+          anHien: 1,
+        });
         enqueueSnackbar('Sửa sản phẩm thành công', { variant: 'success' });
+        mutate('/api/san-pham?idCh=4');
+        setIsModalOpen(false);
         return;
       }
     } catch (error) {
@@ -148,7 +159,6 @@ const ProductList = (props: Props) => {
   const handleTableChange = (pagination: any) => {
     console.log('product list call');
   };
-
   const [uploading, setUploading] = useState(false);
 
   const handleUpload = (json: any) => {

@@ -4,9 +4,9 @@ import { Home, Login, NotFound, Products, Protected } from 'src/pages';
 import * as authRoutes from 'src/routes/routes.auth';
 import * as publicRoutes from 'src/routes/routes.public';
 import Sale from 'src/pages/Sale';
-import MainLayout from 'src/Layout/MainLayout';
 
 import ProtectedRoute from './ProtectedRoute';
+import MainLayout from 'src/Layout/MainLayout';
 
 function MainRoutes() {
   return (

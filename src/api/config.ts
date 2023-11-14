@@ -6,11 +6,16 @@ import authApi from './authApi';
 const beesmartAPI = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 });
-export const getAPI = (url: string) =>
-  beesmartAPI.get(url).then(res => res.data);
-
+export const getAPI = async (url: string) => {
+  const response = await beesmartAPI.get(url).then(res => res.data);
+  return response?.data;
+};
 export const postAPI = async <T>(key: string, newData: T) => {
-  const response = await beesmartAPI.post(`${key}`, { ...newData });
+  const response = await beesmartAPI.post(`${key}`, newData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response?.data;
 };
 export const patchAPI = async <T>(key: string, newData: T) => {

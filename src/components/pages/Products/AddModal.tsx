@@ -15,6 +15,7 @@ import {
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
+import { RcFile } from 'antd/es/upload';
 
 import { getAPI } from 'src/api/config';
 import { ProductProps } from 'src/constants/types/product';
@@ -45,7 +46,6 @@ const AddModal = (props: Props) => {
   const { data: categoriesData } = useSWR(CATEGORIESENDPOINT, getAPI);
   const { data: brandsData } = useSWR(BRANDSENDPOINT, getAPI);
   const { data: productTypeData } = useSWR(PRODUCTTYPEENDPOINT, getAPI);
-
   const [costValue, setCostValue] = useState<number>(0);
   const [priceValue, setPriceValue] = useState<number>(0);
   const [showProfit, setShowProfit] = useState<boolean>(false);
@@ -70,16 +70,19 @@ const AddModal = (props: Props) => {
     listType: 'picture',
     fileList,
     onChange(info) {
-      const { status } = info.file;
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-      setFileList([...info.fileList]);
+      // const { status } = info.file;
+      // if (status !== 'uploading') {
+      //   console.log(info.file, info.fileList);
+      // }
+      // if (status === 'done') {
+      //   message.success(`${info.file.name} file uploaded successfully.`);
+      // } else if (status === 'error') {
+      //   message.error(`${info.file.name} file upload failed.`);
+      // }
+      setFileList([info.file]);
+    },
+    beforeUpload() {
+      return false;
     },
     onDrop(e) {
       console.log('Dropped files', e.dataTransfer.files);
@@ -88,11 +91,23 @@ const AddModal = (props: Props) => {
   const handleShowProfit = useDebounce(() => {
     if (costValue && priceValue) setShowProfit(true);
   }, 500);
+  // const convertImageToBase64 = (imageFile: any) => {
+  //   return new Promise(resolve => {
+  //     const reader = new FileReader();
+  //     reader.onload = e => {
+  //       if (e.target) {
+  //         const base64String = btoa(e.target.result);
+  //         resolve(base64String);
+  //       }
+  //     };
+  //     reader.readAsBinaryString(imageFile);
+  //   });
+  // };
   const handleSubmitForm = async () => {
-    console.log('subtting');
     try {
       const values = await form.validateFields();
-      onSuccess({ ...values });
+      const image = fileList[0];
+      onSuccess({ ...values, img: image, anHien: 1 });
     } catch (error) {}
   };
   useEffect(() => {
@@ -103,7 +118,6 @@ const AddModal = (props: Props) => {
       setShowProfit(true);
     }
   }, [modalType, editingProduct?.id]);
-
   return (
     <Modal
       title={`${modalType === 'edit' ? 'Sửa' : 'Thêm'} sản phẩm`}
@@ -120,6 +134,12 @@ const AddModal = (props: Props) => {
         <Card size='small' title='Thông tin chung'>
           <Row gutter={[16, 16]}>
             <Col xs={24} md={12}>
+              {modalType === 'edit' ? (
+                <Form.Item label='Id sản phẩm' name={'id'}>
+                  <Input placeholder='Id sản phẩm' tabIndex={3} disabled />
+                </Form.Item>
+              ) : null}
+
               <Form.Item
                 label='Tên sản phẩm'
                 rules={[
@@ -138,13 +158,6 @@ const AddModal = (props: Props) => {
               >
                 <Input placeholder='Mã sản phẩm' tabIndex={3} />
               </Form.Item>
-              {/* <Form.Item
-                label='Cửa hàng'
-                name={'idCh'}
-                // rules={[{ required: true, message: 'Vui lòng chọn cửa hàng' }]}
-              >
-                <Select placeholder='Cửa hàng' tabIndex={5} />
-              </Form.Item> */}
               <Form.Item
                 label='Danh mục'
                 name={'idDm'}
@@ -152,15 +165,13 @@ const AddModal = (props: Props) => {
               >
                 <Select placeholder='Danh mục' tabIndex={4}>
                   {categoriesData &&
-                    categoriesData?.data?.map(
-                      (item: CategoryProp, index: number) => {
-                        return (
-                          <Select.Option value={item.id} key={index}>
-                            {item.ten}
-                          </Select.Option>
-                        );
-                      },
-                    )}
+                    categoriesData?.map((item: CategoryProp, index: number) => {
+                      return (
+                        <Select.Option value={item.id} key={index}>
+                          {item.ten}
+                        </Select.Option>
+                      );
+                    })}
                 </Select>
               </Form.Item>
             </Col>
@@ -172,9 +183,13 @@ const AddModal = (props: Props) => {
                   { required: true, message: 'Vui lòng chọn loại sản phẩm' },
                 ]}
               >
-                <Select placeholder='Loại sản phẩm' tabIndex={2}>
+                <Select
+                  placeholder='Loại sản phẩm'
+                  tabIndex={2}
+                  value={'tenLoaiSp'}
+                >
                   {productTypeData &&
-                    productTypeData?.data?.map(
+                    productTypeData?.map(
                       (item: productTypeProps, index: number) => {
                         return (
                           <Select.Option value={item.id} key={index}>
@@ -193,15 +208,13 @@ const AddModal = (props: Props) => {
               >
                 <Select placeholder='Nhà cung cấp' tabIndex={4}>
                   {suppliersData &&
-                    suppliersData?.data?.map(
-                      (item: SupplierProps, index: number) => {
-                        return (
-                          <Select.Option value={item.id} key={index}>
-                            {item.ten}
-                          </Select.Option>
-                        );
-                      },
-                    )}
+                    suppliersData?.map((item: SupplierProps, index: number) => {
+                      return (
+                        <Select.Option value={item.id} key={index}>
+                          {item.ten}
+                        </Select.Option>
+                      );
+                    })}
                 </Select>
               </Form.Item>
               <Form.Item
@@ -213,7 +226,7 @@ const AddModal = (props: Props) => {
               >
                 <Select placeholder='Thương hiệu' tabIndex={6}>
                   {brandsData &&
-                    brandsData?.data?.map((item: BrandProps, index: number) => {
+                    brandsData?.map((item: BrandProps, index: number) => {
                       return (
                         <Select.Option value={item.id} key={index}>
                           {item.ten}
