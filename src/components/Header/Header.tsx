@@ -42,7 +42,7 @@ function AdminHeader() {
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
 
-  const action: MenuProps['items'] = [
+  const actions: MenuProps['items'] = [
     {
       key: 'detail',
       label: (
@@ -116,7 +116,7 @@ function AdminHeader() {
           })}
 
           <Dropdown
-            menu={{ items: action }}
+            menu={{ items: actions }}
             trigger={['click']}
             placement='bottomLeft'
           >
