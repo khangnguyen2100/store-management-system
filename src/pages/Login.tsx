@@ -9,7 +9,8 @@ import {
   Typography,
   message,
 } from 'antd';
-import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useEffect } from 'react';
+import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
 
 import authApi from 'src/api/authApi';
@@ -23,6 +24,47 @@ export default function AntSignInSideTemplate() {
   const [form] = Form.useForm();
 
   const [signInWithGoogle] = useSignInWithGoogle(fireBaseAuth);
+  const [user] = useAuthState(fireBaseAuth);
+
+  const handleLoginWithGoogle = async () => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const UserImpl: any = user;
+      const res = await authApi.loginWithGoogle({
+        email: UserImpl.email,
+        token: UserImpl.accessToken,
+      });
+      if (res.status === 200) {
+        localStorage.setItem('beesmart_token', res.data.token);
+        localStorage.setItem(
+          'userInfo',
+          JSON.stringify({
+            id: res.data.tt_user.id,
+            email: res.data.tt_user.email,
+            HoTen: res.data.tt_user.HoTen,
+            sdt: res.data.tt_user.sdt,
+            Diachi: res.data.tt_user.Diachi,
+            vaiTro: res.data.tt_user.vaiTro,
+            idCh: res.data.tt_user.idCh,
+            tenCh: res.data.tt_user.tenCh,
+            tenLoaiCh: res.data.tt_user.tenLoaiCh,
+            idLoaiCh: res.data.tt_user.idLoaiCh,
+          }),
+        );
+        localStorage.setItem('idCh', res.data.tt_user.idCh);
+        message.success('Đăng nhập thành công');
+        navigate(HOME);
+        return true;
+      } else {
+        message.error(res.data.message || 'Tài khoản chưa được đăng ký.');
+        return false;
+      }
+    } catch (error) {
+      console.log('login with google error:', error);
+      message.error('Tài khoản chưa được đăng ký.');
+      return false;
+    }
+  };
 
   const handleSubmitForm = async () => {
     try {
@@ -59,13 +101,22 @@ export default function AntSignInSideTemplate() {
     }
   };
 
+  useEffect(() => {
+    const checkGoogleAccount = async () => {
+      if (user) {
+        await handleLoginWithGoogle();
+      }
+    };
+    checkGoogleAccount();
+  }, [user]);
+
   return (
     <Layout className='flex min-h-screen flex-col'>
       <div className='mx-auto flex w-full max-w-large py-3'>
         <Logo />
         <div></div>
       </div>
-      <Content className='m-auto mt-10 flex w-[350px] flex-col gap-2 rounded-sm pb-5'>
+      <Content className='m-auto mt-10 flex w-[400px] flex-col gap-2 rounded-sm pb-5'>
         <div className='block text-center'>
           <Typography.Title level={1}>Đăng nhập</Typography.Title>
         </div>
@@ -97,15 +148,20 @@ export default function AntSignInSideTemplate() {
             />
           </Form.Item>
           <div className='mb-3 flex justify-between'>
-            {/* <Form.Item name='remember'> */}
-            <Form.Item>
-              <Checkbox className='text-sm'>Ghi nhớ</Checkbox>
-            </Form.Item>
             <Link to='/forgot-password'>
               <Typography.Text className='text-sm'>
                 Quên mật khẩu?
               </Typography.Text>
             </Link>
+            <Typography.Text
+              className='text-sm text-primary !underline cursor-pointer'
+              onClick={() =>
+                (window.location.href =
+                  'https://beesmart-stage.vercel.app/sign-up')
+              }
+            >
+              Đăng ký tài khoản
+            </Typography.Text>
           </div>
         </Form>
         <Button
