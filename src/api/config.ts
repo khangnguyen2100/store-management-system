@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import qs from 'qs';
 
 import authApi from './authApi';
@@ -11,11 +11,7 @@ export const getAPI = async (url: string) => {
   return response?.data;
 };
 export const postAPI = async <T>(key: string, newData: T) => {
-  const response = await beesmartAPI.post(`${key}`, newData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  const response = await beesmartAPI.post(`${key}`, newData);
   return response?.data;
 };
 export const patchAPI = async <T>(key: string, newData: T) => {
@@ -35,6 +31,7 @@ export const getToken = () =>
 const getAuthorizationHeader = () => `Bearer ${getToken()}`;
 
 export const request = axios.create({
+  withCredentials: true,
   baseURL: process.env.REACT_APP_API_URL,
   headers: {
     'content-type': 'application/json',
