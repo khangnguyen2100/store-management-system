@@ -61,16 +61,31 @@ function ListFilter({ apiURL, forField }: Props) {
               <div
                 className='group flex cursor-pointer items-center justify-between py-2 hover:bg-[#F0F1F3]'
                 key={index}
+                onClick={() => alert('Đang fix chờ tí ....')}
               >
                 <span className='text-sm'>{item.ten}</span>
                 <i
                   className='fa-regular fa-pencil !invisible h-full cursor-pointer p-1 text-base hover:bg-[#e6f8ec] group-hover:!visible'
-                  onClick={() => handleChangeModal('edit', item)}
+                  onClick={e => {
+                    e.stopPropagation();
+                    handleChangeModal('edit', item);
+                  }}
                 ></i>
               </div>
             );
           }}
-        />
+          className='relative'
+        >
+          <div className='absolute right-0'>
+            <i
+              className='fa-regular fa-plus text-md rounded-full p-1 hover:bg-[#e6f8ec]'
+              onClick={e => {
+                e.stopPropagation();
+                console.log('Clicked');
+              }}
+            ></i>
+          </div>
+        </List>
         <ChangeModal
           isOpen={isModalOpen}
           onSuccess={handleModalOk}

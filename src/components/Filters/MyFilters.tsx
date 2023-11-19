@@ -3,9 +3,14 @@ import { CollapseProps } from 'antd/lib';
 import clsx from 'clsx';
 import { useState } from 'react';
 import { BiSolidRightArrow } from 'react-icons/bi';
+import { enqueueSnackbar } from 'notistack';
+import { mutate } from 'swr';
+
+import { postAPI } from 'src/api/config';
 
 import PickTimeFilter from './PickTimeFilter/PickTimeFilter';
 import ListFilter from './ListFilter';
+import AddModal from './AddModal';
 
 type OptionProps = {
   label: string;
@@ -104,6 +109,10 @@ const FilterItem = ({ item, onFilterChange }: IFilterItem) => {
 const MyFilters = (props: Props) => {
   const { title = 'title', filters, onFilterChange } = props;
   const [filtersData, setFiltersData] = useState<FilterData>();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [currentFilter, setCurrentFilter] = useState<MyFilterProps | null>(
+    null,
+  );
   const handleFilterChange = (name: string, value: string | string[]) => {
     const newFiltersData = {
       ...filtersData,
@@ -119,16 +128,37 @@ const MyFilters = (props: Props) => {
     borderRadius: 4,
     border: '1px solid #f0f0f0',
   };
+  const handleAddModalOpen = (filter: MyFilterProps) => {
+    setCurrentFilter(filter);
+    setIsOpen(true);
+  };
+
+  const handleModalOk = async (values: any) => {
+    try {
+      const { apiUrl, ...newItem } = values;
+      await postAPI(apiUrl as string, newItem);
+      setIsOpen(false);
+      enqueueSnackbar('Thêm thành công', { variant: 'success' });
+    } catch (error) {
+      console.log('error:', error);
+      enqueueSnackbar('Có lỗi xảy ra', { variant: 'error' });
+    }
+  };
+  const handleModalCancel = () => {
+    setIsOpen(false);
+  };
   const getExtraIcon = (filter: MyFilterProps) => {
     if (filter.type === 'list')
       return (
-        <i
-          className='fa-regular fa-plus text-md rounded-full p-1 hover:bg-[#e6f8ec]'
-          onClick={e => {
-            e.stopPropagation();
-            console.log('Clicked');
-          }}
-        ></i>
+        <>
+          <i
+            className='fa-regular fa-plus text-md rounded-full p-1 hover:bg-[#e6f8ec]'
+            onClick={e => {
+              e.stopPropagation();
+              handleAddModalOpen(filter);
+            }}
+          ></i>
+        </>
       );
   };
   const items: CollapseProps['items'] = filters.map((filter, i) => {
@@ -142,6 +172,7 @@ const MyFilters = (props: Props) => {
       extra: getExtraIcon(filter),
     };
   });
+
   return (
     <div className='w-full max-w-[234px] shrink-0'>
       <h3 className='mb-6 block text-xl font-bold text-typo-1'>{title}</h3>
@@ -156,6 +187,13 @@ const MyFilters = (props: Props) => {
           />
         )}
       />
+      <AddModal
+        isOpen={isOpen}
+        onSuccess={handleModalOk}
+        onCancel={handleModalCancel}
+        modalFor={`${currentFilter?.title}`}
+        apiUrl={`${currentFilter?.apiURL}`}
+      ></AddModal>
     </div>
   );
 };

@@ -49,31 +49,31 @@ const filters: MyFilterProps[] = [
   //     },
   //   ],
   // },
-  {
-    title: 'Thương hiệu',
-    type: 'select',
-    name: 'brand',
-    options: [
-      {
-        label: 'Indomie',
-        value: '1',
-      },
-      {
-        label: 'Monster Energy',
-        value: '2',
-      },
-    ],
-  },
-  {
-    title: 'Nhà cung cấp',
-    type: 'text',
-    name: 'supplier',
-  },
-  {
-    title: 'Thời gian',
-    type: 'pick-time',
-    name: 'date',
-  },
+  // {
+  //   title: 'Thương hiệu',
+  //   type: 'select',
+  //   name: 'brand',
+  //   options: [
+  //     {
+  //       label: 'Indomie',
+  //       value: '1',
+  //     },
+  //     {
+  //       label: 'Monster Energy',
+  //       value: '2',
+  //     },
+  //   ],
+  // },
+  // {
+  //   title: 'Nhà cung cấp',
+  //   type: 'text',
+  //   name: 'supplier',
+  // },
+  // {
+  //   title: 'Thời gian',
+  //   type: 'pick-time',
+  //   name: 'date',
+  // },
   {
     title: 'Nhà cung cấp',
     type: 'list',

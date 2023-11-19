@@ -3,7 +3,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { Button, Image, Space, Upload, UploadProps, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { enqueueSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import * as xlsx from 'xlsx';
 import { KeyedMutator } from 'swr';
 
@@ -22,7 +22,9 @@ type Props = {
 };
 
 const ProductList = (props: Props) => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const { mutate, products } = props;
+
   const [productsData, setProductsData] = useState<ProductProps[]>(products);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'add' | 'edit' | null>(null);
@@ -58,13 +60,13 @@ const ProductList = (props: Props) => {
       key: 6,
       title: 'Ảnh',
       dataIndex: 'img',
-      width: 70,
+      width: 200,
       render: (thumbnail: string) => (
         <Image
-          src={thumbnail}
+          src={`https://admin.beesmart.io.vn/${thumbnail}`}
           alt='product img'
-          width={50}
-          height={50}
+          width={'full'}
+          // height={50}
           className='rounded-md'
         />
       ),
@@ -121,8 +123,6 @@ const ProductList = (props: Props) => {
     setIsModalOpen(true);
   };
   const handleModalOk = async (values: ProductProps) => {
-    console.log('add');
-
     try {
       if (modalType === 'add') {
         const newData = new FormData();
@@ -131,17 +131,20 @@ const ProductList = (props: Props) => {
             newData.append(key, value);
           }
         }
+
         console.log(await postAPI('/api/san-pham?idCh=4', newData));
         mutate('/api/san-pham?idCh=4');
         enqueueSnackbar('Thêm sản phẩm thành công', { variant: 'success' });
         setIsModalOpen(false);
       }
       if (modalType === 'edit') {
-        await postAPI(`/api/san-pham/${values.id}?idCh=4`, {
-          ...values,
-          idCh: '4',
-          anHien: 1,
-        });
+        const newData = new FormData();
+        for (const [key, value] of Object.entries(values)) {
+          if (value !== undefined && value !== null) {
+            newData.append(key, value);
+          }
+        }
+        await postAPI(`/api/san-pham/${values.id}?idCh=4`, newData);
         enqueueSnackbar('Sửa sản phẩm thành công', { variant: 'success' });
         mutate('/api/san-pham?idCh=4');
         setIsModalOpen(false);
@@ -183,7 +186,6 @@ const ProductList = (props: Props) => {
     accept: '.xlsx, .xls',
     showUploadList: false,
     multiple: false,
-
     onChange(info) {
       if (info.file.status !== 'uploading') {
         const reader = new FileReader();
