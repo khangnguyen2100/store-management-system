@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import { BiSolidRightArrow } from 'react-icons/bi';
 import { enqueueSnackbar } from 'notistack';
-import { mutate } from 'swr';
+import useSWR, { mutate } from 'swr';
 
 import { postAPI } from 'src/api/config';
 
@@ -108,6 +108,7 @@ const FilterItem = ({ item, onFilterChange }: IFilterItem) => {
 
 const MyFilters = (props: Props) => {
   const { title = 'title', filters, onFilterChange } = props;
+  const { mutate } = useSWR(``);
   const [filtersData, setFiltersData] = useState<FilterData>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentFilter, setCurrentFilter] = useState<MyFilterProps | null>(
@@ -139,6 +140,7 @@ const MyFilters = (props: Props) => {
       await postAPI(apiUrl as string, newItem);
       setIsOpen(false);
       enqueueSnackbar('Thêm thành công', { variant: 'success' });
+      mutate(`${apiUrl}`);
     } catch (error) {
       console.log('error:', error);
       enqueueSnackbar('Có lỗi xảy ra', { variant: 'error' });
@@ -152,7 +154,7 @@ const MyFilters = (props: Props) => {
       return (
         <>
           <i
-            className='fa-regular fa-plus text-md rounded-full p-1 hover:bg-[#e6f8ec]'
+            className='fa-regular fa-plus text-md rounded-full p-1 text-sm hover:bg-[#e6f8ec]'
             onClick={e => {
               e.stopPropagation();
               handleAddModalOpen(filter);

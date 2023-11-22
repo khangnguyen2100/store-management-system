@@ -27,23 +27,22 @@ import { CategoryProp } from 'src/constants/types/category';
 import { BrandProps } from 'src/constants/types/brand';
 import { productTypeProps } from 'src/constants/types/productType';
 import { getBase64 } from 'src/utils/getBase64';
+import { BillProps } from 'src/constants/types/bill';
 
 const { Dragger } = Upload;
 type Props = {
   isOpen: boolean;
   onSuccess: (values: any) => void;
   onCancel: () => void;
-  editingProduct: ProductProps | null;
+  editingBill: BillProps | null;
   modalType: 'add' | 'edit' | null;
 };
-const getIdCh = () =>
-  localStorage.getItem('idCh') ? localStorage.getItem('idCh') : '4';
-const SUPPLIERSENDPOINT = `/api/nha-cung-cap?idCh=${getIdCh()}`;
-const CATEGORIESENDPOINT = `/api/danh-muc-san-pham?idCh=${getIdCh()}`;
-const BRANDSENDPOINT = `/api/thuong-hieu?idCh=${getIdCh()}`;
-const PRODUCTTYPEENDPOINT = `/api/loai-san-pham`;
+const SUPPLIERSENDPOINT = '/api/nha-cung-cap?idCh=4';
+const CATEGORIESENDPOINT = '/api/danh-muc-san-pham?idCh=4';
+const BRANDSENDPOINT = '/api/thuong-hieu?idCh=4';
+const PRODUCTTYPEENDPOINT = '/api/loai-san-pham';
 const AddModal = (props: Props) => {
-  const { isOpen, onCancel, onSuccess, modalType, editingProduct } = props;
+  const { isOpen, onCancel, onSuccess, modalType, editingBill } = props;
   const [form] = Form.useForm();
   const { data: suppliersData } = useSWR(SUPPLIERSENDPOINT, getAPI);
   const { data: categoriesData } = useSWR(CATEGORIESENDPOINT, getAPI);
@@ -116,13 +115,11 @@ const AddModal = (props: Props) => {
     form.resetFields();
     if (modalType === 'add') form.setFieldValue('maSp', randomString('SP'));
     if (modalType === 'add') form.setFieldValue('ten', randomString('name'));
-    if (modalType === 'edit' && editingProduct) {
-      form.setFieldsValue({
-        ...editingProduct,
-      });
+    if (modalType === 'edit' && editingBill) {
+      form.setFieldsValue(editingBill);
       setShowProfit(true);
     }
-  }, [modalType, editingProduct?.id]);
+  }, [modalType, editingBill?.id]);
   return (
     <Modal
       title={`${modalType === 'edit' ? 'Sửa' : 'Thêm'} sản phẩm`}
@@ -140,7 +137,7 @@ const AddModal = (props: Props) => {
           <Row gutter={[16, 16]}>
             <Col xs={24} md={12}>
               {modalType === 'edit' ? (
-                <Form.Item label='Id sản phẩm' name={'id'} hidden>
+                <Form.Item label='Id sản phẩm' name={'id'}>
                   <Input placeholder='Id sản phẩm' tabIndex={3} disabled />
                 </Form.Item>
               ) : null}
@@ -167,32 +164,16 @@ const AddModal = (props: Props) => {
                 label='Danh mục'
                 name={'idDm'}
                 rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
-                // getValueProps={value => {
-                //   return value.tenDm;
-                // }}
               >
-                <Select
-                  placeholder='Danh mục'
-                  tabIndex={4}
-                  options={
-                    categoriesData &&
-                    categoriesData?.map((item: CategoryProp, index: number) => {
-                      return {
-                        value: item.id,
-                        label: item.ten,
-                      };
-                    })
-                  }
-                  value={editingProduct?.tenDm}
-                >
-                  {/* {categoriesData &&
+                <Select placeholder='Danh mục' tabIndex={4}>
+                  {categoriesData &&
                     categoriesData?.map((item: CategoryProp, index: number) => {
                       return (
                         <Select.Option value={item.id} key={index}>
                           {item.ten}
                         </Select.Option>
                       );
-                    })} */}
+                    })}
                 </Select>
               </Form.Item>
             </Col>
@@ -245,11 +226,7 @@ const AddModal = (props: Props) => {
                   { required: true, message: 'Vui lòng chọn thương hiệu' },
                 ]}
               >
-                <Select
-                  placeholder='Thương hiệu'
-                  tabIndex={6}
-                  labelInValue={true}
-                >
+                <Select placeholder='Thương hiệu' tabIndex={6}>
                   {brandsData &&
                     brandsData?.map((item: BrandProps, index: number) => {
                       return (
@@ -405,7 +382,7 @@ const AddModal = (props: Props) => {
                   { required: true, message: 'Vui lòng đơn vị của sản phẩm' },
                 ]}
               >
-                <Select defaultActiveFirstOption>
+                <Select defaultValue='1'>
                   <Select.Option value='1'>Lon</Select.Option>
                   <Select.Option value='2'>Gói</Select.Option>
                   <Select.Option value='3'>Bao</Select.Option>

@@ -20,7 +20,6 @@ const TableAction = (props: Props) => {
           <Button
             type='text'
             className='text-blue-600 hover:!text-blue-500'
-            ghost
             icon={<AiOutlineEdit className='text-xl' />}
             onClick={onEdit}
           />
@@ -31,7 +30,6 @@ const TableAction = (props: Props) => {
           <Button
             type='text'
             className='text-blue-600 hover:!text-blue-500'
-            ghost
             icon={<AiOutlineEye className='text-xl' />}
             onClick={onView}
           />
@@ -40,8 +38,8 @@ const TableAction = (props: Props) => {
       {onDelete && (
         <Tooltip title='Xóa'>
           <Popconfirm
-            title='Từ chối thêm file'
-            description='Are you sure to delete this task?'
+            title='Xóa sản phẩm'
+            description='Bạn có chắc chưa?'
             onConfirm={() => {
               onDelete();
             }}

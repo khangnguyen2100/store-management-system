@@ -86,6 +86,18 @@ const filters: MyFilterProps[] = [
     name: 'test',
     apiURL: '/api/thuong-hieu',
   },
+  {
+    title: 'Loại sản phẩm',
+    type: 'list',
+    name: 'test',
+    apiURL: '/api/loai-san-pham',
+  },
+  {
+    title: 'Danh mục',
+    type: 'list',
+    name: 'test',
+    apiURL: '/api/danh-muc-san-pham',
+  },
 ];
 const Products = () => {
   const { data: productsData, mutate, error } = useProducts({ idCh: '4' });

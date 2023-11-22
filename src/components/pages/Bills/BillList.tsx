@@ -10,28 +10,26 @@ import { KeyedMutator } from 'swr';
 import { DeleteAPI, postAPI } from 'src/api/config';
 import BasicTable from 'src/components/BasicTable/BasicTable';
 import { formatPrice } from 'src/utils/format';
-import { ProductProps } from 'src/constants/types/product';
+import { BillProps } from 'src/constants/types/bill';
 
 import TableAction from '../../GroupButton/TableAction';
 
 import AddModal from './AddModal';
 
 type Props = {
-  products: ProductProps[];
+  data: BillProps[];
   mutate: KeyedMutator<any>;
 };
 
-const ProductList = (props: Props) => {
+const BillList = (props: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { mutate, products } = props;
+  const { mutate, data } = props;
 
-  const [productsData, setProductsData] = useState<ProductProps[]>(products);
+  const [billData, setBillData] = useState<BillProps[]>(data);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'add' | 'edit' | null>(null);
-  const [editingProduct, setEditingProduct] = useState<ProductProps | null>(
-    null,
-  );
-  const columns: ColumnsType<ProductProps> = [
+  const [editingBill, setEditingBill] = useState<BillProps | null>(null);
+  const columns: ColumnsType<BillProps> = [
     {
       key: 1,
       title: 'STT',
@@ -40,65 +38,43 @@ const ProductList = (props: Props) => {
     },
     {
       key: 2,
-      title: 'Tên',
-      dataIndex: 'ten',
+      title: 'Mã hóa đơn',
+      dataIndex: 'ma_hoa_don',
       width: 100,
     },
     {
+      key: 3,
+      title: 'Tổng tiền',
+      dataIndex: 'tong_tien',
+      width: 100,
+      render: (tongTien: number) => {
+        return <span className='text-blue-500'>{formatPrice(tongTien)}</span>;
+      },
+      sorter: (a, b) => Number(a.tong_tien) - Number(b.tong_tien),
+    },
+    {
       key: 4,
-      title: 'Mã sản phẩm',
-      dataIndex: 'maSp',
+      title: 'Tổng giảm giá',
+      dataIndex: 'tong_giam_gia',
       width: 100,
     },
     {
       key: 5,
-      title: 'Số lượng',
-      dataIndex: 'soLuong',
+      title: 'Tên cửa hàng',
+      dataIndex: 'cua_hang',
       width: 70,
     },
     {
       key: 6,
-      title: 'Ảnh',
-      dataIndex: 'img',
-      width: 200,
-      render: (thumbnail: string) => (
-        <Image
-          src={`https://admin.beesmart.io.vn/${thumbnail}`}
-          alt='product img'
-          width={'full'}
-          // height={165}
-          // height={50}
-          className='rounded-md object-cover'
-        />
-      ),
-      align: 'center',
-      className: 'table-cell-img',
-    },
-    {
-      key: 7,
-      title: 'Giá vốn',
-      dataIndex: 'giaVon',
-      width: 150,
-      sorter: (a, b) => Number(a.giaVon) - Number(b.giaVon),
-      render: (costPrice: string) => (
-        <span className='text-blue-500'>{formatPrice(costPrice)}</span>
-      ),
-    },
-    {
-      key: 8,
-      title: 'Giá bán',
-      dataIndex: 'giaBan',
+      title: 'Ngày tạo',
+      dataIndex: 'created_at',
       width: 120,
-      sorter: (a, b) => Number(a.giaBan) - Number(b.giaBan),
-      render: (salePrice: string) => (
-        <span className='text-red-500'>{formatPrice(salePrice)}</span>
-      ),
     },
     {
       title: 'Action',
       key: 'action',
       width: 80,
-      render: (record: ProductProps) => {
+      render: (record: BillProps) => {
         return (
           <TableAction
             onDelete={() => handleDeleteProduct(record.id!)}
@@ -114,41 +90,34 @@ const ProductList = (props: Props) => {
     mutate('/api/san-pham?idCh=4');
     enqueueSnackbar('Xóa sản phẩm thành công', { variant: 'success' });
   };
-  const handleEditProduct = (record: ProductProps) => {
+  const handleEditProduct = (record: BillProps) => {
     setModalType('edit');
-    setEditingProduct(record);
+    setEditingBill(record);
     setIsModalOpen(true);
   };
   const handleAddProduct = () => {
     setModalType('add');
     setIsModalOpen(true);
   };
-  const handleModalOk = async (values: ProductProps) => {
+  const handleModalOk = async (values: BillProps) => {
     try {
       if (modalType === 'add') {
-        const newData = new FormData();
-        for (const [key, value] of Object.entries(values)) {
-          if (value !== undefined && value !== null) {
-            newData.append(key, value);
-          }
-        }
-
-        console.log(await postAPI('/api/san-pham?idCh=4', newData));
-        mutate('/api/san-pham?idCh=4');
-        enqueueSnackbar('Thêm sản phẩm thành công', { variant: 'success' });
-        setIsModalOpen(false);
+        // console.log(await postAPI('/api/san-pham?idCh=4', newData));
+        // mutate('/api/san-pham?idCh=4');
+        // enqueueSnackbar('Thêm sản phẩm thành công', { variant: 'success' });
+        // setIsModalOpen(false);
       }
       if (modalType === 'edit') {
-        const newData = new FormData();
-        for (const [key, value] of Object.entries(values)) {
-          if (value !== undefined && value !== null) {
-            newData.append(key, value);
-          }
-        }
-        await postAPI(`/api/san-pham/${values.id}?idCh=4`, newData);
-        enqueueSnackbar('Sửa sản phẩm thành công', { variant: 'success' });
-        mutate('/api/san-pham?idCh=4');
-        setIsModalOpen(false);
+        // const newData = new FormData();
+        // for (const [key, value] of Object.entries(values)) {
+        //   if (value !== undefined && value !== null) {
+        //     newData.append(key, value);
+        //   }
+        // }
+        // await postAPI(`/api/san-pham/${values.id}?idCh=4`, newData);
+        // enqueueSnackbar('Sửa sản phẩm thành công', { variant: 'success' });
+        // mutate('/api/san-pham?idCh=4');
+        // setIsModalOpen(false);
         return;
       }
     } catch (error) {
@@ -224,7 +193,7 @@ const ProductList = (props: Props) => {
     <Space className='w-full' direction='vertical'>
       <BasicTable
         columns={columns}
-        data={productsData}
+        data={billData}
         extra={
           <>
             <Button type='default'>Export</Button>
@@ -253,10 +222,10 @@ const ProductList = (props: Props) => {
         onSuccess={handleModalOk}
         onCancel={handleModalCancel}
         modalType={modalType}
-        editingProduct={editingProduct}
+        editingBill={editingBill}
       />
     </Space>
   );
 };
 
-export default ProductList;
+export default BillList;
