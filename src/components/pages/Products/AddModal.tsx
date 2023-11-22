@@ -113,9 +113,10 @@ const AddModal = (props: Props) => {
   };
 
   useEffect(() => {
-    form.resetFields();
-    if (modalType === 'add') form.setFieldValue('maSp', randomString('SP'));
-    if (modalType === 'add') form.setFieldValue('ten', randomString('name'));
+    if (modalType === 'add') {
+      form.resetFields();
+      form.setFieldValue('code', randomString('SP'));
+    }
     if (modalType === 'edit' && editingProduct) {
       form.setFieldsValue({
         ...editingProduct,
@@ -188,7 +189,7 @@ const AddModal = (props: Props) => {
                   {/* {categoriesData &&
                     categoriesData?.map((item: CategoryProp, index: number) => {
                       return (
-                        <Select.Option value={item.id} key={index}>
+                        <Select.Option value={item.id.toString()} key={index}>
                           {item.ten}
                         </Select.Option>
                       );
@@ -213,7 +214,7 @@ const AddModal = (props: Props) => {
                     productTypeData?.map(
                       (item: productTypeProps, index: number) => {
                         return (
-                          <Select.Option value={item.id} key={index}>
+                          <Select.Option value={item.id.toString()} key={index}>
                             {item.ten}
                           </Select.Option>
                         );
@@ -231,7 +232,7 @@ const AddModal = (props: Props) => {
                   {suppliersData &&
                     suppliersData?.map((item: SupplierProps, index: number) => {
                       return (
-                        <Select.Option value={item.id} key={index}>
+                        <Select.Option value={item.id.toString()} key={index}>
                           {item.ten}
                         </Select.Option>
                       );
