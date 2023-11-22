@@ -26,6 +26,7 @@ import { SupplierProps } from 'src/constants/types/supplier';
 import { CategoryProp } from 'src/constants/types/category';
 import { BrandProps } from 'src/constants/types/brand';
 import { productTypeProps } from 'src/constants/types/productType';
+import { getBase64 } from 'src/utils/getBase64';
 
 const { Dragger } = Upload;
 type Props = {
@@ -40,6 +41,8 @@ const CATEGORIESENDPOINT = '/api/danh-muc-san-pham?idCh=4';
 const BRANDSENDPOINT = '/api/thuong-hieu?idCh=4';
 const PRODUCTTYPEENDPOINT = '/api/loai-san-pham';
 const AddModal = (props: Props) => {
+  console.log('rerendered');
+
   const { isOpen, onCancel, onSuccess, modalType, editingProduct } = props;
   const [form] = Form.useForm();
   const { data: suppliersData } = useSWR(SUPPLIERSENDPOINT, getAPI);
@@ -62,6 +65,16 @@ const AddModal = (props: Props) => {
       <Select.Option value='lit'>lít</Select.Option>
     </Select>
   );
+  // const handlePreview = async (file: UploadFile) => {
+  //   if (!file.url && !file.preview) {
+  //     file.preview = await getBase64(file.originFileObj as RcFile);
+  //   }
+  //   setPreviewImage(file.url || (file.preview as string));
+  //   setPreviewOpen(true);
+  //   setPreviewTitle(
+  //     file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1),
+  //   );
+  // };
   const draggerProps: UploadProps = {
     name: 'file',
     multiple: true,
@@ -91,18 +104,6 @@ const AddModal = (props: Props) => {
   const handleShowProfit = useDebounce(() => {
     if (costValue && priceValue) setShowProfit(true);
   }, 500);
-  // const convertImageToBase64 = (imageFile: any) => {
-  //   return new Promise(resolve => {
-  //     const reader = new FileReader();
-  //     reader.onload = e => {
-  //       if (e.target) {
-  //         const base64String = btoa(e.target.result);
-  //         resolve(base64String);
-  //       }
-  //     };
-  //     reader.readAsBinaryString(imageFile);
-  //   });
-  // };
   const handleSubmitForm = async () => {
     try {
       const values = await form.validateFields();
@@ -110,6 +111,7 @@ const AddModal = (props: Props) => {
       onSuccess({ ...values, img: image, anHien: 1 });
     } catch (error) {}
   };
+
   useEffect(() => {
     if (modalType === 'add') {
       form.resetFields();
@@ -246,7 +248,14 @@ const AddModal = (props: Props) => {
               <Form.Item
                 label='Giá vốn'
                 name='giaVon'
-                rules={[{ required: true, message: 'Vui lòng nhập giá vốn' }]}
+                rules={[
+                  { required: true, message: 'Vui lòng nhập giá vốn' },
+                  {
+                    type: 'number',
+                    min: 0,
+                    message: 'Vui lòng nhập số dương! ',
+                  },
+                ]}
               >
                 <InputNumber
                   placeholder='Giá vốn'
@@ -267,7 +276,14 @@ const AddModal = (props: Props) => {
               <Form.Item
                 label='Giá bán'
                 name='giaBan'
-                rules={[{ required: true, message: 'Vui lòng nhập giá bán' }]}
+                rules={[
+                  { required: true, message: 'Vui lòng nhập giá bán' },
+                  {
+                    type: 'number',
+                    min: 0,
+                    message: 'Vui lòng nhập số dương! ',
+                  },
+                ]}
               >
                 <InputNumber
                   placeholder='Giá bán'
@@ -348,6 +364,11 @@ const AddModal = (props: Props) => {
                 name={'soLuong'}
                 rules={[
                   { required: true, message: 'Vui lòng nhập số lượng tồn kho' },
+                  {
+                    type: 'number',
+                    min: 0,
+                    message: 'Vui lòng nhập số dương! ',
+                  },
                 ]}
               >
                 <InputNumber

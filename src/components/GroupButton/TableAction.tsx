@@ -1,5 +1,10 @@
-import { Button, Space, Tooltip } from 'antd';
-import { AiOutlineDelete, AiOutlineEdit, AiOutlineEye } from 'react-icons/ai';
+import { Button, Popconfirm, Space, Tooltip } from 'antd';
+import {
+  AiOutlineClose,
+  AiOutlineDelete,
+  AiOutlineEdit,
+  AiOutlineEye,
+} from 'react-icons/ai';
 
 type Props = {
   onEdit?: () => void;
@@ -34,13 +39,22 @@ const TableAction = (props: Props) => {
       )}
       {onDelete && (
         <Tooltip title='Xóa'>
-          <Button
-            type='text'
-            ghost
-            danger
-            icon={<AiOutlineDelete className='text-xl' />}
-            onClick={onDelete}
-          />
+          <Popconfirm
+            title='Từ chối thêm file'
+            description='Are you sure to delete this task?'
+            onConfirm={() => {
+              onDelete();
+            }}
+            onCancel={() => {}}
+            okText='Yes'
+            cancelText='No'
+          >
+            <Button
+              type='text'
+              danger
+              icon={<AiOutlineDelete className='text-xl' />}
+            />
+          </Popconfirm>
         </Tooltip>
       )}
     </Space>
