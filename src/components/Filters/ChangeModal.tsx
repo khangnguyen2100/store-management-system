@@ -25,13 +25,15 @@ import { DeleteAPI } from 'src/api/config';
 
 import BrandForm from '../Forms/BrandForm';
 import SupplierForm from '../Forms/SupplierForm';
+import CategoryForm from '../Forms/categoryForm';
+import ProductTypeForm from '../Forms/productTypeForm';
 
 type Props = {
   isOpen: boolean;
   onSuccess: (values: any) => void;
   onCancel: () => void;
   onDelete: (values: any) => void;
-  editingItem: ProductProps | CategoryProp | BrandProps | null;
+  editingItem: CategoryProp | BrandProps | null;
   modalType: string;
   modalFor?: string;
 };
@@ -47,7 +49,6 @@ const ChangeModal = (props: Props) => {
     onDelete,
   } = props;
   const [form] = Form.useForm();
-  const [modalCurrentType, setModalCurrentType] = useState(modalType);
   const handleSubmitForm = async () => {
     try {
       const values = await form.validateFields();
@@ -65,7 +66,6 @@ const ChangeModal = (props: Props) => {
       form.setFieldsValue(editingItem);
     }
   }, [modalType, editingItem?.id]);
-
   return (
     <Modal
       title={`${modalType === 'edit' ? 'Sửa' : 'Thêm'} ${modalFor}`}
@@ -108,9 +108,12 @@ const ChangeModal = (props: Props) => {
         );
       }}
     >
-      {modalFor === 'Thương Hiệu' && <BrandForm form={form}></BrandForm>}
+      {modalFor === 'Thương hiệu' && <BrandForm form={form}></BrandForm>}
       {modalFor === 'Nhà cung cấp' && <SupplierForm form={form}></SupplierForm>}
-      {/* {modalFor === 'Thương Hiệu' && <BrandForm form={form}></BrandForm>} */}
+      {modalFor === 'Danh mục' && <CategoryForm form={form}></CategoryForm>}
+      {modalFor === 'Loại sản phẩm' && (
+        <ProductTypeForm form={form}></ProductTypeForm>
+      )}
     </Modal>
   );
 };

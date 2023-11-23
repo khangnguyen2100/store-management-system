@@ -18,11 +18,14 @@ const formatPriceInput = (value?: valueType) => {
 };
 const serialize = (obj: any) => {
   const str: string[] = [];
-  for (const p in obj)
+  for (const p in obj) {
     if (obj.hasOwnProperty(p)) {
-      if (obj[p] || obj[p] === 0)
+      // Skip properties with a value of 'clearSelect'
+      if (obj[p] !== 'clearSelect' && (obj[p] || obj[p] === 0)) {
         str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+      }
     }
+  }
   return str.join('&');
 };
 export { formatPrice, formatPriceInput, serialize };

@@ -15,7 +15,6 @@ import {
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { RcFile } from 'antd/es/upload';
 
 import { getAPI } from 'src/api/config';
 import { ProductProps } from 'src/constants/types/product';
@@ -26,7 +25,7 @@ import { SupplierProps } from 'src/constants/types/supplier';
 import { CategoryProp } from 'src/constants/types/category';
 import { BrandProps } from 'src/constants/types/brand';
 import { productTypeProps } from 'src/constants/types/productType';
-import { getBase64 } from 'src/utils/getBase64';
+import { getIdCh } from 'src/utils/common';
 
 const { Dragger } = Upload;
 type Props = {
@@ -36,8 +35,7 @@ type Props = {
   editingProduct: ProductProps | null;
   modalType: 'add' | 'edit' | null;
 };
-const getIdCh = () =>
-  localStorage.getItem('idCh') ? localStorage.getItem('idCh') : '4';
+
 const SUPPLIERSENDPOINT = `/api/nha-cung-cap?idCh=${getIdCh()}`;
 const CATEGORIESENDPOINT = `/api/danh-muc-san-pham?idCh=${getIdCh()}`;
 const BRANDSENDPOINT = `/api/thuong-hieu?idCh=${getIdCh()}`;
@@ -65,16 +63,7 @@ const AddModal = (props: Props) => {
       <Select.Option value='lit'>lít</Select.Option>
     </Select>
   );
-  // const handlePreview = async (file: UploadFile) => {
-  //   if (!file.url && !file.preview) {
-  //     file.preview = await getBase64(file.originFileObj as RcFile);
-  //   }
-  //   setPreviewImage(file.url || (file.preview as string));
-  //   setPreviewOpen(true);
-  //   setPreviewTitle(
-  //     file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1),
-  //   );
-  // };
+
   const draggerProps: UploadProps = {
     name: 'file',
     multiple: true,
@@ -115,7 +104,8 @@ const AddModal = (props: Props) => {
   useEffect(() => {
     if (modalType === 'add') {
       form.resetFields();
-      form.setFieldValue('code', randomString('SP'));
+      form.setFieldValue('maSp', randomString('SP'));
+      form.setFieldValue('ten', randomString('SP'));
     }
     if (modalType === 'edit' && editingProduct) {
       form.setFieldsValue({
@@ -168,32 +158,16 @@ const AddModal = (props: Props) => {
                 label='Danh mục'
                 name={'idDm'}
                 rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
-                // getValueProps={value => {
-                //   return value.tenDm;
-                // }}
               >
-                <Select
-                  placeholder='Danh mục'
-                  tabIndex={4}
-                  options={
-                    categoriesData &&
-                    categoriesData?.map((item: CategoryProp, index: number) => {
-                      return {
-                        value: item.id,
-                        label: item.ten,
-                      };
-                    })
-                  }
-                  value={editingProduct?.tenDm}
-                >
-                  {/* {categoriesData &&
+                <Select placeholder='Danh mục' tabIndex={4}>
+                  {categoriesData &&
                     categoriesData?.map((item: CategoryProp, index: number) => {
                       return (
                         <Select.Option value={item.id.toString()} key={index}>
                           {item.ten}
                         </Select.Option>
                       );
-                    })} */}
+                    })}
                 </Select>
               </Form.Item>
             </Col>
@@ -246,15 +220,11 @@ const AddModal = (props: Props) => {
                   { required: true, message: 'Vui lòng chọn thương hiệu' },
                 ]}
               >
-                <Select
-                  placeholder='Thương hiệu'
-                  tabIndex={6}
-                  labelInValue={true}
-                >
+                <Select placeholder='Thương hiệu' tabIndex={6}>
                   {brandsData &&
-                    brandsData?.map((item: BrandProps, index: number) => {
+                    brandsData?.data?.map((item: BrandProps, index: number) => {
                       return (
-                        <Select.Option value={item.id} key={index}>
+                        <Select.Option value={item.id.toString()} key={index}>
                           {item.ten}
                         </Select.Option>
                       );

@@ -71,3 +71,9 @@
 //   color:#Ffff !important;
 //   border-color: unset !important;
 // }
+.ant-custom-select {
+  .ant-select-selection-item {
+    width: 100% !important;
+    padding-right: 0 !important;
+  }
+}

@@ -22,7 +22,6 @@ type Props = {
 };
 
 const ProductList = (props: Props) => {
-  const inputRef = useRef<HTMLInputElement>(null);
   const { mutate, products } = props;
 
   const [productsData, setProductsData] = useState<ProductProps[]>(products);
@@ -132,6 +131,7 @@ const ProductList = (props: Props) => {
             newData.append(key, value);
           }
         }
+        console.log(values);
 
         console.log(await postAPI('/api/san-pham?idCh=4', newData));
         mutate('/api/san-pham?idCh=4');
@@ -147,7 +147,8 @@ const ProductList = (props: Props) => {
         }
         await postAPI(`/api/san-pham/${values.id}?idCh=4`, newData);
         enqueueSnackbar('Sửa sản phẩm thành công', { variant: 'success' });
-        mutate('/api/san-pham?idCh=4');
+        await mutate('/api/san-pham?idCh=4', { revalidate: true });
+
         setIsModalOpen(false);
         return;
       }
