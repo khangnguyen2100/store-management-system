@@ -7,6 +7,12 @@ const billApi = {
       data,
     });
   },
+  paymentVNPay: (data: any) => {
+    return request(`/api/vnpay_payment`, {
+      method: 'POST',
+      data,
+    });
+  },
 };
 
 export default billApi;

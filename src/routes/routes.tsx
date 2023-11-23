@@ -1,12 +1,14 @@
 import { Route, Routes } from 'react-router-dom';
 
 import { Home, Login, NotFound, Products, Protected } from 'src/pages';
+import Sale from 'src/pages/Sale';
 import * as authRoutes from 'src/routes/routes.auth';
 import * as publicRoutes from 'src/routes/routes.public';
-import Sale from 'src/pages/Sale';
+import MainLayout from 'src/Layout/MainLayout';
+import ChangePassword from 'src/pages/ChangePassword';
+import ChangeUserInfo from 'src/pages/ChangeUserInfo';
 
 import ProtectedRoute from './ProtectedRoute';
-import MainLayout from 'src/Layout/MainLayout';
 
 function MainRoutes() {
   return (
@@ -33,6 +35,22 @@ function MainRoutes() {
           element={
             <ProtectedRoute>
               <Products />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path={authRoutes.CHANGE_PASSWORD}
+          element={
+            <ProtectedRoute>
+              <ChangePassword />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path={authRoutes.CHANGE_USER_INFO}
+          element={
+            <ProtectedRoute>
+              <ChangeUserInfo />
             </ProtectedRoute>
           }
         ></Route>
