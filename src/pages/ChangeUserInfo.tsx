@@ -6,6 +6,7 @@ import {
   Form,
   Input,
   Modal,
+  Select,
   Space,
   Tag,
   Typography,
@@ -14,6 +15,7 @@ import {
 import { useEffect, useState } from 'react';
 
 import authApi from 'src/api/authApi';
+import district_json from 'src/mocks/quan_huyen.json';
 
 type ChangePasswordModalProps = {
   visible: boolean;
@@ -110,7 +112,7 @@ const ChangePasswordModal = ({
     </Modal>
   );
 };
-
+const districtJson = Object.values(district_json);
 const UserProfilePage = () => {
   const [userData, setUserData] = useState<any>();
   const [modalVisible, setModalVisible] = useState(false);
@@ -138,7 +140,15 @@ const UserProfilePage = () => {
 
   useEffect(() => {
     if (userData) {
-      form.setFieldsValue(userData);
+      const data = {
+        ...userData,
+        quan: districtJson.find(
+          (item: any) => item.name_with_type === userData.quan,
+        )?.code,
+      };
+      console.log('data:', data);
+
+      form.setFieldsValue(data);
     }
   }, [userData, form]);
 
@@ -162,6 +172,8 @@ const UserProfilePage = () => {
       const edtiData = {
         ...oldData,
         ...values,
+        quan: districtJson.find((item: any) => item.code === values.quan)
+          ?.name_with_type,
       };
       const resEdit = await authApi.editUserInfo(edtiData);
       if (resEdit.data.status) {
@@ -235,13 +247,16 @@ const UserProfilePage = () => {
           initialValues={userData}
           scrollToFirstError
         >
-          <Descriptions layout='vertical' column={{ xs: 2, sm: 3, md: 4 }}>
+          <Descriptions layout='vertical' column={{ xs: 2, sm: 3, lg: 4 }}>
             <Descriptions.Item label='Email'>
               {userData?.email}
             </Descriptions.Item>
             <Descriptions.Item label='Họ tên'>
               {editMode ? (
-                <Form.Item name='HoTen'>
+                <Form.Item
+                  name='HoTen'
+                  rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}
+                >
                   <Input />
                 </Form.Item>
               ) : (
@@ -250,7 +265,16 @@ const UserProfilePage = () => {
             </Descriptions.Item>
             <Descriptions.Item label='Điện thoại'>
               {editMode ? (
-                <Form.Item name='sdt'>
+                <Form.Item
+                  name='sdt'
+                  rules={[
+                    { required: true, message: 'Vui lòng nhập số điện thoại!' },
+                    {
+                      pattern: new RegExp(/^[0-9\b]+$/),
+                      message: 'Vui lòng nhập số!',
+                    },
+                  ]}
+                >
                   <Input />
                 </Form.Item>
               ) : (
@@ -259,8 +283,17 @@ const UserProfilePage = () => {
             </Descriptions.Item>
             <Descriptions.Item label='Quận'>
               {editMode ? (
-                <Form.Item name='quan'>
-                  <Input />
+                <Form.Item
+                  name='quan'
+                  rules={[{ required: true, message: 'Vui lòng nhập quận!' }]}
+                >
+                  <Select
+                    options={districtJson.map((item: any) => ({
+                      label: item.name_with_type,
+                      value: item.code,
+                    }))}
+                    className='min-w-[300px]'
+                  ></Select>
                 </Form.Item>
               ) : (
                 userData?.quan
@@ -268,7 +301,12 @@ const UserProfilePage = () => {
             </Descriptions.Item>
             <Descriptions.Item label='Địa chỉ'>
               {editMode ? (
-                <Form.Item name='Diachi'>
+                <Form.Item
+                  name='Diachi'
+                  rules={[
+                    { required: true, message: 'Vui lòng nhập địa chỉ!' },
+                  ]}
+                >
                   <Input />
                 </Form.Item>
               ) : (
