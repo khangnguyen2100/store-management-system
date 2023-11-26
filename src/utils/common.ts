@@ -1,5 +1,5 @@
 const getImage = (fileName: string) => {
   if (!fileName) return '';
-  return `https://admin.beesmart.io.vn/${fileName}`;
+  return `${process.env.REACT_APP_API_URL}/${fileName}`;
 };
 export { getImage };

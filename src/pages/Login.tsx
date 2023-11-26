@@ -156,10 +156,9 @@ export default function AntSignInSideTemplate() {
               </Typography.Text>
             </Link>
             <Typography.Text
-              className='text-sm text-primary !underline cursor-pointer'
+              className='cursor-pointer text-sm text-primary !underline'
               onClick={() =>
-                (window.location.href =
-                  'https://beesmart-stage.vercel.app/sign-up')
+                (window.location.href = 'https://beesmart.io.vn/sign-up')
               }
             >
               Đăng ký tài khoản
