@@ -42,12 +42,17 @@ const ChangePasswordModal = ({
         checkpass: values.checkpass,
         newpass: values.newpass,
       });
+      if (res.data.status) {
+        message.success(res.data.message);
+        onSuccess();
+        form.resetFields();
+      } else {
+        message.error(res.data.message);
+      }
       console.log('res:', res);
     } catch (error) {
       console.error('da co loi: ', error);
     }
-    // onSuccess();
-    // form.resetFields();
   };
   const handleSendMail = async () => {
     // navigate('/xac-thuc');
@@ -84,34 +89,46 @@ const ChangePasswordModal = ({
         <Form.Item
           name='newpass'
           label='Mật khẩu mới'
-          rules={[{ required: true, message: 'Vui lòng nhập mật khẩu mới!' }]}
+          rules={[
+            { required: true, message: 'Vui lòng nhập mật khẩu mới!' },
+            {
+              min: 6,
+              message: 'Mật khẩu phải có ít nhất 6 ký tự!',
+            },
+          ]}
         >
           <Input.Password style={{ width: '100%' }} />
         </Form.Item>
 
         <Form.Item
-          name='newPassword'
+          name='checkNewPass'
           label='Xác nhận mật khẩu mới'
-          // Additional rules for validating newPassword
+          // Additional rules for validating checkNewPass
           rules={[
             { required: true, message: 'Vui lòng nhập mật khẩu mới!' },
+            {
+              min: 6,
+              message: 'Mật khẩu phải có ít nhất 6 ký tự!',
+            },
             () => ({
               validator(_, value) {
-                if (value === form.getFieldValue('newpass')) {
+                if (value !== form.getFieldValue('newpass')) {
+                  return Promise.reject(new Error('Mật khẩu không khớp!'));
+                } else {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error('Mật khẩu không khớp!'));
               },
             }),
           ]}
         >
           <Input.Password style={{ width: '100%' }} />
-          <a onClick={() => handleSendMail()}>Quên mật khẩu?</a>
         </Form.Item>
+        <a onClick={() => handleSendMail()}>Quên mật khẩu?</a>
       </Form>
     </Modal>
   );
 };
+
 const districtJson = Object.values(district_json);
 const UserProfilePage = () => {
   const [userData, setUserData] = useState<any>();
@@ -197,8 +214,6 @@ const UserProfilePage = () => {
     setModalVisible(false);
     console.log('success');
   };
-
-  // console.log(userData.thumbnail)
 
   return (
     <Space direction='vertical' style={{ width: '100%' }}>
