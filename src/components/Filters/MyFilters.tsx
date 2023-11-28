@@ -6,6 +6,7 @@ import { BiSolidRightArrow } from 'react-icons/bi';
 import { enqueueSnackbar } from 'notistack';
 import { useSWRConfig } from 'swr';
 import { RightOutlined } from '@ant-design/icons';
+import { ItemType } from 'antd/lib/menu/hooks/useItems';
 
 import { DeleteAPI, patchAPI, postAPI } from 'src/api/config';
 import { CategoryProp } from 'src/constants/types/category';
@@ -115,6 +116,7 @@ const MyFilters = (props: Props) => {
             className='ant-custom-select w-full'
             options={options?.map(option => ({
               ...option,
+              value: option.value,
               label: (
                 <div className='group flex w-full justify-between'>
                   {option.label}
@@ -133,6 +135,7 @@ const MyFilters = (props: Props) => {
             }))}
             allowClear
             onClear={() => {
+              console.log('cleared');
               onFilterChange(name, 'clearSelect');
             }}
             suffixIcon={<></>}
@@ -146,12 +149,14 @@ const MyFilters = (props: Props) => {
     };
     return <div className='ml-2 w-full overflow-hidden'>{renderInput()}</div>;
   };
+
   const panelStyle: React.CSSProperties = {
     marginBottom: 16,
     background: '#FAFAFA',
     borderRadius: 4,
     border: '1px solid #f0f0f0',
   };
+
   const getExtraIcon = (filter: MyFilterProps) => {
     if (filter.type === 'select')
       return (
@@ -173,7 +178,7 @@ const MyFilters = (props: Props) => {
       key: i + 1,
       label: filter.title,
       children: (
-        <FilterItem item={filter} onFilterChange={handleFilterChange} key={i} />
+        <FilterItem item={filter} onFilterChange={handleFilterChange} />
       ),
       style: panelStyle,
       extra: getExtraIcon(filter),
@@ -224,7 +229,7 @@ const MyFilters = (props: Props) => {
       <Collapse
         className='filters-container flex w-full flex-col bg-transparent'
         items={items}
-        defaultActiveKey={['panel1']}
+        // defaultActiveKey={items.map(item => item.key) as string[]}
         bordered={false}
         expandIcon={({ isActive }) => (
           <BiSolidRightArrow

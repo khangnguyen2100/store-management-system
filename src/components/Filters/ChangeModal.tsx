@@ -77,6 +77,7 @@ const ChangeModal = (props: Props) => {
       width={800}
       destroyOnClose
       className='add-product-modal'
+      getContainer={false}
       footer={() => {
         return (
           <div className='flex justify-end gap-x-3'>
@@ -96,14 +97,16 @@ const ChangeModal = (props: Props) => {
             >
               Hủy
             </Button>
-            <Button
-              icon={<i className='fa-regular fa-trash'></i>}
-              size='large'
-              className='bg-danger text-white opacity-80 hover:!opacity-100'
-              onClick={handleDeleteForm}
-            >
-              Xóa
-            </Button>
+            {modalType === 'edit' && (
+              <Button
+                icon={<i className='fa-regular fa-trash'></i>}
+                size='large'
+                className='bg-danger text-white opacity-80 hover:!opacity-100'
+                onClick={handleDeleteForm}
+              >
+                Xóa
+              </Button>
+            )}
           </div>
         );
       }}

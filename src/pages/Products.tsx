@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { Empty, Spin } from 'antd';
-import { mutate } from 'swr';
 
 import ProductList from 'src/components/pages/Products/ProductList';
 import MyFilters, { MyFilterProps } from 'src/components/Filters/MyFilters';
@@ -72,15 +71,15 @@ const filters: MyFilterProps[] = [
 ];
 
 const Products = () => {
-  const [url, setURL] = useState(`/api/thuong-hieu?idCh=${getIdCh()}`);
-  const { data: productsData, error } = useSWR(url);
+  const [url, setURL] = useState(`/api/sort_search?idCh=${getIdCh()}`);
+  const { data: productsData, error, mutate } = useSWR(url);
   const { data: brandData } = useSWR(`/api/thuong-hieu?idCh=${getIdCh()}`);
   const { data: productTypeData } = useSWR(
     `/api/loai-san-pham?idCh=${getIdCh()}`,
   );
   const { data: categoryData } = useSWR(`/api/thuong-hieu?idCh=${getIdCh()}`);
   const { data: supplierData } = useSWR(`api/nha-cung-cap?idCh=${getIdCh()}`);
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState<object>({});
   const filtersProp: MyFilterProps[] = [
     {
       title: 'Thương hiệu',
@@ -147,10 +146,12 @@ const Products = () => {
   ];
   const loading = !productsData && !error;
   const handleFilterChange = (filters: any) => {
-    setFilters(filters);  
+    console.log(filters);
+
+    setFilters(filters);
   };
   useEffect(() => {
-    setURL(`/api/sort_search?idCh=4&${serialize(filters)}`);
+    setURL(`/api/sort_search?idCh=${getIdCh()}&${serialize(filters)}`);
   }, [filters]);
   return (
     <div className='flex w-full items-start gap-5'>
@@ -162,12 +163,9 @@ const Products = () => {
 
       <div className='flex-1'>
         {loading && <Spin size='large' className='mx-auto block' />}
-        {/* {productsData.data && productsData.data.length > 0 ? (
-          <ProductList products={productsData.data} mutate={mutate} />
-        ) : (
-          <Empty description='Không tìm thấy sản phẩm' />
-        )} */}
-        {productsData && productsData.data.length == 0 ? (
+        {productsData &&
+        productsData?.data &&
+        productsData?.data?.length == 0 ? (
           <Empty description='Không tìm thấy sản phẩm' />
         ) : (
           productsData &&

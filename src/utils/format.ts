@@ -14,8 +14,13 @@ const formatPrice = (price: string | number, rounded?: boolean) => {
 };
 const formatPriceInput = (value?: valueType) => {
   if (!value) return '';
-  return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  // Remove any minus sign from the beginning of the string
+  const valueString = `${value}`.replace(/^-/, '');
+
+  return valueString.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 };
+
 const serialize = (obj: any) => {
   const str: string[] = [];
   for (const p in obj) {

@@ -5,8 +5,8 @@ import BillList from 'src/components/pages/Bills/BillList';
 
 function Bills() {
   const { data: billData, mutate } = useBills({ idCh: '4' });
-  console.log(billData);
-  if (billData && billData.data)
+
+  if (billData && billData?.data)
     return (
       <div className='flex w-full items-start gap-5'>
         {/* <MyFilters

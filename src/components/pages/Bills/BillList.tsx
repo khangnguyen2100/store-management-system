@@ -14,8 +14,6 @@ import { BillProps } from 'src/constants/types/bill';
 
 import TableAction from '../../GroupButton/TableAction';
 
-import AddModal from './AddModal';
-
 type Props = {
   data: BillProps[];
   mutate: KeyedMutator<any>;
@@ -70,70 +68,25 @@ const BillList = (props: Props) => {
       dataIndex: 'created_at',
       width: 120,
     },
-    {
-      title: 'Action',
-      key: 'action',
-      width: 80,
-      render: (record: BillProps) => {
-        return (
-          <TableAction
-            onDelete={() => handleDeleteProduct(record.id!)}
-            onEdit={() => handleEditProduct(record)}
-          />
-        );
-      },
-      align: 'center',
-    },
+    // {
+    //   title: 'Action',
+    //   key: 'action',
+    //   width: 80,
+    //   render: (record: BillProps) => {
+    //     return (
+    //       <TableAction
+    //         onDelete={() => handleDeleteProduct(record.id!)}
+    //         onEdit={() => handleEditProduct(record)}
+    //       />
+    //     );
+    //   },
+    //   align: 'center',
+    // },
   ];
-  const handleDeleteProduct = async (id: string) => {
-    await DeleteAPI(`/api/san-pham/${id}`);
-    mutate('/api/san-pham?idCh=4');
-    enqueueSnackbar('Xóa sản phẩm thành công', { variant: 'success' });
-  };
-  const handleEditProduct = (record: BillProps) => {
-    setModalType('edit');
-    setEditingBill(record);
-    setIsModalOpen(true);
-  };
-  const handleAddProduct = () => {
-    setModalType('add');
-    setIsModalOpen(true);
-  };
-  const handleModalOk = async (values: BillProps) => {
-    try {
-      if (modalType === 'add') {
-        // console.log(await postAPI('/api/san-pham?idCh=4', newData));
-        // mutate('/api/san-pham?idCh=4');
-        // enqueueSnackbar('Thêm sản phẩm thành công', { variant: 'success' });
-        // setIsModalOpen(false);
-      }
-      if (modalType === 'edit') {
-        // const newData = new FormData();
-        // for (const [key, value] of Object.entries(values)) {
-        //   if (value !== undefined && value !== null) {
-        //     newData.append(key, value);
-        //   }
-        // }
-        // await postAPI(`/api/san-pham/${values.id}?idCh=4`, newData);
-        // enqueueSnackbar('Sửa sản phẩm thành công', { variant: 'success' });
-        // mutate('/api/san-pham?idCh=4');
-        // setIsModalOpen(false);
-        return;
-      }
-    } catch (error) {
-      console.log('error:', error);
-      enqueueSnackbar('Có lỗi xảy ra', { variant: 'error' });
-    }
-    setIsModalOpen(false);
-  };
-  const handleModalCancel = () => {
-    setIsModalOpen(false);
-  };
   const handleTableChange = (pagination: any) => {
     console.log('product list call');
   };
   const [uploading, setUploading] = useState(false);
-
   const handleUpload = (json: any) => {
     setUploading(true);
     fetch('https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188', {
@@ -194,20 +147,6 @@ const BillList = (props: Props) => {
       <BasicTable
         columns={columns}
         data={billData}
-        extra={
-          <>
-            <Button type='default'>Export</Button>
-            <Button>Import</Button>
-            <Upload {...uploadProps}>
-              <Button icon={<UploadOutlined />} loading={uploading}>
-                Import
-              </Button>
-            </Upload>
-            <Button type='primary' onClick={handleAddProduct}>
-              Thêm hàng
-            </Button>
-          </>
-        }
         onChange={handleTableChange}
         pagination={{
           current: 1,
@@ -216,13 +155,11 @@ const BillList = (props: Props) => {
           pageSizeOptions: ['10', '15', '20'],
           total: 48,
         }}
-      />
-      <AddModal
-        isOpen={isModalOpen}
-        onSuccess={handleModalOk}
-        onCancel={handleModalCancel}
-        modalType={modalType}
-        editingBill={editingBill}
+        extra={
+          <>
+            <Button type='default'>Xuất file PDF</Button>
+          </>
+        }
       />
     </Space>
   );

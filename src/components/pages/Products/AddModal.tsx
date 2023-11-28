@@ -125,6 +125,7 @@ const AddModal = (props: Props) => {
       width={800}
       destroyOnClose
       className='add-product-modal'
+      getContainer={false}
     >
       <Form form={form} layout='vertical' className='flex flex-col gap-y-4'>
         <Card size='small' title='Thông tin chung'>
@@ -356,15 +357,11 @@ const AddModal = (props: Props) => {
                 name={'soLuong'}
                 rules={[
                   { required: true, message: 'Vui lòng nhập số lượng tồn kho' },
-                  // {
-                  //   type: 'number',
-                  //   min: 0,
-                  //   message: 'Vui lòng nhập số dương! ',
-                  // },
                 ]}
               >
                 <InputNumber
                   placeholder='Tồn kho'
+                  formatter={value => formatPriceInput(value)}
                   tabIndex={10}
                   className='w-full'
                 />
@@ -376,7 +373,7 @@ const AddModal = (props: Props) => {
                   { required: true, message: 'Vui lòng đơn vị của sản phẩm' },
                 ]}
               >
-                <Select defaultActiveFirstOption>
+                <Select defaultActiveFirstOption={true}>
                   <Select.Option value='1'>Lon</Select.Option>
                   <Select.Option value='2'>Gói</Select.Option>
                   <Select.Option value='3'>Bao</Select.Option>

@@ -78,18 +78,22 @@ function VerticalBarChart({ data }: Props) {
   const [type, setType] = useState<string>('');
   useEffect(() => {
     if (type === 'Theo ngày') {
-      const chartData = data.map(item => parseInt(item.doanhThu));
-      const labels = data.map(item => item.ngayTao.split(' ')[0]);
-      setChartData(chartData);
-      setLabels(labels);
+      setChartData(() => {
+        return data.map(item => parseInt(item.doanhThu));
+      });
+      setLabels(() => {
+        return data.map(item => item.ngayTao.split(' ')[0]);
+      });
     }
 
     if (type === 'Theo tháng') {
       const revenueMonthly = getRevenueMonthly(data);
-      const chartData = revenueMonthly.map(item => item.doanhThu);
-      const labels = revenueMonthly.map(item => item.thang);
-      setChartData(chartData);
-      setLabels(labels);
+      setChartData(() => {
+        return revenueMonthly.map(item => item.doanhThu);
+      });
+      setLabels(() => {
+        return revenueMonthly.map(item => item.thang);
+      });
     }
   }, [type]);
   const handleOnChange = (value: string) => {
@@ -113,21 +117,22 @@ function VerticalBarChart({ data }: Props) {
         <div className='flex justify-between'>
           <div className='flex flex-col gap-x-5'>
             <h3>
-              DOANH THU THÁNG NÀY :{' '}
+              Doanh thu tháng này :{' '}
               <span className='text-blue-500'>
                 {data.length > 0 && formatPrice(getCurrentMonthRevenue(data))}
               </span>
             </h3>
-            <div className='flex gap-x-8'>
+            {/* <div className='flex gap-x-8'>
               <span>Theo ngày</span>
               <span>Theo năm</span>
-            </div>
+            </div> */}
           </div>
           <Select
             className='w-[150px]'
             onSelect={value => {
               handleOnChange(value);
             }}
+            defaultValue={'Theo ngày'}
           >
             <Select.Option value='Theo ngày'>Theo ngày</Select.Option>
             <Select.Option value='Theo tháng'>Theo tháng</Select.Option>
