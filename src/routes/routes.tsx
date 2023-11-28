@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 
-import { Home, Login, NotFound, Products, Protected } from 'src/pages';
+import { Bills, Home, Login, NotFound, Products, Protected } from 'src/pages';
 import Sale from 'src/pages/Sale';
 import * as authRoutes from 'src/routes/routes.auth';
 import * as publicRoutes from 'src/routes/routes.public';
@@ -51,6 +51,14 @@ function MainRoutes() {
           element={
             <ProtectedRoute>
               <ChangeUserInfo />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path={authRoutes.BILLS}
+          element={
+            <ProtectedRoute>
+              <Bills />
             </ProtectedRoute>
           }
         ></Route>

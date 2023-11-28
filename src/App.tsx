@@ -29,6 +29,7 @@ function App() {
 
               setTimeout(() => revalidate({ retryCount }), 5000);
             },
+            revalidateOnMount: true,
           }}
         >
           <ConfigProvider

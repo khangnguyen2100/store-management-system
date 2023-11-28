@@ -11,6 +11,7 @@ import { DeleteAPI, postAPI } from 'src/api/config';
 import BasicTable from 'src/components/BasicTable/BasicTable';
 import { formatPrice } from 'src/utils/format';
 import { ProductProps } from 'src/constants/types/product';
+import { getIdCh } from 'src/utils/common';
 import { getImage } from 'src/utils/common';
 
 import TableAction from '../../GroupButton/TableAction';
@@ -23,7 +24,6 @@ type Props = {
 };
 
 const ProductList = (props: Props) => {
-  const inputRef = useRef<HTMLInputElement>(null);
   const { mutate, products } = props;
 
   const [productsData, setProductsData] = useState<ProductProps[]>(products);
@@ -66,9 +66,9 @@ const ProductList = (props: Props) => {
         <Image
           src={getImage(thumbnail)}
           alt='product img'
-          width={'full'}
+          // height={165}
           // height={50}
-          className='rounded-md'
+          className='w-full rounded-md object-cover'
         />
       ),
       align: 'center',
@@ -111,7 +111,7 @@ const ProductList = (props: Props) => {
   ];
   const handleDeleteProduct = async (id: string) => {
     await DeleteAPI(`/api/san-pham/${id}`);
-    mutate('/api/san-pham?idCh=4');
+    mutate(`/api/sort_search?idCh=${getIdCh()}`);
     enqueueSnackbar('Xóa sản phẩm thành công', { variant: 'success' });
   };
   const handleEditProduct = (record: ProductProps) => {
@@ -132,9 +132,8 @@ const ProductList = (props: Props) => {
             newData.append(key, value);
           }
         }
-
-        console.log(await postAPI('/api/san-pham?idCh=4', newData));
-        mutate('/api/san-pham?idCh=4');
+        console.log(await postAPI(`/api/san-pham?idCh=${getIdCh()}`, newData));
+        mutate(`/api/sort_search?idCh=${getIdCh()}`);
         enqueueSnackbar('Thêm sản phẩm thành công', { variant: 'success' });
         setIsModalOpen(false);
       }
@@ -145,9 +144,10 @@ const ProductList = (props: Props) => {
             newData.append(key, value);
           }
         }
-        await postAPI(`/api/san-pham/${values.id}?idCh=4`, newData);
+        await postAPI(`/api/san-pham/${values.id}?idCh=${getIdCh()}`, newData);
         enqueueSnackbar('Sửa sản phẩm thành công', { variant: 'success' });
-        mutate('/api/san-pham?idCh=4');
+        await mutate(`/api/sort_search?idCh=${getIdCh()}`);
+
         setIsModalOpen(false);
         return;
       }

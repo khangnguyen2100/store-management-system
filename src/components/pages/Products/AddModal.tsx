@@ -15,7 +15,6 @@ import {
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { RcFile } from 'antd/es/upload';
 
 import { getAPI } from 'src/api/config';
 import { ProductProps } from 'src/constants/types/product';
@@ -26,7 +25,7 @@ import { SupplierProps } from 'src/constants/types/supplier';
 import { CategoryProp } from 'src/constants/types/category';
 import { BrandProps } from 'src/constants/types/brand';
 import { productTypeProps } from 'src/constants/types/productType';
-import { getBase64 } from 'src/utils/getBase64';
+import { getIdCh } from 'src/utils/common';
 
 const { Dragger } = Upload;
 type Props = {
@@ -36,13 +35,12 @@ type Props = {
   editingProduct: ProductProps | null;
   modalType: 'add' | 'edit' | null;
 };
-const SUPPLIERSENDPOINT = '/api/nha-cung-cap?idCh=4';
-const CATEGORIESENDPOINT = '/api/danh-muc-san-pham?idCh=4';
-const BRANDSENDPOINT = '/api/thuong-hieu?idCh=4';
-const PRODUCTTYPEENDPOINT = '/api/loai-san-pham';
-const AddModal = (props: Props) => {
-  console.log('rerendered');
 
+const SUPPLIERSENDPOINT = `/api/nha-cung-cap?idCh=${getIdCh()}`;
+const CATEGORIESENDPOINT = `/api/danh-muc-san-pham?idCh=${getIdCh()}`;
+const BRANDSENDPOINT = `/api/thuong-hieu?idCh=${getIdCh()}`;
+const PRODUCTTYPEENDPOINT = `/api/loai-san-pham`;
+const AddModal = (props: Props) => {
   const { isOpen, onCancel, onSuccess, modalType, editingProduct } = props;
   const [form] = Form.useForm();
   const { data: suppliersData } = useSWR(SUPPLIERSENDPOINT, getAPI);
@@ -65,16 +63,7 @@ const AddModal = (props: Props) => {
       <Select.Option value='lit'>lít</Select.Option>
     </Select>
   );
-  // const handlePreview = async (file: UploadFile) => {
-  //   if (!file.url && !file.preview) {
-  //     file.preview = await getBase64(file.originFileObj as RcFile);
-  //   }
-  //   setPreviewImage(file.url || (file.preview as string));
-  //   setPreviewOpen(true);
-  //   setPreviewTitle(
-  //     file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1),
-  //   );
-  // };
+
   const draggerProps: UploadProps = {
     name: 'file',
     multiple: true,
@@ -115,10 +104,13 @@ const AddModal = (props: Props) => {
   useEffect(() => {
     if (modalType === 'add') {
       form.resetFields();
-      form.setFieldValue('code', randomString('SP'));
+      form.setFieldValue('maSp', randomString('SP'));
+      form.setFieldValue('ten', randomString('SP'));
     }
     if (modalType === 'edit' && editingProduct) {
-      form.setFieldsValue(editingProduct);
+      form.setFieldsValue({
+        ...editingProduct,
+      });
       setShowProfit(true);
     }
   }, [modalType, editingProduct?.id]);
@@ -133,13 +125,14 @@ const AddModal = (props: Props) => {
       width={800}
       destroyOnClose
       className='add-product-modal'
+      getContainer={false}
     >
       <Form form={form} layout='vertical' className='flex flex-col gap-y-4'>
         <Card size='small' title='Thông tin chung'>
           <Row gutter={[16, 16]}>
             <Col xs={24} md={12}>
               {modalType === 'edit' ? (
-                <Form.Item label='Id sản phẩm' name={'id'}>
+                <Form.Item label='Id sản phẩm' name={'id'} hidden>
                   <Input placeholder='Id sản phẩm' tabIndex={3} disabled />
                 </Form.Item>
               ) : null}
@@ -230,9 +223,9 @@ const AddModal = (props: Props) => {
               >
                 <Select placeholder='Thương hiệu' tabIndex={6}>
                   {brandsData &&
-                    brandsData?.map((item: BrandProps, index: number) => {
+                    brandsData?.data?.map((item: BrandProps, index: number) => {
                       return (
-                        <Select.Option value={item.id} key={index}>
+                        <Select.Option value={item.id.toString()} key={index}>
                           {item.ten}
                         </Select.Option>
                       );
@@ -250,11 +243,11 @@ const AddModal = (props: Props) => {
                 name='giaVon'
                 rules={[
                   { required: true, message: 'Vui lòng nhập giá vốn' },
-                  {
-                    type: 'number',
-                    min: 0,
-                    message: 'Vui lòng nhập số dương! ',
-                  },
+                  // {
+                  //   type: 'number',
+                  //   min: 0,
+                  //   message: 'Vui lòng nhập số dương! ',
+                  // },
                 ]}
               >
                 <InputNumber
@@ -278,11 +271,11 @@ const AddModal = (props: Props) => {
                 name='giaBan'
                 rules={[
                   { required: true, message: 'Vui lòng nhập giá bán' },
-                  {
-                    type: 'number',
-                    min: 0,
-                    message: 'Vui lòng nhập số dương! ',
-                  },
+                  // {
+                  //   type: 'number',
+                  //   min: 0,
+                  //   message: 'Vui lòng nhập số dương! ',
+                  // },
                 ]}
               >
                 <InputNumber
@@ -364,15 +357,11 @@ const AddModal = (props: Props) => {
                 name={'soLuong'}
                 rules={[
                   { required: true, message: 'Vui lòng nhập số lượng tồn kho' },
-                  {
-                    type: 'number',
-                    min: 0,
-                    message: 'Vui lòng nhập số dương! ',
-                  },
                 ]}
               >
                 <InputNumber
                   placeholder='Tồn kho'
+                  formatter={value => formatPriceInput(value)}
                   tabIndex={10}
                   className='w-full'
                 />
@@ -384,7 +373,7 @@ const AddModal = (props: Props) => {
                   { required: true, message: 'Vui lòng đơn vị của sản phẩm' },
                 ]}
               >
-                <Select defaultValue='1'>
+                <Select defaultActiveFirstOption={true}>
                   <Select.Option value='1'>Lon</Select.Option>
                   <Select.Option value='2'>Gói</Select.Option>
                   <Select.Option value='3'>Bao</Select.Option>
