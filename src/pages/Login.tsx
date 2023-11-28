@@ -49,6 +49,7 @@ export default function AntSignInSideTemplate() {
             tenCh: res.data.tt_user.tenCh,
             tenLoaiCh: res.data.tt_user.tenLoaiCh,
             idLoaiCh: res.data.tt_user.idLoaiCh,
+            loai: res.data.tt_user.loai,
           }),
         );
         localStorage.setItem('idCh', res.data.tt_user.idCh);
@@ -86,6 +87,7 @@ export default function AntSignInSideTemplate() {
             tenCh: res.data.tt_user[0].tenCh,
             tenLoaiCh: res.data.tt_user[0].tenLoaiCh,
             idLoaiCh: res.data.tt_user[0].idLoaiCh,
+            loai: res.data.tt_user[0].loai,
           }),
         );
         localStorage.setItem('idCh', res.data.tt_user[0].idCh);
@@ -154,10 +156,9 @@ export default function AntSignInSideTemplate() {
               </Typography.Text>
             </Link>
             <Typography.Text
-              className='text-sm text-primary !underline cursor-pointer'
+              className='cursor-pointer text-sm text-primary !underline'
               onClick={() =>
-                (window.location.href =
-                  'https://beesmart-stage.vercel.app/sign-up')
+                (window.location.href = 'https://beesmart.io.vn/sign-up')
               }
             >
               Đăng ký tài khoản

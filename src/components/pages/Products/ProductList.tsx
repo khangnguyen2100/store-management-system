@@ -12,6 +12,7 @@ import BasicTable from 'src/components/BasicTable/BasicTable';
 import { formatPrice } from 'src/utils/format';
 import { ProductProps } from 'src/constants/types/product';
 import { getIdCh } from 'src/utils/common';
+import { getImage } from 'src/utils/common';
 
 import TableAction from '../../GroupButton/TableAction';
 
@@ -63,7 +64,7 @@ const ProductList = (props: Props) => {
       width: 200,
       render: (thumbnail: string) => (
         <Image
-          src={`https://admin.beesmart.io.vn/${thumbnail}`}
+          src={getImage(thumbnail)}
           alt='product img'
           // height={165}
           // height={50}

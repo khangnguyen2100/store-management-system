@@ -61,7 +61,6 @@ const PaymentStepModal = (props: Props) => {
     'success',
     'cancel',
   ];
-  console.log('discountPrice:', discountPrice);
 
   const steps = [
     {

@@ -35,7 +35,10 @@ const ProductItem = (props: Props) => {
         <p className='font-medium text-red-600'>
           {formatPrice(product.giaBan)}
         </p>
-        <p>{product.soLuong}</p>
+        <p>
+          SL: {' '}
+          <span className='font-semibold'>{product.soLuong}</span>
+        </p>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import {
   SnippetsOutlined,
   SortDescendingOutlined,
   ZoomInOutlined,
+  ArrowLeftOutlined,
 } from '@ant-design/icons';
 import { Button, Input, Space, Tabs, Tooltip } from 'antd';
 import React, { useState } from 'react';
@@ -11,6 +12,7 @@ import { randomString } from 'src/utils/randomString';
 
 import SaleTabItem from './SaleTabItem';
 import './style.scss';
+import { Link } from 'react-router-dom';
 
 type TargetKey = React.MouseEvent | React.KeyboardEvent | string;
 
@@ -83,7 +85,15 @@ const SaleTabList: React.FC = () => {
       className='sale-container w-full'
       tabBarExtraContent={{
         left: (
-          <div className='mr-4'>
+          <div className='mr-4 flex items-center gap-x-2'>
+            <Button
+              type='text'
+              icon={
+                <Link to={'/'} className='text-white'>
+                  <ArrowLeftOutlined />
+                </Link>
+              }
+            ></Button>
             <Input.Search className='w-full' placeholder='Tìm kiếm sản phẩm' />
           </div>
         ),

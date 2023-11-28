@@ -35,6 +35,24 @@ const authApi = {
       method: 'GET',
     });
   },
+  editUserInfo: (data: any) => {
+    return request(`/api/updateInfo`, {
+      method: 'POST',
+      data: JSON.stringify(data),
+    });
+  },
+  forgotPassword: (data: any) => {
+    return request(`/api/forgotPassword`, {
+      method: 'POST',
+      data: JSON.stringify(data),
+    });
+  },
+  changePassword: (data: any) => {
+    return request(`/api/changePassword`, {
+      method: 'POST',
+      data: JSON.stringify(data),
+    });
+  },
 };
 
 export default authApi;
