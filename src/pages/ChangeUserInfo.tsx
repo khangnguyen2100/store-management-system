@@ -42,10 +42,10 @@ const ForgotPassword = ({ onSuccess }: ForgotPasswordProps) => {
       const res = await authApi.forgotPassword(userData?.email as string);
       console.log('res:', res);
       if (res.data.status) {
-        message.success(res.data.message);
+        message.success('Mật khẩu mới tạm thời đã được gửi về email của bạn. Vui Lòng kiểm tra email');
         onSuccess();
       } else {
-        message.error(res.data.message);
+        message.error('Có lỗi xảy ra!');
       }
     } catch (error) {
       console.error(error);
