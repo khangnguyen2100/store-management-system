@@ -26,7 +26,7 @@ const serialize = (obj: any) => {
   for (const p in obj) {
     if (obj.hasOwnProperty(p)) {
       // Skip properties with a value of 'clearSelect'
-      if (obj[p] !== 'clearSelect' && (obj[p] || obj[p] === 0)) {
+      if (obj[p] !== '' && (obj[p] || obj[p] === 0)) {
         str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
       }
     }

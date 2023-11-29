@@ -1,19 +1,19 @@
 import { Checkbox, Collapse, Input, Radio, Select } from 'antd';
 import { CollapseProps } from 'antd/lib';
 import clsx from 'clsx';
+import { enqueueSnackbar } from 'notistack';
 import { useState } from 'react';
 import { BiSolidRightArrow } from 'react-icons/bi';
-import { enqueueSnackbar } from 'notistack';
-import { useSWRConfig } from 'swr';
-import { RightOutlined } from '@ant-design/icons';
-import { ItemType } from 'antd/lib/menu/hooks/useItems';
+import useSWR, { useSWRConfig } from 'swr';
 
 import { DeleteAPI, patchAPI, postAPI } from 'src/api/config';
-import { CategoryProp } from 'src/constants/types/category';
 import { BrandProps } from 'src/constants/types/brand';
+import { CategoryProp } from 'src/constants/types/category';
+import { productTypeProps } from 'src/constants/types/productType';
+import { SupplierProps } from 'src/constants/types/supplier';
+import { ProductFilter } from 'src/pages/Products';
 import { getIdCh } from 'src/utils/common';
 
-import PickTimeFilter from './PickTimeFilter/PickTimeFilter';
 import ChangeModal from './ChangeModal';
 
 type OptionProps = {
@@ -21,12 +21,9 @@ type OptionProps = {
   value: string;
   item?: any;
 };
-type FilterData = {
-  [key: string]: string | string[];
-};
 
 export type MyFilterProps = {
-  name: string;
+  name: keyof ProductFilter;
   title: string;
   type: 'text' | 'radio' | 'checkbox' | 'select' | 'pick-time' | 'list';
   options?: OptionProps[];
@@ -34,19 +31,91 @@ export type MyFilterProps = {
 };
 type Props = {
   title: string;
-  filters: MyFilterProps[];
-  // eslint-disable-next-line no-unused-vars
-  onFilterChange: (filters: FilterData) => void;
+  filters: ProductFilter;
+  onFilterChange: (filters: ProductFilter) => void;
 };
 type IFilterItem = {
+  filters: ProductFilter;
   item: MyFilterProps;
-  onFilterChange: (name: string, value: string | string[]) => void;
+  onFilterChange: (name: keyof ProductFilter, value: string | string[]) => void;
 };
 
 const MyFilters = (props: Props) => {
   const { mutate } = useSWRConfig();
-  const { title = 'title', filters, onFilterChange } = props;
-  const [filtersData, setFiltersData] = useState<FilterData>();
+  const idCh = getIdCh();
+  const { title = 'title', onFilterChange, filters } = props;
+  console.log('filters:', filters);
+
+  const { data: brandData } = useSWR(`/api/thuong-hieu?idCh=${idCh}`);
+  const { data: productTypeData } = useSWR(`/api/loai-san-pham?idCh=${idCh}`);
+  const { data: categoryData } = useSWR(`/api/thuong-hieu?idCh=${idCh}`);
+  const { data: supplierData } = useSWR(`api/nha-cung-cap?idCh=${idCh}`);
+
+  const filtersProps: MyFilterProps[] = [
+    {
+      title: 'Thương hiệu',
+      type: 'select',
+      name: 'th',
+      apiURL: '/api/thuong-hieu',
+      options:
+        brandData &&
+        brandData.data?.map((item: CategoryProp) => {
+          return {
+            value: item.id,
+            label: item.ten,
+            item: item,
+          };
+        }),
+    },
+    {
+      title: 'Loại sản phẩm',
+      type: 'select',
+      name: 'loai',
+      options:
+        productTypeData &&
+        productTypeData?.data?.map((item: productTypeProps) => {
+          return {
+            value: item.id,
+            label: item.ten,
+            item: item,
+          };
+        }),
+      apiURL: '/api/loai-san-pham',
+    },
+    {
+      title: 'Danh mục',
+      type: 'select',
+      name: 'dm',
+      options:
+        categoryData &&
+        categoryData.data &&
+        categoryData.data?.map((item: CategoryProp) => {
+          return {
+            value: item.id,
+            label: item.ten,
+            item: item,
+          };
+        }),
+      apiURL: '/api/danh-muc-san-pham',
+    },
+    {
+      title: 'Nhà cung cấp',
+      type: 'select',
+      name: 'ncc',
+      options:
+        supplierData &&
+        supplierData.data &&
+        supplierData.data?.map((item: SupplierProps) => {
+          return {
+            value: item.id,
+            label: item.ten,
+            item: item,
+          };
+        }),
+      apiURL: '/api/nha-cung-cap',
+    },
+  ];
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [editingItem, setEditingItem] = useState<
     CategoryProp | BrandProps | null
@@ -54,15 +123,17 @@ const MyFilters = (props: Props) => {
   const [modalType, setModalType] = useState('');
   const [modalFor, setModalFor] = useState('');
   const [apiURL, setAPIURL] = useState('');
-  const handleFilterChange = (name: string, value: string | string[]) => {
+  const handleFilterChange = (
+    name: keyof ProductFilter,
+    value: string | string[],
+  ) => {
     const newFiltersData = {
-      ...filtersData,
+      ...filters,
       [name]: value,
-    };
-    setFiltersData(newFiltersData);
+    } as ProductFilter;
     onFilterChange(newFiltersData);
   };
-  const FilterItem = ({ item, onFilterChange }: IFilterItem) => {
+  const FilterItem = ({ filters, item, onFilterChange }: IFilterItem) => {
     const { type, options, name, apiURL, title } = item;
     const renderInput = () => {
       if (type === 'text') {
@@ -71,6 +142,7 @@ const MyFilters = (props: Props) => {
             size='small'
             placeholder='Tìm kiếm'
             name={name}
+            value={filters[name]}
             onChange={e => onFilterChange(name, e.target.value)}
           />
         );
@@ -96,6 +168,7 @@ const MyFilters = (props: Props) => {
             size='small'
             className='flex flex-col gap-2'
             name={name}
+            value={filters[name]}
             onChange={e => onFilterChange(name, e.target.value)}
           >
             <>
@@ -113,6 +186,7 @@ const MyFilters = (props: Props) => {
           <Select
             placeholder='Chọn'
             size='small'
+            value={filters[name]}
             className='ant-custom-select w-full'
             options={options?.map(option => ({
               ...option,
@@ -135,17 +209,15 @@ const MyFilters = (props: Props) => {
             }))}
             allowClear
             onClear={() => {
-              console.log('cleared');
-              onFilterChange(name, 'clearSelect');
+              onFilterChange(name, '');
             }}
-            suffixIcon={<></>}
             onSelect={value => onFilterChange(name, value as string)}
           />
         );
       }
-      if (type === 'pick-time') {
-        return <PickTimeFilter onFilterChange={onFilterChange} name={name} />;
-      }
+      // if (type === 'pick-time') {
+      //   return <PickTimeFilter onFilterChange={onFilterChange} name={name} />;
+      // }
     };
     return <div className='ml-2 w-full overflow-hidden'>{renderInput()}</div>;
   };
@@ -173,12 +245,16 @@ const MyFilters = (props: Props) => {
         </>
       );
   };
-  const items: CollapseProps['items'] = filters.map((filter, i) => {
+  const items: CollapseProps['items'] = filtersProps.map((filter, i) => {
     return {
       key: i + 1,
       label: filter.title,
       children: (
-        <FilterItem item={filter} onFilterChange={handleFilterChange} />
+        <FilterItem
+          filters={filters}
+          item={filter}
+          onFilterChange={handleFilterChange}
+        />
       ),
       style: panelStyle,
       extra: getExtraIcon(filter),
