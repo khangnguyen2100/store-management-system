@@ -104,8 +104,8 @@ const PaymentStepModal = (props: Props) => {
       const transformData = {
         Sp: cartList.map(item => ({
           idSp: item.id,
-          soLuong: item.soLuong,
-          tong: Number(item.giaBan) * Number(item.soLuong),
+          soLuong: item.quantity,
+          tong: Number(item.giaBan) * Number(item.quantity),
         })),
         tongTien: totalPrice,
         idCh: 4,
