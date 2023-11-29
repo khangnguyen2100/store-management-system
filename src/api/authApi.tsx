@@ -41,10 +41,12 @@ const authApi = {
       data: JSON.stringify(data),
     });
   },
-  forgotPassword: (data: any) => {
+  forgotPassword: (email: string) => {
     return request(`/api/forgotPassword`, {
       method: 'POST',
-      data: JSON.stringify(data),
+      data: JSON.stringify({
+        email,
+      }),
     });
   },
   changePassword: (data: any) => {

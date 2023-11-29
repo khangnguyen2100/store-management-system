@@ -6,10 +6,10 @@ import {
   Form,
   Input,
   Modal,
+  Popconfirm,
   Select,
   Space,
   Tag,
-  Typography,
   message,
 } from 'antd';
 import { useEffect, useState } from 'react';
@@ -21,13 +21,58 @@ type ChangePasswordModalProps = {
   visible: boolean;
   onCancel: () => void;
   onSuccess: () => void;
-  mail: string;
+};
+type ForgotPasswordProps = {
+  onSuccess: () => void;
+};
+const ForgotPassword = ({ onSuccess }: ForgotPasswordProps) => {
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const handleSendMail = async () => {
+    setConfirmLoading(true);
+
+    try {
+      const userInfo = localStorage.getItem('userInfo');
+      if (!userInfo) {
+        message.error('Vui lòng đăng nhập!');
+        return;
+      }
+      const userData = JSON.parse(userInfo);
+      const res = await authApi.forgotPassword(userData?.email as string);
+      console.log('res:', res);
+      if (res.data.status) {
+        message.success(res.data.message);
+        onSuccess();
+      } else {
+        message.error(res.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setOpen(false);
+      setConfirmLoading(false);
+    }
+  };
+  return (
+    <Popconfirm
+      title='Lấy lại mật khẩu?'
+      description='Mật khâu mới sẽ được gửi đến email của bạn!'
+      open={open}
+      onConfirm={handleSendMail}
+      okButtonProps={{ loading: confirmLoading }}
+      onCancel={() => setOpen(false)}
+      okText='Xác nhận'
+      cancelText='Huỷ'
+    >
+      <a onClick={() => setOpen(true)}>Quên mật khẩu?</a>
+    </Popconfirm>
+  );
 };
 const ChangePasswordModal = ({
   visible,
   onCancel,
   onSuccess,
-  mail,
 }: ChangePasswordModalProps) => {
   const [form] = Form.useForm();
 
@@ -54,25 +99,12 @@ const ChangePasswordModal = ({
       console.error('da co loi: ', error);
     }
   };
-  const handleSendMail = async () => {
-    // navigate('/xac-thuc');
-    const sendData = {
-      email: mail,
-    };
-    try {
-      // const response = await authApi.sendcode(sendData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const handleCancle = () => {
-    onCancel();
-  };
+
   return (
     <Modal
       title='Đổi mật khẩu'
       open={visible}
-      onCancel={handleCancle}
+      onCancel={onCancel}
       onOk={handleOk}
       width={350}
       okText='Xác nhận'
@@ -99,7 +131,6 @@ const ChangePasswordModal = ({
         >
           <Input.Password style={{ width: '100%' }} />
         </Form.Item>
-
         <Form.Item
           name='checkNewPass'
           label='Xác nhận mật khẩu mới'
@@ -123,7 +154,7 @@ const ChangePasswordModal = ({
         >
           <Input.Password style={{ width: '100%' }} />
         </Form.Item>
-        <a onClick={() => handleSendMail()}>Quên mật khẩu?</a>
+        <ForgotPassword onSuccess={onSuccess} />
       </Form>
     </Modal>
   );
@@ -334,7 +365,6 @@ const UserProfilePage = () => {
 
       <ChangePasswordModal
         visible={modalVisible}
-        mail={userData?.email}
         onCancel={() => setModalVisible(false)}
         onSuccess={handleChangePasswordSuccess}
       />
