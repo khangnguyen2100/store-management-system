@@ -61,14 +61,13 @@ const ProductList = (props: Props) => {
       key: 6,
       title: 'Ảnh',
       dataIndex: 'img',
-      width: 200,
+      width: 150,
       render: (thumbnail: string) => (
         <Image
           src={getImage(thumbnail)}
           alt='product img'
-          // height={165}
-          // height={50}
-          className='w-full rounded-md object-cover'
+          height={150}
+          className='h-[150px] w-full rounded-md object-cover'
         />
       ),
       align: 'center',
@@ -227,13 +226,12 @@ const ProductList = (props: Props) => {
         data={productsData}
         extra={
           <>
-            <Button type='default'>Export</Button>
-            <Button>Import</Button>
+            {/* <Button>Import</Button>
             <Upload {...uploadProps}>
               <Button icon={<UploadOutlined />} loading={uploading}>
                 Import
               </Button>
-            </Upload>
+            </Upload> */}
             <Button type='primary' onClick={handleAddProduct}>
               Thêm hàng
             </Button>

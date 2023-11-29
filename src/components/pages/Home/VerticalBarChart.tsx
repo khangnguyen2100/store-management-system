@@ -99,8 +99,6 @@ function VerticalBarChart({ data }: Props) {
   const handleOnChange = (value: string) => {
     setType(value);
   };
-  console.log(data);
-
   const test = {
     labels,
     datasets: [
@@ -132,7 +130,6 @@ function VerticalBarChart({ data }: Props) {
             onSelect={value => {
               handleOnChange(value);
             }}
-            defaultValue={'Theo ngày'}
           >
             <Select.Option value='Theo ngày'>Theo ngày</Select.Option>
             <Select.Option value='Theo tháng'>Theo tháng</Select.Option>

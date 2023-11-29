@@ -36,8 +36,7 @@ const ProductItem = (props: Props) => {
           {formatPrice(product.giaBan)}
         </p>
         <p>
-          SL: {' '}
-          <span className='font-semibold'>{product.soLuong}</span>
+          SL: <span className='font-semibold'>{product.soLuong}</span>
         </p>
       </div>
     </div>
