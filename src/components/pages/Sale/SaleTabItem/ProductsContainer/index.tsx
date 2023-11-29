@@ -7,6 +7,7 @@ import Loading from 'src/components/Loading/Loading';
 import { CartType } from 'src/constants/types/cart';
 
 import ProductItem from './ProductItem';
+import { getIdCh } from 'src/utils/common';
 
 type Props = {
   cartList: CartType[];
@@ -16,7 +17,7 @@ type Props = {
 const {} = Card;
 const ProductsContainer = (props: Props) => {
   const { onAddToCart, onPayment, cartList } = props;
-  const { data, error, isLoading } = useProducts({ idCh: '4' });
+  const { data, error, isLoading } = useProducts({ idCh: getIdCh() });
   if (isLoading) {
     return <Loading />;
   }
@@ -31,15 +32,17 @@ const ProductsContainer = (props: Props) => {
     >
       <div className='h-[calc(100vh-50px-16px-38px-12px)] overflow-y-auto'>
         <div className='grid w-full grid-cols-1 items-start justify-start gap-2 px-2 sm:grid-cols-2 lg:grid-cols-3'>
-          {data?.datalink?.map((product: ProductProps) =>
-            product ? (
-              <ProductItem
-                key={product.id}
-                product={product}
-                onAdd={onAddToCart}
-              />
-            ) : null,
-          )}
+          {data?.datalink
+            ?.filter((item: ProductProps) => Number(item.soLuong) >= 0)
+            .map((product: ProductProps) =>
+              product ? (
+                <ProductItem
+                  key={product.id}
+                  product={product}
+                  onAdd={onAddToCart}
+                />
+              ) : null,
+            )}
         </div>
       </div>
       <div className='absolute inset-x-0 bottom-0 h-[80px] rounded-b-md border border-primary/20 bg-white px-4 py-2 shadow-md'>
