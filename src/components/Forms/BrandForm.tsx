@@ -1,7 +1,6 @@
 import { Card, Col, Input, Row, Form } from 'antd';
 import { FormInstance } from 'antd/lib';
 
-import { getIdCh } from 'src/utils/common';
 type Props = {
   form: FormInstance;
 };

@@ -2,9 +2,10 @@ import { Spin } from 'antd';
 
 import { useBills } from 'src/api/billApi';
 import BillList from 'src/components/pages/Bills/BillList';
+import { getIdCh } from 'src/utils/common';
 
 function Bills() {
-  const { data: billData, mutate } = useBills({ idCh: '4' });
+  const { data: billData, mutate } = useBills({ idCh: getIdCh() });
 
   if (billData && billData?.data)
     return (

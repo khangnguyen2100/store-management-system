@@ -5,6 +5,7 @@ import { ProductProps } from 'src/constants/types/product';
 import useProducts from 'src/api/productApi';
 import Loading from 'src/components/Loading/Loading';
 import { CartType } from 'src/constants/types/cart';
+import { getIdCh } from 'src/utils/common';
 
 import ProductItem from './ProductItem';
 
@@ -16,7 +17,7 @@ type Props = {
 const {} = Card;
 const ProductsContainer = (props: Props) => {
   const { onAddToCart, onPayment, cartList } = props;
-  const { data, error, isLoading } = useProducts({ idCh: '4' });
+  const { data, error, isLoading } = useProducts({ idCh: getIdCh() });
   if (isLoading) {
     return <Loading />;
   }
