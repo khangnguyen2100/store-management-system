@@ -9,7 +9,7 @@ import {
   Typography,
   message,
 } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -22,10 +22,10 @@ const { Footer, Content } = Layout;
 export default function AntSignInSideTemplate() {
   const navigate = useNavigate();
   const [form] = Form.useForm();
-
+  const inputRef = useRef(null);
   const [signInWithGoogle] = useSignInWithGoogle(fireBaseAuth);
   const [user] = useAuthState(fireBaseAuth);
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleLoginWithGoogle = async () => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -69,6 +69,7 @@ export default function AntSignInSideTemplate() {
 
   const handleSubmitForm = async () => {
     try {
+      setIsLoading(true);
       await form.validateFields();
       const values = form.getFieldsValue();
       const res = await authApi.login(values);
@@ -91,7 +92,7 @@ export default function AntSignInSideTemplate() {
           }),
         );
         localStorage.setItem('idCh', res.data.tt_user[0].idCh);
-
+        setIsLoading(prev => !prev);
         message.success('Đăng nhập thành công');
         navigate(HOME);
       }
@@ -100,6 +101,11 @@ export default function AntSignInSideTemplate() {
       message.error(
         'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin.',
       );
+      if (inputRef.current) {
+        // Focus vào input sử dụng ref
+        (inputRef.current as HTMLInputElement).focus();
+      }
+      setIsLoading(prev => !prev);
     }
   };
 
@@ -110,6 +116,22 @@ export default function AntSignInSideTemplate() {
       }
     };
     checkGoogleAccount();
+    window.addEventListener('keydown', async e => {
+      if (e.key === 'Enter') {
+        setIsLoading(true);
+        await handleSubmitForm();
+      }
+    });
+    return window.removeEventListener('keydown', async e => {
+      if (e.key === 'Enter') {
+        setIsLoading(true);
+        await handleSubmitForm();
+        if (inputRef.current) {
+          // Focus vào input sử dụng ref
+          (inputRef.current as HTMLInputElement).focus();
+        }
+      }
+    });
   }, [user]);
 
   return (
@@ -136,6 +158,7 @@ export default function AntSignInSideTemplate() {
               prefix={<UserOutlined className='site-form-item-icon' />}
               placeholder='Email'
               size='large'
+              ref={inputRef}
             />
           </Form.Item>
           <Form.Item
@@ -171,6 +194,7 @@ export default function AntSignInSideTemplate() {
           className='login-form-button mb-1 w-full'
           size='large'
           onClick={handleSubmitForm}
+          loading={isLoading}
         >
           Đăng nhập
         </Button>

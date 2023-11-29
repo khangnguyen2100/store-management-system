@@ -11,7 +11,7 @@ function SupplierForm({ form, type }: Props) {
         <Row gutter={[16, 16]}>
           <Col xs={24} md={12}>
             {type !== 'add' && (
-              <Form.Item label='Id nhà cung cấp' name={'id'}>
+              <Form.Item label='Id nhà cung cấp' name={'id'} hidden>
                 <Input placeholder='Id nhà cung cấp' disabled={true} />
               </Form.Item>
             )}
@@ -33,6 +33,13 @@ function SupplierForm({ form, type }: Props) {
             >
               <Input placeholder='Số điện thoại nhà cung cấp' tabIndex={2} />
             </Form.Item>
+            <Form.Item
+              label='Mã số thuế'
+              rules={[{ required: true, message: 'Vui lòng nhập mã số thuế' }]}
+              name={'MST'}
+            >
+              <Input placeholder='Mã số thuế' tabIndex={3} />
+            </Form.Item>
           </Col>
           <Col xs={24} md={12}>
             <Form.Item label='Email nhà cung cấp' name={'email'}>
@@ -40,13 +47,6 @@ function SupplierForm({ form, type }: Props) {
             </Form.Item>
             <Form.Item label='Địa chỉ nhà cung cấp' name={'diaChi'}>
               <Input placeholder='Địa chỉ nhà cung cấp' tabIndex={5} />
-            </Form.Item>
-            <Form.Item
-              label='Mã số thuế'
-              rules={[{ required: true, message: 'Vui lòng nhập mã số thuế' }]}
-              name={'MST'}
-            >
-              <Input placeholder='Mã số thuế' tabIndex={3} />
             </Form.Item>
           </Col>
         </Row>

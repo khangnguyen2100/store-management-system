@@ -35,7 +35,7 @@ const NavbarLinks: NavbarLinkType[] = [
     ],
   },
   { title: 'Sản phẩm', linkTo: '/san-pham' },
-  { title: 'Nhân viên', linkTo: '#!' },
+  { title: 'Hóa đơn', linkTo: '/hoa-don' },
   { title: 'Báo cáo', linkTo: '#!' },
 ];
 function AdminHeader() {

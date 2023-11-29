@@ -17,7 +17,7 @@ import { TablePaginationConfig } from 'antd/lib';
 interface Props<T> {
   columns: ColumnsType<T>;
   data: T[];
-  extra: React.ReactNode;
+  extra?: React.ReactNode;
   onChange: (pagination: any, filters: any, sorter: any) => void;
   pagination?: TablePaginationConfig;
 }
