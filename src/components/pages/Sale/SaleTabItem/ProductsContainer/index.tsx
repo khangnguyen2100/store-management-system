@@ -8,7 +8,6 @@ import { CartType } from 'src/constants/types/cart';
 import { getIdCh } from 'src/utils/common';
 
 import ProductItem from './ProductItem';
-import { getIdCh } from 'src/utils/common';
 
 type Props = {
   cartList: CartType[];
