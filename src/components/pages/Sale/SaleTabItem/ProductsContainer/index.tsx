@@ -5,9 +5,9 @@ import { ProductProps } from 'src/constants/types/product';
 import useProducts from 'src/api/productApi';
 import Loading from 'src/components/Loading/Loading';
 import { CartType } from 'src/constants/types/cart';
+import { getIdCh } from 'src/utils/common';
 
 import ProductItem from './ProductItem';
-import { getIdCh } from 'src/utils/common';
 
 type Props = {
   cartList: CartType[];

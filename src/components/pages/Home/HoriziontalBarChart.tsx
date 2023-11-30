@@ -49,6 +49,7 @@ const getCurrentMonthRevenue = (data: revenueProps[]) => {
 
   return revenueMonthArray.reduce((previous, current) => previous + current, 0);
 };
+
 function getRevenueMonthly(data: any[]) {
   const revenueMonthly: any = {};
 

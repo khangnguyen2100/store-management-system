@@ -19,24 +19,9 @@ const NavbarLinks: NavbarLinkType[] = [
   {
     title: 'Bán hàng',
     linkTo: '/ban-hang',
-    subMenu: [
-      {
-        key: '1',
-        label: <Link to={'/ban-hang'}>Bán hàng</Link>,
-      },
-      {
-        key: '2',
-        label: <Link to={'/lich-su-ban-hang'}>Lịch sử bán hàng</Link>,
-      },
-      {
-        key: '3',
-        label: <Link to={'/danh-sach-khach-hang'}>Danh sách khách hàng</Link>,
-      },
-    ],
   },
   { title: 'Sản phẩm', linkTo: '/san-pham' },
   { title: 'Hóa đơn', linkTo: '/hoa-don' },
-  { title: 'Báo cáo', linkTo: '#!' },
 ];
 function AdminHeader() {
   const navigate = useNavigate();
@@ -54,15 +39,15 @@ function AdminHeader() {
         </Space>
       ),
     },
-    {
-      key: 'change-password',
-      label: (
-        <Space onClick={() => navigate('/thay-doi-mat-khau')}>
-          <LockOutlined />
-          <Typography className='header-accountAction'>Đổi mật khẩu</Typography>
-        </Space>
-      ),
-    },
+    // {
+    //   key: 'change-password',
+    //   label: (
+    //     <Space onClick={() => navigate('/thay-doi-mat-khau')}>
+    //       <LockOutlined />
+    //       <Typography className='header-accountAction'>Đổi mật khẩu</Typography>
+    //     </Space>
+    //   ),
+    // },
     {
       key: 'logout',
       label: (

@@ -99,7 +99,7 @@ const SaleTabList: React.FC = () => {
         ),
         right: (
           <Space className='ml-4'>
-            <Tooltip title='Test'>
+            {/* <Tooltip title='Test'>
               <Button type='default' icon={<SnippetsOutlined />} />
             </Tooltip>
             <Tooltip title='Test'>
@@ -110,7 +110,7 @@ const SaleTabList: React.FC = () => {
             </Tooltip>
             <Tooltip title='Test'>
               <Button type='default' icon={<SortDescendingOutlined />} />
-            </Tooltip>
+            </Tooltip> */}
           </Space>
         ),
       }}

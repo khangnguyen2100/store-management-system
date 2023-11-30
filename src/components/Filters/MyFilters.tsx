@@ -13,6 +13,7 @@ import { productTypeProps } from 'src/constants/types/productType';
 import { SupplierProps } from 'src/constants/types/supplier';
 import { ProductFilter } from 'src/pages/Products';
 import { getIdCh } from 'src/utils/common';
+import useDebounce from 'src/hooks/useDebounce';
 
 import ChangeModal from './ChangeModal';
 
@@ -44,14 +45,25 @@ const MyFilters = (props: Props) => {
   const { mutate } = useSWRConfig();
   const idCh = getIdCh();
   const { title = 'title', onFilterChange, filters } = props;
-  console.log('filters:', filters);
-
   const { data: brandData } = useSWR(`/api/thuong-hieu?idCh=${idCh}`);
-  const { data: productTypeData } = useSWR(`/api/loai-san-pham?idCh=${idCh}`);
   const { data: categoryData } = useSWR(`/api/thuong-hieu?idCh=${idCh}`);
   const { data: supplierData } = useSWR(`api/nha-cung-cap?idCh=${idCh}`);
 
   const filtersProps: MyFilterProps[] = [
+    {
+      title: 'Tìm tên sản phẩm',
+      type: 'text',
+      name: 'keyword',
+    },
+    {
+      title: 'Tình trạng hàng hóa',
+      type: 'radio',
+      name: 'tinhTrang',
+      options: [
+        { label: 'Còn hàng', value: '1' },
+        { label: 'Hết hàng', value: '0' },
+      ],
+    },
     {
       title: 'Thương hiệu',
       type: 'select',
@@ -66,21 +78,6 @@ const MyFilters = (props: Props) => {
             item: item,
           };
         }),
-    },
-    {
-      title: 'Loại sản phẩm',
-      type: 'select',
-      name: 'loai',
-      options:
-        productTypeData &&
-        productTypeData?.data?.map((item: productTypeProps) => {
-          return {
-            value: item.id,
-            label: item.ten,
-            item: item,
-          };
-        }),
-      apiURL: '/api/loai-san-pham',
     },
     {
       title: 'Danh mục',
@@ -305,7 +302,8 @@ const MyFilters = (props: Props) => {
       <Collapse
         className='filters-container flex w-full flex-col bg-transparent'
         items={items}
-        // defaultActiveKey={items.map(item => item.key) as string[]}
+        // eslint-disable-next-line react/prop-types
+        defaultActiveKey={items.map(item => item.key) as string[]}
         bordered={false}
         expandIcon={({ isActive }) => (
           <BiSolidRightArrow

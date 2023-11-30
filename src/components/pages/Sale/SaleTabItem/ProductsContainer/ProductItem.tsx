@@ -26,9 +26,9 @@ const ProductItem = (props: Props) => {
         <div className='overflow-hidden rounded-md'>
           <Image
             src={getImage(product.img)}
-            width={70}
-            height={50}
-            className='object-cover'
+            width={100}
+            height={100}
+            className='object-fill'
             alt={product.ten}
           />
         </div>

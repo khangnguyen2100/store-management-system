@@ -129,8 +129,6 @@ function VerticalBarChart({ data }: Props) {
       });
     }
   };
-  console.log(data);
-
   const test = {
     labels,
     datasets: [
@@ -141,7 +139,7 @@ function VerticalBarChart({ data }: Props) {
       },
     ],
   };
-  if (data.length > 0)
+  if (data)
     return (
       <div className='mt-5 flex flex-col gap-y-7 p-7  shadow-lg'>
         <div className='flex justify-between'>
@@ -162,7 +160,6 @@ function VerticalBarChart({ data }: Props) {
             onSelect={value => {
               handleChangeType(value);
             }}
-            defaultValue={'Theo ngày'}
           >
             <Select.Option value='Theo ngày'>Theo ngày</Select.Option>
             <Select.Option value='Theo tháng'>Theo tháng</Select.Option>
