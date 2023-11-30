@@ -42,7 +42,6 @@ const Products = () => {
         title='Hàng hóa'
         onFilterChange={handleFilterChange}
       />
-
       <div className='flex-1'>
         <ProductList searchUrl={searchUrl} />
       </div>

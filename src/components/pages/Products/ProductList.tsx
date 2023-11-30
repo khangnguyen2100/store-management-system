@@ -67,12 +67,12 @@ const ProductList = (props: Props) => {
       key: 6,
       title: 'Ảnh',
       dataIndex: 'img',
-      width: 150,
+      width: 100,
       render: (thumbnail: string) => (
         <Image
           src={getImage(thumbnail)}
           alt='product img'
-          height={150}
+          height={75}
           className='h-[150px] w-full rounded-md object-cover'
         />
       ),
@@ -224,11 +224,9 @@ const ProductList = (props: Props) => {
       return false;
     },
   };
-
   if (error) {
     return <Empty description='Có lỗi xảy ra' />;
   }
-
   return (
     <Space className='w-full' direction='vertical'>
       <BasicTable
