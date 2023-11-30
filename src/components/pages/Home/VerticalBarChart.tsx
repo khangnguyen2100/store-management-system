@@ -8,7 +8,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { Select, Spin } from 'antd';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { formatPrice } from 'src/utils/format';
 import { revenueProps } from 'src/constants/types/revenue';
@@ -63,6 +63,31 @@ function getRevenueMonthly(data: any[]) {
 
   return result;
 }
+function getRevenueQuarterly(data: any[]) {
+  const revenueQuarterly: any = {};
+
+  data.forEach(item => {
+    // Lấy quý từ ngày tạo
+    const quy = Math.floor((new Date(item.ngayTao).getMonth() + 3) / 3);
+
+    // Kiểm tra xem quý đã tồn tại trong mảng chưa
+    if (revenueQuarterly[quy]) {
+      // Nếu đã tồn tại, cộng thêm doanh thu vào
+      revenueQuarterly[quy] += parseInt(item.doanhThu);
+    } else {
+      // Nếu chưa tồn tại, tạo mới và gán giá trị doanh thu
+      revenueQuarterly[quy] = parseInt(item.doanhThu);
+    }
+  });
+
+  // Chuyển đổi đối tượng thành mảng
+  const result = Object.keys(revenueQuarterly).map(quy => ({
+    quy: quy,
+    doanhThu: revenueQuarterly[quy],
+  }));
+
+  return result;
+}
 function VerticalBarChart({ data }: Props) {
   const [labels, setLabels] = useState<string[]>(() => {
     return data.map((item, index) => {
@@ -75,8 +100,7 @@ function VerticalBarChart({ data }: Props) {
       return parseInt(item.doanhThu);
     });
   });
-  const [type, setType] = useState<string>('');
-  useEffect(() => {
+  const handleChangeType = (type: string) => {
     if (type === 'Theo ngày') {
       setChartData(() => {
         return data.map(item => parseInt(item.doanhThu));
@@ -95,9 +119,15 @@ function VerticalBarChart({ data }: Props) {
         return revenueMonthly.map(item => item.thang);
       });
     }
-  }, [type]);
-  const handleOnChange = (value: string) => {
-    setType(value);
+    if (type === 'Theo quý') {
+      const revenueMonthly = getRevenueQuarterly(data);
+      setChartData(() => {
+        return revenueMonthly.map(item => item.doanhThu);
+      });
+      setLabels(() => {
+        return revenueMonthly.map(item => item.quy);
+      });
+    }
   };
   const test = {
     labels,
@@ -128,12 +158,12 @@ function VerticalBarChart({ data }: Props) {
           <Select
             className='w-[150px]'
             onSelect={value => {
-              handleOnChange(value);
+              handleChangeType(value);
             }}
           >
             <Select.Option value='Theo ngày'>Theo ngày</Select.Option>
             <Select.Option value='Theo tháng'>Theo tháng</Select.Option>
-            <Select.Option value='Theo năm'>Theo năm</Select.Option>
+            <Select.Option value='Theo quý'>Theo quý</Select.Option>
           </Select>
         </div>
         <Bar options={options} data={test} redraw={true} updateMode='reset' />

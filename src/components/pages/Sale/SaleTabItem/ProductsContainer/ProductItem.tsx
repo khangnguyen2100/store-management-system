@@ -1,4 +1,5 @@
 import { Image } from 'antd';
+import clsx from 'clsx';
 
 import { ProductProps } from 'src/constants/types/product';
 import { getImage } from 'src/utils/common';
@@ -15,8 +16,11 @@ const ProductItem = (props: Props) => {
   return (
     <div
       key={product.id}
-      className='transition-sm col-span-1 flex h-fit w-full cursor-pointer items-center gap-x-2 rounded-md border border-transparent p-1 shadow-sm hover:border-primary'
-      onClick={() => onAdd(product)}
+      className={clsx(
+        'transition-sm col-span-1 flex h-fit w-full cursor-pointer items-center gap-x-2 rounded-md border border-transparent p-1 shadow-sm hover:border-primary',
+        Number(product.soLuong) === 0 && 'cursor-not-allowed opacity-50',
+      )}
+      onClick={Number(product.soLuong) > 0 ? () => onAdd(product) : () => {}}
     >
       {product?.img && (
         <div className='overflow-hidden rounded-md'>

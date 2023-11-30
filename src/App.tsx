@@ -18,7 +18,7 @@ function App() {
       <BrowserRouter basename='/'>
         <SWRConfig
           value={{
-            refreshInterval: 5 * 60 * 1000,
+            refreshInterval: 0,
             refreshWhenHidden: true,
             fetcher: fetcher,
             onErrorRetry: (error, key, config, revalidate, { retryCount }) => {

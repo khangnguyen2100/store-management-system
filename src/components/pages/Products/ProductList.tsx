@@ -1,32 +1,38 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { UploadOutlined } from '@ant-design/icons';
-import { Button, Image, Space, Upload, UploadProps, message } from 'antd';
+import {
+  Button,
+  Empty,
+  Image,
+  Space,
+  Upload,
+  UploadProps,
+  message,
+} from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { enqueueSnackbar } from 'notistack';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
+import useSWR from 'swr';
 import * as xlsx from 'xlsx';
-import { KeyedMutator } from 'swr';
 
 import { DeleteAPI, postAPI } from 'src/api/config';
 import BasicTable from 'src/components/BasicTable/BasicTable';
-import { formatPrice } from 'src/utils/format';
 import { ProductProps } from 'src/constants/types/product';
-import { getIdCh } from 'src/utils/common';
-import { getImage } from 'src/utils/common';
+import { getIdCh, getImage } from 'src/utils/common';
+import { formatPrice } from 'src/utils/format';
 
 import TableAction from '../../GroupButton/TableAction';
 
 import AddModal from './AddModal';
 
 type Props = {
-  products: ProductProps[];
-  mutate: KeyedMutator<any>;
+  searchUrl: string;
 };
 
 const ProductList = (props: Props) => {
-  const { mutate, products } = props;
+  const { searchUrl } = props;
+  const { data: products, mutate, error, isLoading } = useSWR(searchUrl);
 
-  const [productsData, setProductsData] = useState<ProductProps[]>(products);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'add' | 'edit' | null>(null);
   const [editingProduct, setEditingProduct] = useState<ProductProps | null>(
@@ -219,11 +225,16 @@ const ProductList = (props: Props) => {
     },
   };
 
+  if (error) {
+    return <Empty description='Có lỗi xảy ra' />;
+  }
+
   return (
     <Space className='w-full' direction='vertical'>
       <BasicTable
         columns={columns}
-        data={productsData}
+        data={products?.data || []}
+        loading={isLoading}
         extra={
           <>
             {/* <Button>Import</Button>

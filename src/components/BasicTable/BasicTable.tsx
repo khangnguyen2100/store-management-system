@@ -17,13 +17,21 @@ import { TablePaginationConfig } from 'antd/lib';
 interface Props<T> {
   columns: ColumnsType<T>;
   data: T[];
+  loading?: boolean;
   extra?: React.ReactNode;
   onChange: (pagination: any, filters: any, sorter: any) => void;
   pagination?: TablePaginationConfig;
 }
 
 const BasicTable = <T extends object>(props: Props<T>) => {
-  const { columns, data, extra, onChange, pagination: paginationInit } = props;
+  const {
+    columns,
+    data,
+    extra,
+    onChange,
+    pagination: paginationInit,
+    loading = false,
+  } = props;
 
   const optionsDisplay = columns.map(column => ({
     label: column.title,
@@ -116,6 +124,7 @@ const BasicTable = <T extends object>(props: Props<T>) => {
       </div>
       <Table
         bordered
+        loading={loading}
         columns={visibleColumnsData}
         dataSource={data}
         onChange={handleTableChange}
