@@ -31,7 +31,7 @@ const ProductsContainer = (props: Props) => {
       size='small'
     >
       <div className='h-[calc(100vh-50px-16px-38px-12px)] overflow-y-auto'>
-        <div className='grid w-full grid-cols-1 items-start justify-start gap-2 px-2 sm:grid-cols-2 lg:grid-cols-3'>
+        <div className='grid w-full grid-cols-1 items-start justify-start gap-2 px-2 py-1 sm:grid-cols-2 lg:grid-cols-3'>
           {data?.datalink
             ?.filter((item: ProductProps) => Number(item.soLuong) >= 0)
             .map((product: ProductProps) =>

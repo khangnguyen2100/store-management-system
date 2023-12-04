@@ -35,7 +35,7 @@ const SaleTabItem = (props: Props) => {
   return (
     <div className='flex h-full bg-gray-200 p-2'>
       <Row className='!mx-0 w-full mdd:flex-col-reverse' gutter={[8, 8]}>
-        <Col sm={24} md={13} className='!pl-0'>
+        <Col sm={24} md={12} className='!pl-0'>
           <CartContainer
             data={cartList}
             onDecrement={handleDecrementProduct}
@@ -47,7 +47,7 @@ const SaleTabItem = (props: Props) => {
             setNoteValue={setNoteValue}
           />
         </Col>
-        <Col sm={24} md={11} className='!pr-0'>
+        <Col sm={24} md={12} className='!pr-0'>
           <ProductsContainer
             onPayment={handleOpenPaymentModal}
             onAddToCart={handleAddToCart}
