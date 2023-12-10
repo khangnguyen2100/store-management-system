@@ -1,5 +1,6 @@
 import { Col, Modal, Row } from 'antd';
 import { useState } from 'react';
+import dayjs from 'dayjs';
 
 import useCart from 'src/hooks/useCart';
 import { CartStatus } from 'src/constants/types/cart';
@@ -29,6 +30,7 @@ const SaleTabItem = (props: Props) => {
   } = useCart([]);
   const [cartStatus, setCartStatus] = useState<CartStatus>('pending');
   const [openPaymentModal, setOpenPaymentModal] = useState<boolean>(false);
+  const date = dayjs().format('HH:mm, DD/MM/YYYY');
   const handleOpenPaymentModal = () => {
     setOpenPaymentModal(true);
   };
@@ -58,7 +60,14 @@ const SaleTabItem = (props: Props) => {
       <Modal
         open={openPaymentModal}
         onCancel={() => setOpenPaymentModal(false)}
-        title='Thanh toán'
+        title={
+          <div className='flex flex-col items-start'>
+            <span className='text-xl font-semibold'>Thanh toán</span>
+            <span className='text-sm font-semibold text-gray-500'>
+              Thời gian: <span className='text-typo-1'> {date}</span>
+            </span>
+          </div>
+        }
         footer={null}
         width={700}
       >
