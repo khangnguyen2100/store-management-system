@@ -1,23 +1,83 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import {
   Button,
-  Checkbox,
   Form,
   Image,
   Input,
   Layout,
+  Popconfirm,
   Typography,
   message,
 } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import authApi from 'src/api/authApi';
 import Logo from 'src/components/Logo/Logo';
 import { fireBaseAuth } from 'src/configs/firebase';
 import { HOME } from 'src/routes/routes.auth';
 const { Footer, Content } = Layout;
+
+type ForgotPasswordProps = {
+  onSuccess: () => void;
+  email: string;
+};
+const ForgotPassword = ({ onSuccess, email }: ForgotPasswordProps) => {
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const handleSendMail = async () => {
+    setConfirmLoading(true);
+
+    try {
+      const res = await authApi.forgotPassword(email as string);
+      if (res.data.status) {
+        message.success(
+          'Mật khẩu mới tạm thời đã được gửi về email của bạn. Vui Lòng kiểm tra email',
+        );
+        onSuccess();
+      } else {
+        message.error('Có lỗi xảy ra!');
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setOpen(false);
+      setConfirmLoading(false);
+    }
+  };
+  return (
+    <Popconfirm
+      title='Lấy lại mật khẩu?'
+      description='Mật khâu mới sẽ được gửi đến email của bạn!'
+      open={open}
+      onConfirm={handleSendMail}
+      okButtonProps={{ loading: confirmLoading }}
+      onCancel={() => setOpen(false)}
+      okText='Xác nhận'
+      cancelText='Huỷ'
+    >
+      <a
+        onClick={() => {
+          if (!email) {
+            message.error('Vui lòng nhập email!');
+            return;
+          }
+          // validate email
+          const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!regex.test(email)) {
+            message.error('Email không hợp lệ!');
+            return;
+          }
+          setOpen(true);
+        }}
+      >
+        Quên mật khẩu?
+      </a>
+    </Popconfirm>
+  );
+};
 
 export default function AntSignInSideTemplate() {
   const navigate = useNavigate();
@@ -26,6 +86,8 @@ export default function AntSignInSideTemplate() {
   const [signInWithGoogle] = useSignInWithGoogle(fireBaseAuth);
   const [user] = useAuthState(fireBaseAuth);
   const [isLoading, setIsLoading] = useState(false);
+  const [emailValue, setEmailValue] = useState<string>('');
+  console.log('emailValue:', emailValue);
   const handleLoginWithGoogle = async () => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -159,6 +221,8 @@ export default function AntSignInSideTemplate() {
               placeholder='Email'
               size='large'
               ref={inputRef}
+              onChange={e => setEmailValue(e.target.value)}
+              value={emailValue}
             />
           </Form.Item>
           <Form.Item
@@ -173,11 +237,12 @@ export default function AntSignInSideTemplate() {
             />
           </Form.Item>
           <div className='mb-3 flex justify-between'>
-            <Link to='/forgot-password'>
-              <Typography.Text className='text-sm'>
-                Quên mật khẩu?
-              </Typography.Text>
-            </Link>
+            <ForgotPassword
+              onSuccess={() => {
+                form.setFieldsValue({ email: '' });
+              }}
+              email={emailValue}
+            />
             <Typography.Text
               className='cursor-pointer text-sm text-primary !underline'
               onClick={() =>
