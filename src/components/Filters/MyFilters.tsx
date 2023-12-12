@@ -133,17 +133,6 @@ const MyFilters = (props: Props) => {
   const FilterItem = ({ filters, item, onFilterChange }: IFilterItem) => {
     const { type, options, name, apiURL, title } = item;
     const renderInput = () => {
-      if (type === 'text') {
-        return (
-          <Input
-            size='small'
-            placeholder='Tìm kiếm'
-            name={name}
-            value={filters[name]}
-            onChange={e => onFilterChange(name, e.target.value)}
-          />
-        );
-      }
       if (type === 'checkbox') {
         return (
           <Checkbox.Group
@@ -247,11 +236,24 @@ const MyFilters = (props: Props) => {
       key: i + 1,
       label: filter.title,
       children: (
-        <FilterItem
-          filters={filters}
-          item={filter}
-          onFilterChange={handleFilterChange}
-        />
+        <>
+          {filter.type === 'text' ? (
+            <Input
+              size='small'
+              placeholder='Tìm kiếm'
+              name={filter.name}
+              allowClear
+              value={filters[filter.name]}
+              onChange={e => handleFilterChange(filter.name, e.target.value)}
+            />
+          ) : (
+            <FilterItem
+              filters={filters}
+              item={filter}
+              onFilterChange={handleFilterChange}
+            />
+          )}
+        </>
       ),
       style: panelStyle,
       extra: getExtraIcon(filter),
