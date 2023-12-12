@@ -13,7 +13,7 @@ import {
   message,
 } from 'antd';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import useSWR from 'swr';
 
 import { getAPI } from 'src/api/config';
@@ -25,7 +25,7 @@ import { SupplierProps } from 'src/constants/types/supplier';
 import { CategoryProp } from 'src/constants/types/category';
 import { BrandProps } from 'src/constants/types/brand';
 import { productTypeProps } from 'src/constants/types/productType';
-import { getIdCh } from 'src/utils/common';
+import { getIdCh, getImage } from 'src/utils/common';
 
 const { Dragger } = Upload;
 type Props = {
@@ -71,17 +71,11 @@ const AddModal = (props: Props) => {
     accept: '.jpg, .png, .jpeg',
     listType: 'picture',
     fileList,
+    onRemove() {
+      setFileList([]);
+    },
     onChange(info) {
-      // const { status } = info.file;
-      // if (status !== 'uploading') {
-      //   console.log(info.file, info.fileList);
-      // }
-      // if (status === 'done') {
-      //   message.success(`${info.file.name} file uploaded successfully.`);
-      // } else if (status === 'error') {
-      //   message.error(`${info.file.name} file upload failed.`);
-      // }
-      setFileList([info.file]);
+      setFileList(info.fileList);
     },
     beforeUpload() {
       return false;
@@ -97,7 +91,11 @@ const AddModal = (props: Props) => {
     try {
       const values = await form.validateFields();
       const image = fileList[0];
-      onSuccess({ ...values, img: image, anHien: 1 });
+      console.log('image:', image)
+      const imageData = image.originFileObj;
+      console.log('imageData:', imageData)
+
+      onSuccess({ ...values, img: imageData, anHien: 1 });
     } catch (error) {}
   };
 
@@ -108,6 +106,15 @@ const AddModal = (props: Props) => {
       form.setFieldValue('ten', randomString('SP'));
     }
     if (modalType === 'edit' && editingProduct) {
+      setFileList([
+        {
+          uid: '-1',
+          name: 'image.png',
+          status: 'done',
+          preview: getImage(editingProduct.img || ''),
+          url: getImage(editingProduct.img || ''),
+        },
+      ]);
       form.setFieldsValue({
         ...editingProduct,
       });
@@ -387,4 +394,4 @@ const AddModal = (props: Props) => {
   );
 };
 
-export default AddModal;
+export default memo(AddModal);
