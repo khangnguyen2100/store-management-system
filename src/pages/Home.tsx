@@ -1,12 +1,9 @@
-import useSWR from 'swr';
 import { Spin } from 'antd';
-import { useState, useEffect } from 'react';
 
 import VerticalBarChart from 'src/components/pages/Home/VerticalBarChart';
 import SalesResult from 'src/components/pages/Home/SalesResult';
 import HoriziontalBarChart from 'src/components/pages/Home/HoriziontalBarChart';
 import { useRevenue } from 'src/api/revenueApi';
-import { revenueProps } from 'src/constants/types/revenue';
 import { getIdCh } from 'src/utils/common';
 
 const Home = () => {
