@@ -6,6 +6,8 @@ import { request } from './config';
 
 type Props = {
   idCh: string;
+  keyword?: string;
+  tinhTrang?: string;
 };
 
 const productApi = {
@@ -23,7 +25,7 @@ const useProducts = (params: Props) => {
     error,
     isLoading,
     mutate,
-  } = useSWR(`/api/san-pham?${serialize(params)}`);
+  } = useSWR(`/api/sort_search?${serialize(params)}`);
   return {
     data,
     error,

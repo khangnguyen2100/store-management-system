@@ -29,13 +29,12 @@ const Products = () => {
   const idCh = getIdCh();
   const [searchUrl, setSearchURL] = useState(`/api/sort_search?idCh=${idCh}`);
   const [filters, setFilters] = useState<ProductFilter>(filterInit);
-  const debounceValue = useDebounce(filters, 0);
   const handleFilterChange = (filters: ProductFilter) => {
     setFilters(filters);
   };
   useEffect(() => {
     setSearchURL(`/api/sort_search?idCh=${idCh}&${serialize(filters)}`);
-  }, [debounceValue]);
+  }, [filters]);
   return (
     <div className='flex w-full items-start gap-5'>
       <MyFilters

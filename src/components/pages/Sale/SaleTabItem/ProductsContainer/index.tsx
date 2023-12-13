@@ -6,6 +6,7 @@ import useProducts from 'src/api/productApi';
 import Loading from 'src/components/Loading/Loading';
 import { CartType } from 'src/constants/types/cart';
 import { getIdCh } from 'src/utils/common';
+import useSaleSlice from 'src/store/slices/saleSlice';
 
 import ProductItem from './ProductItem';
 
@@ -17,7 +18,12 @@ type Props = {
 const {} = Card;
 const ProductsContainer = (props: Props) => {
   const { onAddToCart, onPayment, cartList } = props;
-  const { data, error, isLoading } = useProducts({ idCh: getIdCh() });
+  const { searchText } = useSaleSlice();
+  const { data, error, isLoading } = useProducts({
+    idCh: getIdCh(),
+    keyword: searchText,
+    tinhTrang: '2',
+  });
   if (isLoading) {
     return <Loading />;
   }
@@ -31,8 +37,8 @@ const ProductsContainer = (props: Props) => {
       size='small'
     >
       <div className='h-[calc(100vh-50px-16px-38px-12px)] overflow-y-auto'>
-        <div className='grid w-full grid-cols-1 items-start justify-start gap-2 px-2 sm:grid-cols-2 lg:grid-cols-3'>
-          {data?.datalink
+        <div className='grid w-full grid-cols-1 items-start justify-start gap-2 px-2 py-1 sm:grid-cols-2 lg:grid-cols-3'>
+          {data?.data
             ?.filter((item: ProductProps) => Number(item.soLuong) >= 0)
             .map((product: ProductProps) =>
               product ? (

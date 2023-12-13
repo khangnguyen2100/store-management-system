@@ -1,18 +1,14 @@
-import {
-  BgColorsOutlined,
-  SnippetsOutlined,
-  SortDescendingOutlined,
-  ZoomInOutlined,
-  ArrowLeftOutlined,
-} from '@ant-design/icons';
-import { Button, Input, Space, Tabs, Tooltip } from 'antd';
-import React, { useState } from 'react';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Button, Input, Space, Tabs } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { randomString } from 'src/utils/randomString';
+import useDebounce from 'src/hooks/useDebounce';
+import useSaleSlice from 'src/store/slices/saleSlice';
 
 import SaleTabItem from './SaleTabItem';
 import './style.scss';
-import { Link } from 'react-router-dom';
 
 type TargetKey = React.MouseEvent | React.KeyboardEvent | string;
 
@@ -28,6 +24,9 @@ const initialItems = [
 const SaleTabList: React.FC = () => {
   const [activeKey, setActiveKey] = useState(initialItems[0].key);
   const [items, setItems] = useState(initialItems);
+  const { onSearchTextChange } = useSaleSlice();
+  const [searchValue, setSearchValue] = useState<string>('');
+  const debounceText = useDebounce(searchValue, 200);
 
   const onChange = (newActiveKey: string) => {
     setActiveKey(newActiveKey);
@@ -78,6 +77,9 @@ const SaleTabList: React.FC = () => {
       handleRemoveTab(targetKey);
     }
   };
+  useEffect(() => {
+    onSearchTextChange(debounceText);
+  }, [debounceText]);
 
   return (
     <Tabs
@@ -94,7 +96,13 @@ const SaleTabList: React.FC = () => {
                 </Link>
               }
             ></Button>
-            <Input.Search className='w-full' placeholder='Tìm kiếm sản phẩm' />
+            <Input.Search
+              className='w-full'
+              placeholder='Tìm kiếm sản phẩm'
+              value={searchValue}
+              onChange={e => setSearchValue(e.target.value)}
+              allowClear
+            />
           </div>
         ),
         right: (
