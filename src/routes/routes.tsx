@@ -6,6 +6,7 @@ import ChangeUserInfo from 'src/pages/ChangeUserInfo';
 import Sale from 'src/pages/Sale';
 import * as authRoutes from 'src/routes/routes.auth';
 import * as publicRoutes from 'src/routes/routes.public';
+import Logout from 'src/pages/Logout';
 
 import ProtectedRoute from './ProtectedRoute';
 
@@ -64,6 +65,7 @@ function MainRoutes() {
       ></Route>
 
       <Route path={publicRoutes.LOGIN} element={<Login />}></Route>
+      <Route path={publicRoutes.LOGOUT} element={<Logout />}></Route>
       <Route path='*' element={<NotFound />} />
     </Routes>
   );
