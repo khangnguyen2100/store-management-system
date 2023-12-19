@@ -9,11 +9,9 @@ import useSWR, { useSWRConfig } from 'swr';
 import { DeleteAPI, patchAPI, postAPI } from 'src/api/config';
 import { BrandProps } from 'src/constants/types/brand';
 import { CategoryProp } from 'src/constants/types/category';
-import { productTypeProps } from 'src/constants/types/productType';
 import { SupplierProps } from 'src/constants/types/supplier';
 import { ProductFilter } from 'src/pages/Products';
 import { getIdCh } from 'src/utils/common';
-import useDebounce from 'src/hooks/useDebounce';
 
 import ChangeModal from './ChangeModal';
 
@@ -43,12 +41,16 @@ type IFilterItem = {
 
 const MyFilters = (props: Props) => {
   const idCh = getIdCh();
-  const { mutate } = useSWRConfig()
   const { title = 'title', onFilterChange, filters } = props;
-  const { data: brandData } = useSWR(`/api/thuong-hieu?idCh=${idCh}`);
-  const { data: categoryData } = useSWR(`/api/thuong-hieu?idCh=${idCh}`);
-  const { data: supplierData } = useSWR(`api/nha-cung-cap?idCh=${idCh}`);
-
+  const { data: brandData, mutate: brandMutate } = useSWR(
+    `/api/thuong-hieu?idCh=${idCh}`,
+  );
+  const { data: categoryData, mutate: categoryMutate } = useSWR(
+    `/api/danh-muc-san-pham?idCh=${idCh}`,
+  );
+  const { data: supplierData, mutate: supplierMutate } = useSWR(
+    `/api/nha-cung-cap?idCh=${idCh}`,
+  );
   const filtersProps: MyFilterProps[] = [
     {
       title: 'Tìm tên sản phẩm',
@@ -113,7 +115,6 @@ const MyFilters = (props: Props) => {
       apiURL: '/api/nha-cung-cap',
     },
   ];
-
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [editingItem, setEditingItem] = useState<
     CategoryProp | BrandProps | null
@@ -208,14 +209,12 @@ const MyFilters = (props: Props) => {
     };
     return <div className='ml-2 w-full overflow-hidden'>{renderInput()}</div>;
   };
-
   const panelStyle: React.CSSProperties = {
     marginBottom: 16,
     background: '#FAFAFA',
     borderRadius: 4,
     border: '1px solid #f0f0f0',
   };
-
   const getExtraIcon = (filter: MyFilterProps) => {
     if (filter.type === 'select')
       return (
@@ -272,19 +271,16 @@ const MyFilters = (props: Props) => {
   const handleModalOk = async (values: any) => {
     try {
       if (modalType === 'add') {
-        console.log(`${apiURL}?idCh=${idCh}`);
         await postAPI(`${apiURL}?idCh=${getIdCh()}`, values);
         setIsOpen(false);
         enqueueSnackbar('Thêm thành công', { variant: 'success' });
-        mutate(`${apiURL}?idCh=${getIdCh()}`);
+        handleMutateData(`${apiURL}?idCh=${idCh}`);
       }
       if (modalType === 'edit') {
-        console.log(`${apiURL}?idCh=${idCh}`);
-
         await patchAPI(`${apiURL}/${values.id}?idCh=${getIdCh()}`, values);
         setIsOpen(false);
         enqueueSnackbar('Sửa thành công', { variant: 'success' });
-        mutate(`https://admin.beesmart.io.vn${apiURL}?idCh=${idCh}`);
+        handleMutateData(`${apiURL}?idCh=${idCh}`);
       }
     } catch (error) {
       console.log('error:', error);
@@ -293,14 +289,19 @@ const MyFilters = (props: Props) => {
   };
   const handleDelete = async (values: any) => {
     try {
-      await DeleteAPI(`${apiURL}/${values.id}?idCh=${getIdCh()}`);
-      await mutate(`${apiURL}?idCh=${getIdCh()}`);
+      await DeleteAPI(`${apiURL}/${values.id}?idCh=${idCh}`);
+      handleMutateData(`${apiURL}?idCh=${idCh}`);
       setIsOpen(false);
       enqueueSnackbar('Xóa thành công', { variant: 'success' });
     } catch (error) {
       console.log('error:', error);
       enqueueSnackbar('Có lỗi xảy ra', { variant: 'error' });
     }
+  };
+  const handleMutateData = (key: string) => {
+    if (key === `/api/thuong-hieu?idCh=${idCh}`) brandMutate();
+    if (key === `/api/danh-muc-san-pham?idCh=${idCh}`) categoryMutate();
+    if (key === `/api/nha-cung-cap?idCh=${idCh}`) supplierMutate();
   };
   return (
     <div className='w-full max-w-[234px] shrink-0'>

@@ -43,10 +43,13 @@ const PRODUCTTYPEENDPOINT = `/api/loai-san-pham`;
 const AddModal = (props: Props) => {
   const { isOpen, onCancel, onSuccess, modalType, editingProduct } = props;
   const [form] = Form.useForm();
-  const { data: suppliersData } = useSWR(SUPPLIERSENDPOINT, getAPI);
-  const { data: categoriesData } = useSWR(CATEGORIESENDPOINT, getAPI);
-  const { data: brandsData } = useSWR(BRANDSENDPOINT, getAPI);
-  const { data: productTypeData } = useSWR(PRODUCTTYPEENDPOINT, getAPI);
+  const { data: suppliersData, isLoading: supplierLoading } =
+    useSWR(SUPPLIERSENDPOINT);
+  const { data: categoriesData, isLoading: categoriesLoading } =
+    useSWR(CATEGORIESENDPOINT);
+  const { data: brandsData, isLoading: brandsLoading } = useSWR(BRANDSENDPOINT);
+  const { data: productTypeData, isLoading: productTypeLoading } =
+    useSWR(PRODUCTTYPEENDPOINT);
   const [costValue, setCostValue] = useState<number>(0);
   const [priceValue, setPriceValue] = useState<number>(0);
   const [showProfit, setShowProfit] = useState<boolean>(false);
@@ -91,9 +94,9 @@ const AddModal = (props: Props) => {
     try {
       const values = await form.validateFields();
       const image = fileList[0];
-      console.log('image:', image)
+      console.log('image:', image);
       const imageData = image.originFileObj;
-      console.log('imageData:', imageData)
+      console.log('imageData:', imageData);
 
       onSuccess({ ...values, img: imageData, anHien: 1 });
     } catch (error) {}
@@ -168,14 +171,16 @@ const AddModal = (props: Props) => {
                 rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
               >
                 <Select placeholder='Danh mục' tabIndex={4}>
-                  {categoriesData &&
-                    categoriesData?.map((item: CategoryProp, index: number) => {
-                      return (
-                        <Select.Option value={item.id.toString()} key={index}>
-                          {item.ten}
-                        </Select.Option>
-                      );
-                    })}
+                  {!categoriesLoading &&
+                    categoriesData?.data?.map(
+                      (item: CategoryProp, index: number) => {
+                        return (
+                          <Select.Option value={item.id.toString()} key={index}>
+                            {item.ten}
+                          </Select.Option>
+                        );
+                      },
+                    )}
                 </Select>
               </Form.Item>
             </Col>
@@ -192,8 +197,8 @@ const AddModal = (props: Props) => {
                   tabIndex={2}
                   value={'tenLoaiSp'}
                 >
-                  {productTypeData &&
-                    productTypeData?.map(
+                  {!productTypeLoading &&
+                    productTypeData?.data?.map(
                       (item: productTypeProps, index: number) => {
                         return (
                           <Select.Option value={item.id.toString()} key={index}>
@@ -211,14 +216,16 @@ const AddModal = (props: Props) => {
                 rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
               >
                 <Select placeholder='Nhà cung cấp' tabIndex={4}>
-                  {suppliersData &&
-                    suppliersData?.map((item: SupplierProps, index: number) => {
-                      return (
-                        <Select.Option value={item.id.toString()} key={index}>
-                          {item.ten}
-                        </Select.Option>
-                      );
-                    })}
+                  {!supplierLoading &&
+                    suppliersData?.data?.map(
+                      (item: SupplierProps, index: number) => {
+                        return (
+                          <Select.Option value={item.id.toString()} key={index}>
+                            {item.ten}
+                          </Select.Option>
+                        );
+                      },
+                    )}
                 </Select>
               </Form.Item>
               <Form.Item
@@ -229,7 +236,7 @@ const AddModal = (props: Props) => {
                 ]}
               >
                 <Select placeholder='Thương hiệu' tabIndex={6}>
-                  {brandsData &&
+                  {!brandsLoading &&
                     brandsData?.data?.map((item: BrandProps, index: number) => {
                       return (
                         <Select.Option value={item.id.toString()} key={index}>
