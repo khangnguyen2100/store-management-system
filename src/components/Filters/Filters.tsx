@@ -1,4 +1,4 @@
-import { Checkbox, Collapse, Input, Radio, Select } from 'antd';
+import { Button, Checkbox, Collapse, Input, Radio, Select } from 'antd';
 import { CollapseProps } from 'antd/lib';
 import clsx from 'clsx';
 import { useState } from 'react';
@@ -139,6 +139,11 @@ const Filters = (props: Props) => {
           />
         )}
       />
+      <div className='none flex w-full justify-end'>
+        <Button type='default' size='small'>
+          Xóa
+        </Button>
+      </div>
     </div>
   );
 };

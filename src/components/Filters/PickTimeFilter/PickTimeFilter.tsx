@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DatePicker, Radio, Select } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -15,9 +14,18 @@ const PickTimeFilter = (props: Props) => {
 
   const handleRadioChange = (value: any) => {
     setChooseTime(value);
+    if (value === 'normal') {
+      onFilterChange(name, normalDateValue as string);
+    } else {
+      onFilterChange(name, customDateValue as string);
+    }
   };
 
   const handleCustomTimeChange = (value: any) => {
+    if (!value) {
+      setCustomDateValue(undefined);
+      return;
+    }
     const [startDate, endDate] = value;
     setCustomDateValue({
       startDate: dayjs(startDate).format('YYYY-MM-DD'),
@@ -36,57 +44,25 @@ const PickTimeFilter = (props: Props) => {
   return (
     <div className='flex w-full flex-col gap-2'>
       <div className='flex items-center gap-x-2'>
-        {/* <Radio
+        <Radio
           onChange={e => handleRadioChange(e.target.value)}
           value={'normal'}
           checked={chooseTime === 'normal'}
-        ></Radio> */}
-        {/* <Select
+        ></Radio>
+        <Select
           size='small'
           className='w-full'
           placeholder='Chọn'
           disabled={chooseTime !== 'normal'}
           onChange={value => setNormalDateValue(value)}
           options={[
-            {
-              label: 'Theo ngày',
-              options: [
-                { label: 'Hôm nay', value: 'today' },
-                { label: 'Hôm qua', value: 'tomorrow' },
-              ],
-            },
-            {
-              label: 'Theo tuần',
-              options: [
-                { label: 'Tuần này', value: 'this-week' },
-                { label: 'Tuần trước', value: 'last-week' },
-                { label: '7 ngày qua', value: '7-days' },
-              ],
-            },
-            {
-              label: 'Theo tháng',
-              options: [
-                { label: 'Tháng này', value: 'this-month' },
-                { label: 'Tháng trước', value: 'last-month' },
-                { label: '30 ngày qua', value: '30-days' },
-              ],
-            },
-            {
-              label: 'Theo quý',
-              options: [
-                { label: 'Quý này', value: 'this-quarter' },
-                { label: 'Quý trước', value: 'last-quarter' },
-              ],
-            },
-            {
-              label: 'Theo năm',
-              options: [
-                { label: 'Năm này', value: 'this-year' },
-                { label: 'Năm trước', value: 'last-year' },
-              ],
-            },
+            { label: 'Hôm nay', value: 'today' },
+            { label: 'Hôm qua', value: 'tomorrow' },
+            { label: '3 ngày qua', value: '3-days' },
+            { label: '7 ngày qua', value: '7-days' },
+            { label: '30 ngày qua', value: '30-days' },
           ]}
-        /> */}
+        />
       </div>
       <div className='flex items-center gap-x-2'>
         <Radio
