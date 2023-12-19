@@ -28,7 +28,7 @@ export const getToken = () =>
     ? localStorage.getItem('beesmart_token')
     : null;
 
-const getAuthorizationHeader = () => `Bearer ${getToken()}`;
+export const getAuthorizationHeader = () => `Bearer ${getToken()}`;
 
 export const request = axios.create({
   withCredentials: true,

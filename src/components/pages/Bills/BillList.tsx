@@ -1,16 +1,27 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { UploadOutlined } from '@ant-design/icons';
-import { Button, Image, Space, Upload, UploadProps, message } from 'antd';
+import {
+  Button,
+  Image,
+  Select,
+  Space,
+  Upload,
+  UploadProps,
+  message,
+} from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { enqueueSnackbar } from 'notistack';
 import { useRef, useState } from 'react';
 import * as xlsx from 'xlsx';
 import { KeyedMutator } from 'swr';
+import axios from 'axios';
 
-import { DeleteAPI, postAPI } from 'src/api/config';
+import { DeleteAPI, postAPI, request } from 'src/api/config';
 import BasicTable from 'src/components/BasicTable/BasicTable';
-import { formatPrice } from 'src/utils/format';
+import { formatPrice, serialize } from 'src/utils/format';
 import { BillProps } from 'src/constants/types/bill';
+import { getIdCh } from 'src/utils/common';
+import PickTimeFilter from 'src/components/Filters/PickTimeFilter/PickTimeFilter';
 
 import TableAction from '../../GroupButton/TableAction';
 
@@ -20,13 +31,11 @@ type Props = {
 };
 
 const BillList = (props: Props) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const { mutate, data } = props;
-
+  const { data } = props;
   const [billData, setBillData] = useState<BillProps[]>(data);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState<'add' | 'edit' | null>(null);
-  const [editingBill, setEditingBill] = useState<BillProps | null>(null);
+  const [dateFilter, setDateFilter] = useState<any>();
+  console.log(dateFilter);
+
   const columns: ColumnsType<BillProps> = [
     {
       key: 1,
@@ -141,7 +150,14 @@ const BillList = (props: Props) => {
       return false;
     },
   };
-
+  const handleExportPDF = () => {
+    window.open(
+      `https://admin.beesmart.io.vn/api/downloadPDF-hoa-don?idCh=${getIdCh()}̃&${serialize(
+        dateFilter,
+      )}`,
+      '_blank',
+    );
+  };
   return (
     <Space className='w-full' direction='vertical'>
       <BasicTable
@@ -156,9 +172,17 @@ const BillList = (props: Props) => {
           total: 48,
         }}
         extra={
-          <>
-            <Button type='default'>Xuất file PDF</Button>
-          </>
+          <div className='flex gap-x-5'>
+            <PickTimeFilter
+              name='date'
+              onFilterChange={(name, value) => {
+                setDateFilter(value);
+              }}
+            ></PickTimeFilter>
+            <Button type='default' onClick={handleExportPDF}>
+              Xuất file PDF
+            </Button>
+          </div>
         }
       />
     </Space>
