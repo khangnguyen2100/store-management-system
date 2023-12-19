@@ -20,7 +20,6 @@ function Bills() {
   const { data: billData, isLoading } = useBills({ idCh: getIdCh() });
   const [filterData, setFilterData] = useState<Filters>();
   const [bills, setBills] = useState<BillProps[]>([]);
-  console.log('bills:', bills);
   const handleFilterChange = (filters: any) => {
     let startDate = '';
     let endDate = '';
@@ -71,6 +70,8 @@ function Bills() {
           (bill: BillProps) => bill.created_at! >= sevenDaysAgo,
         ),
       );
+    } else if (date === '') {
+      setBills(billData?.data);
     } else {
       if (!date?.startDate || !date?.endDate) return;
       // custom date

@@ -1,4 +1,4 @@
-import { DatePicker, Radio, Select } from 'antd';
+import { Button, DatePicker, Radio, Select } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 type Props = {
@@ -55,6 +55,7 @@ const PickTimeFilter = (props: Props) => {
           placeholder='Chọn'
           disabled={chooseTime !== 'normal'}
           onChange={value => setNormalDateValue(value)}
+          value={normalDateValue}
           options={[
             { label: 'Hôm nay', value: 'today' },
             { label: 'Hôm qua', value: 'tomorrow' },
@@ -74,9 +75,31 @@ const PickTimeFilter = (props: Props) => {
           size='small'
           name='custom-time'
           format={'DD/MM/YYYY'}
+          value={
+            customDateValue?.startDate
+              ? [
+                  dayjs(customDateValue?.startDate),
+                  dayjs(customDateValue?.endDate),
+                ]
+              : undefined
+          }
           onChange={value => handleCustomTimeChange(value)}
           disabled={chooseTime !== 'custom-time'}
         />
+      </div>
+      <div className='none flex w-full justify-end'>
+        <Button
+          type='default'
+          size='small'
+          onClick={() => {
+            setChooseTime(undefined);
+            setCustomDateValue(undefined);
+            setNormalDateValue(undefined);
+            onFilterChange(name, '');
+          }}
+        >
+          Xóa
+        </Button>
       </div>
     </div>
   );

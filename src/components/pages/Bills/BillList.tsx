@@ -77,10 +77,12 @@ const BillList = (props: Props) => {
   const handleExportPDF = () => {
     window.open(
       `https://admin.beesmart.io.vn/api/downloadPDF-hoa-don?idCh=${getIdCh()}̃&${serialize(
-        {
-          startDate: filters.startDate,
-          endDate: filters.endDate,
-        },
+        filters
+          ? {
+              startDate: filters.startDate,
+              endDate: filters.endDate,
+            }
+          : {},
       )}`,
       '_blank',
     );
