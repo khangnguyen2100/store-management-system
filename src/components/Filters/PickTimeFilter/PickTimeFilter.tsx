@@ -20,8 +20,8 @@ const PickTimeFilter = (props: Props) => {
   const handleCustomTimeChange = (value: any) => {
     const [startDate, endDate] = value;
     setCustomDateValue({
-      startDate: dayjs(startDate).format('DD/MM/YYYY'),
-      endDate: dayjs(endDate).format('DD/MM/YYYY'),
+      startDate: dayjs(startDate).format('YYYY-MM-DD'),
+      endDate: dayjs(endDate).format('YYYY-MM-DD'),
     });
   };
   useEffect(() => {
@@ -29,19 +29,19 @@ const PickTimeFilter = (props: Props) => {
       onFilterChange(name, normalDateValue as string);
     }
     if (chooseTime === 'custom-time') {
-      onFilterChange(name, customDateValue);
+      onFilterChange(name, customDateValue as string);
     }
   }, [normalDateValue, customDateValue]);
 
   return (
     <div className='flex w-full flex-col gap-2'>
       <div className='flex items-center gap-x-2'>
-        <Radio
+        {/* <Radio
           onChange={e => handleRadioChange(e.target.value)}
           value={'normal'}
           checked={chooseTime === 'normal'}
-        ></Radio>
-        <Select
+        ></Radio> */}
+        {/* <Select
           size='small'
           className='w-full'
           placeholder='Chọn'
@@ -86,7 +86,7 @@ const PickTimeFilter = (props: Props) => {
               ],
             },
           ]}
-        />
+        /> */}
       </div>
       <div className='flex items-center gap-x-2'>
         <Radio

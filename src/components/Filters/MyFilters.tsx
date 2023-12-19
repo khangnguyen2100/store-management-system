@@ -42,8 +42,8 @@ type IFilterItem = {
 };
 
 const MyFilters = (props: Props) => {
-  const { mutate } = useSWRConfig();
   const idCh = getIdCh();
+  const { mutate } = useSWRConfig()
   const { title = 'title', onFilterChange, filters } = props;
   const { data: brandData } = useSWR(`/api/thuong-hieu?idCh=${idCh}`);
   const { data: categoryData } = useSWR(`/api/thuong-hieu?idCh=${idCh}`);
@@ -60,8 +60,9 @@ const MyFilters = (props: Props) => {
       type: 'radio',
       name: 'tinhTrang',
       options: [
-        { label: 'Còn hàng', value: '1' },
-        { label: 'Hết hàng', value: '0' },
+        { label: 'Còn hàng', value: '2' },
+        { label: 'Hết hàng', value: '1' },
+        { label: 'Tất cả', value: '3' },
       ],
     },
     {
@@ -271,16 +272,19 @@ const MyFilters = (props: Props) => {
   const handleModalOk = async (values: any) => {
     try {
       if (modalType === 'add') {
+        console.log(`${apiURL}?idCh=${idCh}`);
         await postAPI(`${apiURL}?idCh=${getIdCh()}`, values);
         setIsOpen(false);
         enqueueSnackbar('Thêm thành công', { variant: 'success' });
         mutate(`${apiURL}?idCh=${getIdCh()}`);
       }
       if (modalType === 'edit') {
+        console.log(`${apiURL}?idCh=${idCh}`);
+
         await patchAPI(`${apiURL}/${values.id}?idCh=${getIdCh()}`, values);
         setIsOpen(false);
-        enqueueSnackbar('Thêm thành công', { variant: 'success' });
-        mutate(`${apiURL}?idCh=${getIdCh()}`);
+        enqueueSnackbar('Sửa thành công', { variant: 'success' });
+        mutate(`https://admin.beesmart.io.vn${apiURL}?idCh=${idCh}`);
       }
     } catch (error) {
       console.log('error:', error);

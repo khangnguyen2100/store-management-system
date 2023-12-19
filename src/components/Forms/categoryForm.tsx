@@ -13,7 +13,10 @@ function CategoryForm({ form }: Props) {
             <Form.Item
               label='Tên danh mục sản phẩm'
               rules={[
-                { required: true, message: 'Vui lòng nhập tên thương hiệu' },
+                {
+                  required: true,
+                  message: 'Vui lòng nhập tên danh mục sản phẩm',
+                },
               ]}
               name={'ten'}
             >

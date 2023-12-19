@@ -12,6 +12,7 @@ import { useState, useEffect, useRef } from 'react';
 
 import { formatPrice } from 'src/utils/format';
 import { revenueProps } from 'src/constants/types/revenue';
+import PickTimeFilter from 'src/components/Filters/PickTimeFilter/PickTimeFilter';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Legend);
 type Props = {
   data: revenueProps[];
@@ -88,10 +89,16 @@ function getRevenueQuarterly(data: any[]) {
 
   return result;
 }
+
 function VerticalBarChart({ data }: Props) {
   const [labels, setLabels] = useState<string[]>(() => {
     return data.map((item, index) => {
-      return item.ngayTao.split(' ')[0];
+      return item.ngayTao
+        .split(' ')[0]
+        .split('-')
+        .reverse()
+        .slice(0, 2)
+        .join('-');
     });
   });
   const [chartData, setChartData] = useState<number[]>(() => {
@@ -106,7 +113,14 @@ function VerticalBarChart({ data }: Props) {
         return data.map(item => parseInt(item.doanhThu));
       });
       setLabels(() => {
-        return data.map(item => item.ngayTao.split(' ')[0]);
+        return data.map((item, index) => {
+          return item.ngayTao
+            .split(' ')[0]
+            .split('-')
+            .reverse()
+            .slice(0, 2)
+            .join('-');
+        });
       });
     }
 
@@ -141,19 +155,15 @@ function VerticalBarChart({ data }: Props) {
   };
   if (data)
     return (
-      <div className='mt-5 flex flex-col gap-y-7 p-7  shadow-lg'>
+      <div className='mt-5 flex flex-col gap-y-7  p-7 shadow-lg'>
         <div className='flex justify-between'>
-          <div className='flex flex-col gap-x-5'>
+          <div className='flex gap-x-5'>
             <h3>
               Doanh thu tháng này :{' '}
               <span className='text-blue-500'>
                 {data.length > 0 && formatPrice(getCurrentMonthRevenue(data))}
               </span>
             </h3>
-            {/* <div className='flex gap-x-8'>
-              <span>Theo ngày</span>
-              <span>Theo năm</span>
-            </div> */}
           </div>
           <Select
             className='w-[150px]'

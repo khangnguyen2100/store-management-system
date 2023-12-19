@@ -78,7 +78,12 @@ function getRevenueMonthly(data: any[]) {
 function HoriziontalBarChart({ data }: Props) {
   const [labels, setLabels] = useState<string[]>(() => {
     return data.map((item, index) => {
-      return item.ngayTao.split(' ')[0];
+      return item.ngayTao
+        .split(' ')[0]
+        .split('-')
+        .reverse()
+        .slice(0, 2)
+        .join('-');
     });
   });
   const [chartData, setChartData] = useState<number[]>(() => {
@@ -87,28 +92,42 @@ function HoriziontalBarChart({ data }: Props) {
       return parseInt(item.loiNhuan);
     });
   });
-  const [type, setType] = useState<string>('');
-  useEffect(() => {
+  const handleChangeType = (type: string) => {
     if (type === 'Theo ngày') {
-      const chartData = data.map(item => parseInt(item.loiNhuan));
-      const labels = data.map(item => item.ngayTao.split(' ')[0]);
-      setChartData(chartData);
-      setLabels(labels);
+      setChartData(() => {
+        return data.map(item => parseInt(item.doanhThu));
+      });
+      setLabels(() => {
+        return data.map((item, index) => {
+          return item.ngayTao
+            .split(' ')[0]
+            .split('-')
+            .reverse()
+            .slice(0, 2)
+            .join('-');
+        });
+      });
     }
 
     if (type === 'Theo tháng') {
       const revenueMonthly = getRevenueMonthly(data);
-      const chartData = revenueMonthly.map(item => item.loiNhuan);
-      const labels = revenueMonthly.map(item => item.thang);
-      setChartData(chartData);
-      setLabels(labels);
+      setChartData(() => {
+        return revenueMonthly.map(item => item.loiNhuan);
+      });
+      setLabels(() => {
+        return revenueMonthly.map(item => item.thang);
+      });
     }
-  }, [type]);
-  const handleOnChange = (value: string) => {
-    setType(value);
+    if (type === 'Theo quý') {
+      const revenueMonthly = getRevenueQuarterly(data);
+      setChartData(() => {
+        return revenueMonthly.map(item => item.loiNhuan);
+      });
+      setLabels(() => {
+        return revenueMonthly.map(item => item.quy);
+      });
+    }
   };
-  console.log(data);
-
   const test = {
     labels,
     datasets: [
@@ -123,7 +142,7 @@ function HoriziontalBarChart({ data }: Props) {
   };
   if (data.length > 0)
     return (
-      <div className='mt-5 flex flex-col gap-y-7 p-7  shadow-lg'>
+      <div className='mt-5 flex flex-col gap-y-7 p-7 shadow-lg'>
         <div className='flex justify-between'>
           <h3>
             Lợi nhuận tháng này :{' '}
@@ -134,12 +153,12 @@ function HoriziontalBarChart({ data }: Props) {
           <Select
             className='w-[150px]'
             onSelect={value => {
-              handleOnChange(value);
+              handleChangeType(value);
             }}
           >
             <Select.Option value='Theo ngày'>Theo ngày</Select.Option>
             <Select.Option value='Theo tháng'>Theo tháng</Select.Option>
-            <Select.Option value='Theo năm'>Theo năm</Select.Option>
+            <Select.Option value='Theo quý'>Theo quý</Select.Option>
           </Select>
         </div>
         <Line options={options} data={test} redraw={true} updateMode='reset' />
@@ -147,5 +166,29 @@ function HoriziontalBarChart({ data }: Props) {
     );
   return <Spin size='small'></Spin>;
 }
+function getRevenueQuarterly(data: any[]) {
+  const revenueQuarterly: any = {};
 
+  data.forEach(item => {
+    // Lấy quý từ ngày tạo
+    const quy = Math.floor((new Date(item.ngayTao).getMonth() + 3) / 3);
+
+    // Kiểm tra xem quý đã tồn tại trong mảng chưa
+    if (revenueQuarterly[quy]) {
+      // Nếu đã tồn tại, cộng thêm doanh thu vào
+      revenueQuarterly[quy] += parseInt(item.loiNhuan);
+    } else {
+      // Nếu chưa tồn tại, tạo mới và gán giá trị doanh thu
+      revenueQuarterly[quy] = parseInt(item.loiNhuan);
+    }
+  });
+
+  // Chuyển đổi đối tượng thành mảng
+  const result = Object.keys(revenueQuarterly).map(quy => ({
+    quy: quy,
+    loiNhuan: revenueQuarterly[quy],
+  }));
+
+  return result;
+}
 export default HoriziontalBarChart;

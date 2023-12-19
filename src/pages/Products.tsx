@@ -22,7 +22,7 @@ const filterInit: ProductFilter = {
   dm: '',
   ncc: '',
   keyword: '',
-  tinhTrang: 1,
+  tinhTrang: 3,
 };
 
 const Products = () => {

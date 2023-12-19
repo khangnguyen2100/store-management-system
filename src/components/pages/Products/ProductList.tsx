@@ -15,7 +15,12 @@ import { useState } from 'react';
 import useSWR from 'swr';
 import * as xlsx from 'xlsx';
 
-import { DeleteAPI, postAPI } from 'src/api/config';
+import {
+  DeleteAPI,
+  getAuthorizationHeader,
+  postAPI,
+  request,
+} from 'src/api/config';
 import BasicTable from 'src/components/BasicTable/BasicTable';
 import { ProductProps } from 'src/constants/types/product';
 import { getIdCh, getImage } from 'src/utils/common';
@@ -32,7 +37,7 @@ type Props = {
 const ProductList = (props: Props) => {
   const { searchUrl } = props;
   const { data: products, mutate, error, isLoading } = useSWR(searchUrl);
-
+  const [uploading, setUploading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'add' | 'edit' | null>(null);
   const [editingProduct, setEditingProduct] = useState<ProductProps | null>(
@@ -49,7 +54,7 @@ const ProductList = (props: Props) => {
       key: 2,
       title: 'Tên',
       dataIndex: 'ten',
-      width: 100,
+      width: 150,
     },
     {
       key: 4,
@@ -62,6 +67,7 @@ const ProductList = (props: Props) => {
       title: 'Số lượng',
       dataIndex: 'soLuong',
       width: 70,
+      align: 'center',
     },
     {
       key: 6,
@@ -72,8 +78,8 @@ const ProductList = (props: Props) => {
         <Image
           src={getImage(thumbnail)}
           alt='product img'
-          height={75}
-          className='h-[150px] w-full rounded-md object-cover'
+          height={'75px'}
+          className='!w-[75px] rounded-md object-cover'
         />
       ),
       align: 'center',
@@ -83,11 +89,12 @@ const ProductList = (props: Props) => {
       key: 7,
       title: 'Giá vốn',
       dataIndex: 'giaVon',
-      width: 150,
+      width: 100,
       sorter: (a, b) => Number(a.giaVon) - Number(b.giaVon),
       render: (costPrice: string) => (
         <span className='text-blue-500'>{formatPrice(costPrice)}</span>
       ),
+      align: 'right',
     },
     {
       key: 8,
@@ -98,10 +105,11 @@ const ProductList = (props: Props) => {
       render: (salePrice: string) => (
         <span className='text-red-500'>{formatPrice(salePrice)}</span>
       ),
+      align: 'right',
     },
     {
-      title: 'Action',
-      key: 'action',
+      title: 'Thao tác',
+      key: 'Thao tác',
       width: 80,
       render: (record: ProductProps) => {
         return (
@@ -168,61 +176,87 @@ const ProductList = (props: Props) => {
   const handleTableChange = (pagination: any) => {
     console.log('product list call');
   };
-  const [uploading, setUploading] = useState(false);
-
-  const handleUpload = (json: any) => {
-    setUploading(true);
-    fetch('https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188', {
-      method: 'POST',
-      body: JSON.stringify(json),
-    })
-      .then(res => res.json())
-      .then(() => {
-        message.success('upload successfully.');
-      })
-      .catch(() => {
-        message.error('upload failed.');
-      })
-      .finally(() => {
-        setUploading(false);
-      });
-  };
+  // const handleUpload = (json: any) => {
+  //   setUploading(true);
+  //   request('/api/import-excel', {
+  //     method: 'POST',
+  //     data: JSON.stringify(json),
+  //   })
+  //     .then(res => res.json())
+  //     .then(() => {
+  //       message.success('upload successfully.');
+  //     })
+  //     .catch(() => {
+  //       message.error('upload failed.');
+  //     })
+  //     .finally(() => {
+  //       setUploading(false);
+  //     });
+  // };
   const uploadProps: UploadProps = {
     name: 'excel-file',
     accept: '.xlsx, .xls',
     showUploadList: false,
     multiple: false,
-    onChange(info) {
-      if (info.file.status !== 'uploading') {
-        const reader = new FileReader();
-        reader.onload = e => {
-          const data = e.target?.result;
-          const workbook = xlsx.read(data, { type: 'array' });
-          const sheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[sheetName];
-          const json = xlsx.utils.sheet_to_json(worksheet);
-          handleUpload(json);
-        };
-        reader.readAsArrayBuffer(info.fileList[0].originFileObj as Blob);
+    customRequest: async ({ file, onSuccess, onError }) => {
+      console.log(file);
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('idCh', getIdCh());
+        // Thay thế 'YOUR_API_ENDPOINT' bằng địa chỉ API của bạn
+        const response = await request(`/api/import-excel`, {
+          headers: {
+            'content-type': 'multipart/form-data',
+            Authorization: getAuthorizationHeader(),
+          },
+          method: 'POST',
+          data: formData,
+        });
+
+        // Xử lý response thành công
+        if (response.status === 200) {
+          message.success(`file uploaded successfully`);
+          mutate(`/api/sort_search?idCh=${getIdCh()}`);
+        } else {
+          message.error(`file upload failed.`);
+        }
+      } catch (error) {
+        // Xử lý lỗi
+        message.error(`file upload failed.`);
       }
     },
-    beforeUpload(file: any) {
-      console.log('file:', file);
-      const isExcel =
-        file.type === 'application/vnd.ms-excel' ||
-        file.type ===
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-      const isSize = file.size / 1024 / 1024 < 100;
-      if (!isExcel) {
-        message.error('Vui lòng chỉ nhập file Excel (định dạng XLS/XLSX)!');
-        return false;
-      }
-      if (!isSize) {
-        message.error('Nhập file dung lượng nhỏ hơn 100MB!');
-        return false;
-      }
-      return false;
-    },
+    // onChange(info) {
+    //   if (info.file.status !== 'uploading') {
+    //     const reader = new FileReader();
+    //     reader.onload = e => {
+    //       const data = e.target?.result;
+    //       const workbook = xlsx.read(data, { type: 'array' });
+    //       const sheetName = workbook.SheetNames[0];
+    //       const worksheet = workbook.Sheets[sheetName];
+    //       const json = xlsx.utils.sheet_to_json(worksheet);
+    //       handleUpload(json);
+    //     };
+    //     reader.readAsArrayBuffer(info.fileList[0].originFileObj as Blob);
+    //   }
+    // },
+    // beforeUpload(file: any) {
+    //   console.log('file:', file);
+    //   const isExcel =
+    //     file.type === 'application/vnd.ms-excel' ||
+    //     file.type ===
+    //       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    //   const isSize = file.size / 1024 / 1024 < 100;
+    //   if (!isExcel) {
+    //     message.error('Vui lòng chỉ nhập file Excel (định dạng XLS/XLSX)!');
+    //     return false;
+    //   }
+    //   if (!isSize) {
+    //     message.error('Nhập file dung lượng nhỏ hơn 100MB!');
+    //     return false;
+    //   }
+    //   return false;
+    // },
   };
   if (error) {
     return <Empty description='Có lỗi xảy ra' />;
@@ -235,12 +269,11 @@ const ProductList = (props: Props) => {
         loading={isLoading}
         extra={
           <>
-            {/* <Button>Import</Button>
             <Upload {...uploadProps}>
               <Button icon={<UploadOutlined />} loading={uploading}>
-                Import
+                Nhập hàng
               </Button>
-            </Upload> */}
+            </Upload>
             <Button type='primary' onClick={handleAddProduct}>
               Thêm hàng
             </Button>
