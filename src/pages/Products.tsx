@@ -1,5 +1,6 @@
 import { Empty, Spin } from 'antd';
 import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 
 import useProducts from 'src/api/productApi';
 import MyFilters from 'src/components/Filters/MyFilters';

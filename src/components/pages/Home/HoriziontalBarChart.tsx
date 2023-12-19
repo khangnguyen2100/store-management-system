@@ -140,7 +140,7 @@ function HoriziontalBarChart({ data }: Props) {
       },
     ],
   };
-  if (data.length > 0)
+  if (data)
     return (
       <div className='mt-5 flex flex-col gap-y-7 p-7 shadow-lg'>
         <div className='flex justify-between'>
