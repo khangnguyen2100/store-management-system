@@ -1,5 +1,5 @@
 import { Form, Input, Modal, Select, message } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { shopApi } from 'src/api/shopApi';
 import { ShopProp } from 'src/constants/types/shop';
 import { shopTypes } from 'src/mocks/shopType';
@@ -14,10 +14,13 @@ type Props = {
 
 const ShopFormModal = (props: Props) => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState<boolean>(false);
   const { visible, selectedShop, onCancel, onSuccess, type } = props;
   const handleOk = async () => {
+    setLoading(true);
     if (type === 'add') {
       try {
+        await form.validateFields();
         const userInfo = localStorage.getItem('userInfo');
         if (!userInfo) return;
         const data = JSON.parse(userInfo);
@@ -38,7 +41,8 @@ const ShopFormModal = (props: Props) => {
         console.log('res:', res);
       } catch (error: any) {
         console.error('da co loi: ', error);
-        message.error(error.response.data.message || error.message);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -64,6 +68,7 @@ const ShopFormModal = (props: Props) => {
       width={350}
       okText='Xác nhận'
       cancelText='Huỷ'
+      confirmLoading={loading}
     >
       <Form form={form} labelAlign='left' layout='vertical'>
         <Form.Item

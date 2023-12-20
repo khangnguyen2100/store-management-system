@@ -20,6 +20,17 @@ function Bills() {
   const { data: billData, isLoading } = useBills({ idCh: getIdCh() });
   const [filterData, setFilterData] = useState<Filters>();
   const [bills, setBills] = useState<BillProps[]>([]);
+  const compareDate = (date1: string, date2: string) => {
+    // data is format in 23-11-2021
+    // help me compare of 2 date
+    const [day1, month1, year1] = date1.split('/').map(Number);
+    const [day2, month2, year2] = date2.split('/').map(Number);
+    if (day1 === day2 && month1 === month2 && year1 === year2) return true;
+    if (day1 < day2) return false;
+    if (month1 < month2) return false;
+    if (year1 < year2) return false;
+    return true;
+  };
   const handleFilterChange = (filters: any) => {
     let startDate = '';
     let endDate = '';
@@ -44,21 +55,23 @@ function Bills() {
         ),
       );
     } else if (date === '3-days') {
-      const sevenDaysAgo = dayjs().subtract(3, 'day').format('DD/MM/YYYY');
+      const threeDaysAgo = dayjs().subtract(3, 'day').format('DD/MM/YYYY');
       startDate = dayjs().subtract(3, 'day').format('YYYY-MM-DD');
       endDate = dayjs().format('YYYY-MM-DD');
+
       setBills(
-        billData?.data.filter(
-          (bill: BillProps) => bill.created_at! >= sevenDaysAgo,
+        billData?.data.filter((bill: BillProps) =>
+          compareDate(bill.created_at!, threeDaysAgo),
         ),
       );
     } else if (date === '7-days') {
       const sevenDaysAgo = dayjs().subtract(7, 'day').format('DD/MM/YYYY');
       startDate = dayjs().subtract(7, 'day').format('YYYY-MM-DD');
       endDate = dayjs().format('YYYY-MM-DD');
+
       setBills(
-        billData?.data.filter(
-          (bill: BillProps) => bill.created_at! >= sevenDaysAgo,
+        billData?.data.filter((bill: BillProps) =>
+          compareDate(bill.created_at!, sevenDaysAgo),
         ),
       );
     } else if (date === '30-days') {
@@ -66,8 +79,8 @@ function Bills() {
       startDate = dayjs().subtract(30, 'day').format('YYYY-MM-DD');
       endDate = dayjs().format('YYYY-MM-DD');
       setBills(
-        billData?.data.filter(
-          (bill: BillProps) => bill.created_at! >= sevenDaysAgo,
+        billData?.data.filter((bill: BillProps) =>
+          compareDate(bill.created_at!, sevenDaysAgo),
         ),
       );
     } else if (date === '') {
@@ -87,8 +100,6 @@ function Bills() {
         ),
       );
     }
-    console.log('startDate:', startDate);
-    console.log('endDate:', endDate);
     setFilterData({
       date,
       startDate,

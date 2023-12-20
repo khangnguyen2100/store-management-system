@@ -1,8 +1,7 @@
 import {
-  FileAddOutlined,
   LogoutOutlined,
-  UserOutlined,
   PlusOutlined,
+  UserOutlined
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import {
@@ -62,10 +61,8 @@ function AdminHeader() {
     window.location.reload();
   };
   const handleDeleteShop = async (id: string) => {
-    console.log(id);
     try {
       const res = await shopApi.deleteShop(id);
-      console.log('res:', res);
       message.success('Xóa cửa hàng thành công');
       mutate();
     } catch (error: any) {
@@ -136,6 +133,17 @@ function AdminHeader() {
               <Typography
                 className='text-md mb-2 mt-1 cursor-pointer font-medium'
                 onClick={() => {
+                  if (userInfo.loai === 1) {
+                    message.info(
+                      'Vui lòng nâng cấp tài khoản để thêm cửa hàng',
+                    );
+                    return;
+                  } else if (userInfo.loai === '2' && shops?.length >= 3) {
+                    message.info(
+                      'Bạn đã đạt giới hạn tối đa 3 cửa hàng, vui lòng nâng cấp tài khoản để thêm cửa hàng',
+                    );
+                    return;
+                  }
                   setShopModalType('add');
                   setOpenShopModal(true);
                 }}

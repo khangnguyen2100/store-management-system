@@ -1,9 +1,8 @@
 import { Spin } from 'antd';
 
-import VerticalBarChart from 'src/components/pages/Home/VerticalBarChart';
-import SalesResult from 'src/components/pages/Home/SalesResult';
-import HoriziontalBarChart from 'src/components/pages/Home/HoriziontalBarChart';
 import { useRevenue } from 'src/api/revenueApi';
+import HoriziontalBarChart from 'src/components/pages/Home/HoriziontalBarChart';
+import VerticalBarChart from 'src/components/pages/Home/VerticalBarChart';
 import { getIdCh } from 'src/utils/common';
 
 const Home = () => {
@@ -12,7 +11,6 @@ const Home = () => {
     isLoading,
     mutate,
   } = useRevenue({ idCh: getIdCh() });
-  console.log(revenueData);
 
   if (!isLoading)
     return (

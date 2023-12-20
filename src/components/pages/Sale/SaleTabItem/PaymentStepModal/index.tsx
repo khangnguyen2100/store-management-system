@@ -6,6 +6,7 @@ import { CartStatus, CartType } from 'src/constants/types/cart';
 
 import CartInfo from './CartInfo';
 import PaymentMethod from './PaymentMethod/PaymentMethod';
+import { getIdCh } from 'src/utils/common';
 type Props = {
   cartList: CartType[];
   setCartList: (cartList: CartType[]) => void;
@@ -108,7 +109,7 @@ const PaymentStepModal = (props: Props) => {
           tong: Number(item.giaBan) * Number(item.quantity),
         })),
         tongTien: totalPrice,
-        idCh: 4,
+        idCh: getIdCh(),
         tongGiamGia: discountPrice,
         ghiChu: noteValue,
       };
