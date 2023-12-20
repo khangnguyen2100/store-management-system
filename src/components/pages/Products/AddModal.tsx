@@ -106,7 +106,6 @@ const AddModal = (props: Props) => {
     if (modalType === 'add') {
       form.resetFields();
       form.setFieldValue('maSp', randomString('SP'));
-      form.setFieldValue('ten', randomString('SP'));
     }
     if (modalType === 'edit' && editingProduct) {
       setFileList([

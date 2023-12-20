@@ -167,7 +167,7 @@ const ProductList = (props: Props) => {
       }
     } catch (error: any) {
       console.log('error:', error);
-      if (error.response.status === 403) {
+      if (error && error.response.status === 403) {
         enqueueSnackbar('Bạn đạt giới hạn số lượng sản phẩm tối đa!', {
           variant: 'error',
         });
