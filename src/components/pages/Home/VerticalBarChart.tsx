@@ -167,6 +167,7 @@ function VerticalBarChart({ data }: Props) {
           </div>
           <Select
             className='w-[150px]'
+            placeholder={'Chọn kiểu hiện'}
             onSelect={value => {
               handleChangeType(value);
             }}

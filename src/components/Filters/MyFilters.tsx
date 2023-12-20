@@ -27,6 +27,7 @@ export type MyFilterProps = {
   type: 'text' | 'radio' | 'checkbox' | 'select' | 'pick-time' | 'list';
   options?: OptionProps[];
   apiURL?: string;
+  loading?: boolean;
 };
 type Props = {
   title: string;
@@ -37,20 +38,27 @@ type IFilterItem = {
   filters: ProductFilter;
   item: MyFilterProps;
   onFilterChange: (name: keyof ProductFilter, value: string | string[]) => void;
+  loading?: boolean;
 };
 
 const MyFilters = (props: Props) => {
   const idCh = getIdCh();
   const { title = 'title', onFilterChange, filters } = props;
-  const { data: brandData, mutate: brandMutate } = useSWR(
-    `/api/thuong-hieu?idCh=${idCh}`,
-  );
-  const { data: categoryData, mutate: categoryMutate } = useSWR(
-    `/api/danh-muc-san-pham?idCh=${idCh}`,
-  );
-  const { data: supplierData, mutate: supplierMutate } = useSWR(
-    `/api/nha-cung-cap?idCh=${idCh}`,
-  );
+  const {
+    data: brandData,
+    mutate: brandMutate,
+    isLoading: brandLoading,
+  } = useSWR(`/api/thuong-hieu?idCh=${idCh}`);
+  const {
+    data: categoryData,
+    mutate: categoryMutate,
+    isLoading: categoryLoading,
+  } = useSWR(`/api/danh-muc-san-pham?idCh=${idCh}`);
+  const {
+    data: supplierData,
+    mutate: supplierMutate,
+    isLoading: supplierLoading,
+  } = useSWR(`/api/nha-cung-cap?idCh=${idCh}`);
   const filtersProps: MyFilterProps[] = [
     {
       title: 'Tìm tên sản phẩm',
@@ -73,7 +81,7 @@ const MyFilters = (props: Props) => {
       name: 'th',
       apiURL: '/api/thuong-hieu',
       options:
-        brandData &&
+        !brandLoading &&
         brandData.data?.map((item: CategoryProp) => {
           return {
             value: item.id,
@@ -81,14 +89,14 @@ const MyFilters = (props: Props) => {
             item: item,
           };
         }),
+      loading: brandLoading,
     },
     {
       title: 'Danh mục',
       type: 'select',
       name: 'dm',
       options:
-        categoryData &&
-        categoryData.data &&
+        !categoryLoading &&
         categoryData.data?.map((item: CategoryProp) => {
           return {
             value: item.id,
@@ -97,14 +105,14 @@ const MyFilters = (props: Props) => {
           };
         }),
       apiURL: '/api/danh-muc-san-pham',
+      loading: categoryLoading,
     },
     {
       title: 'Nhà cung cấp',
       type: 'select',
       name: 'ncc',
       options:
-        supplierData &&
-        supplierData.data &&
+        !supplierLoading &&
         supplierData.data?.map((item: SupplierProps) => {
           return {
             value: item.id,
@@ -113,6 +121,7 @@ const MyFilters = (props: Props) => {
           };
         }),
       apiURL: '/api/nha-cung-cap',
+      loading: supplierLoading,
     },
   ];
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -132,7 +141,12 @@ const MyFilters = (props: Props) => {
     } as ProductFilter;
     onFilterChange(newFiltersData);
   };
-  const FilterItem = ({ filters, item, onFilterChange }: IFilterItem) => {
+  const FilterItem = ({
+    filters,
+    item,
+    onFilterChange,
+    loading,
+  }: IFilterItem) => {
     const { type, options, name, apiURL, title } = item;
     const renderInput = () => {
       if (type === 'checkbox') {
@@ -160,11 +174,12 @@ const MyFilters = (props: Props) => {
             onChange={e => onFilterChange(name, e.target.value)}
           >
             <>
-              {options?.map((option, i) => (
-                <Radio value={option.value} key={i}>
-                  {option.label}
-                </Radio>
-              ))}
+              {options &&
+                options?.map((option, i) => (
+                  <Radio value={option.value} key={i}>
+                    {option.label}
+                  </Radio>
+                ))}
             </>
           </Radio.Group>
         );
@@ -172,29 +187,33 @@ const MyFilters = (props: Props) => {
       if (type === 'select') {
         return (
           <Select
-            placeholder='Chọn'
+            placeholder={`Chọn ${title}`}
             size='small'
-            value={filters[name]}
+            value={filters[name] || null}
+            loading={loading}
             className='ant-custom-select w-full'
-            options={options?.map(option => ({
-              ...option,
-              value: option.value,
-              label: (
-                <div className='group flex w-full justify-between'>
-                  {option.label}
-                  <i
-                    className='fa-regular fa-pencil !invisible h-full cursor-pointer p-1 text-base hover:bg-[#e6f8ec] group-hover:!visible'
-                    onClick={e => {
-                      e.stopPropagation();
-                      setModalType('edit');
-                      setEditingItem(option.item);
-                      setAPIURL(apiURL as string);
-                      handleOpenModal(title);
-                    }}
-                  ></i>
-                </div>
-              ),
-            }))}
+            options={
+              options &&
+              options?.map(option => ({
+                ...option,
+                value: option.value,
+                label: (
+                  <div className='group flex w-full justify-between'>
+                    {option.label}
+                    <i
+                      className='fa-regular fa-pencil !invisible h-full cursor-pointer p-1 text-base hover:bg-[#e6f8ec] group-hover:!visible'
+                      onClick={e => {
+                        e.stopPropagation();
+                        setModalType('edit');
+                        setEditingItem(option.item);
+                        setAPIURL(apiURL as string);
+                        handleOpenModal(title);
+                      }}
+                    ></i>
+                  </div>
+                ),
+              }))
+            }
             allowClear
             onClear={() => {
               onFilterChange(name, '');
@@ -251,6 +270,7 @@ const MyFilters = (props: Props) => {
               filters={filters}
               item={filter}
               onFilterChange={handleFilterChange}
+              loading={filter.loading}
             />
           )}
         </>
@@ -259,7 +279,6 @@ const MyFilters = (props: Props) => {
       extra: getExtraIcon(filter),
     };
   });
-
   //Form interact
   const handleOpenModal = (type: string) => {
     setModalFor(type);

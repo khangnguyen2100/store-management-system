@@ -1,10 +1,15 @@
 import { Card, Col, Input, Row, Form } from 'antd';
 import { FormInstance } from 'antd/lib';
+import { useEffect } from 'react';
 
 type Props = {
   form: FormInstance;
+  type: string;
 };
-function CategoryForm({ form }: Props) {
+function CategoryForm({ form, type }: Props) {
+  useEffect(() => {
+    if (type === 'add') form.resetFields();
+  }, []);
   return (
     <Form form={form} layout='vertical' className='flex flex-col gap-y-4'>
       <Card size='small' title='Thông tin chung'>

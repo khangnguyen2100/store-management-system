@@ -93,13 +93,18 @@ const AddModal = (props: Props) => {
   const handleSubmitForm = async () => {
     try {
       const values = await form.validateFields();
-      const image = fileList[0];
-      console.log('image:', image);
-      const imageData = image.originFileObj;
-      console.log('imageData:', imageData);
+      let imageData;
+      if (fileList.length > 0) {
+        const image = fileList[0];
+        imageData = image.originFileObj;
+      } else {
+        imageData = undefined;
+      }
 
       onSuccess({ ...values, img: imageData, anHien: 1 });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

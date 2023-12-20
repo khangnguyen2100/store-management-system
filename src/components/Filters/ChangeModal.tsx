@@ -43,7 +43,6 @@ const ChangeModal = (props: Props) => {
   };
   useEffect(() => {
     form.resetFields();
-    if (modalType === 'add') form.setFieldValue('code', randomString('SP'));
     if (modalType === 'edit' && editingItem) {
       form.setFieldsValue(editingItem);
     }
@@ -93,9 +92,15 @@ const ChangeModal = (props: Props) => {
         );
       }}
     >
-      {modalFor === 'Thương hiệu' && <BrandForm form={form}></BrandForm>}
-      {modalFor === 'Nhà cung cấp' && <SupplierForm form={form}></SupplierForm>}
-      {modalFor === 'Danh mục' && <CategoryForm form={form}></CategoryForm>}
+      {modalFor === 'Thương hiệu' && (
+        <BrandForm form={form} type={modalType}></BrandForm>
+      )}
+      {modalFor === 'Nhà cung cấp' && (
+        <SupplierForm form={form} type={modalType}></SupplierForm>
+      )}
+      {modalFor === 'Danh mục' && (
+        <CategoryForm form={form} type={modalType}></CategoryForm>
+      )}
       {modalFor === 'Loại sản phẩm' && (
         <ProductTypeForm form={form}></ProductTypeForm>
       )}
