@@ -66,14 +66,11 @@ function AdminHeader() {
     try {
       const res = await shopApi.deleteShop(id);
       console.log('res:', res);
-      if (res.data.status) {
-        message.success(res.data.message);
-        mutate();
-      } else {
-        message.error(res.data.message);
-      }
-    } catch (error) {
+      message.success('Xóa cửa hàng thành công');
+      mutate();
+    } catch (error: any) {
       console.log('error:', error);
+      message.error(error.message);
     }
   };
 
