@@ -14,7 +14,7 @@ const Home = () => {
   } = useRevenue({ idCh: getIdCh() });
   console.log(revenueData);
 
-  if (revenueData && revenueData.data)
+  if (!isLoading)
     return (
       <div className='mx-auto flex w-full max-w-7xl flex-col'>
         {/* <SalesResult></SalesResult> */}

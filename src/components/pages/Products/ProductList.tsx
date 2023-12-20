@@ -11,9 +11,10 @@ import {
 } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { enqueueSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import * as xlsx from 'xlsx';
+import { AxiosError } from 'axios';
 
 import {
   DeleteAPI,
@@ -43,6 +44,7 @@ const ProductList = (props: Props) => {
   const [editingProduct, setEditingProduct] = useState<ProductProps | null>(
     null,
   );
+  const [totalItem, setTotalItem] = useState(100);
   const columns: ColumnsType<ProductProps> = [
     {
       key: 1,
@@ -160,13 +162,19 @@ const ProductList = (props: Props) => {
         await postAPI(`/api/san-pham/${values.id}?idCh=${getIdCh()}`, newData);
         enqueueSnackbar('Sửa sản phẩm thành công', { variant: 'success' });
         await mutate(`/api/sort_search?idCh=${getIdCh()}`);
-
         setIsModalOpen(false);
         return;
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log('error:', error);
-      enqueueSnackbar('Có lỗi xảy ra', { variant: 'error' });
+      if (error.response.status === 403) {
+        enqueueSnackbar('Bạn đạt giới hạn số lượng sản phẩm tối đa!', {
+          variant: 'error',
+        });
+        enqueueSnackbar('Để có thể thêm sản phẩm vui lòng nâng gói', {
+          variant: 'info',
+        });
+      } else enqueueSnackbar('Có lỗi xảy ra', { variant: 'error' });
     }
     setIsModalOpen(false);
   };
@@ -176,23 +184,6 @@ const ProductList = (props: Props) => {
   const handleTableChange = (pagination: any) => {
     console.log('product list call');
   };
-  // const handleUpload = (json: any) => {
-  //   setUploading(true);
-  //   request('/api/import-excel', {
-  //     method: 'POST',
-  //     data: JSON.stringify(json),
-  //   })
-  //     .then(res => res.json())
-  //     .then(() => {
-  //       message.success('upload successfully.');
-  //     })
-  //     .catch(() => {
-  //       message.error('upload failed.');
-  //     })
-  //     .finally(() => {
-  //       setUploading(false);
-  //     });
-  // };
   const uploadProps: UploadProps = {
     name: 'excel-file',
     accept: '.xlsx, .xls',
@@ -204,7 +195,6 @@ const ProductList = (props: Props) => {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('idCh', getIdCh());
-        // Thay thế 'YOUR_API_ENDPOINT' bằng địa chỉ API của bạn
         const response = await request(`/api/import-excel`, {
           headers: {
             'content-type': 'multipart/form-data',
@@ -285,7 +275,8 @@ const ProductList = (props: Props) => {
           pageSize: 10,
           showSizeChanger: true,
           pageSizeOptions: ['10', '15', '20'],
-          total: 48,
+          hideOnSinglePage: true,
+          total: totalItem,
         }}
       />
       <AddModal

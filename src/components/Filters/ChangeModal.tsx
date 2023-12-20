@@ -1,27 +1,9 @@
-import { InboxOutlined } from '@ant-design/icons';
-import type { UploadFile, UploadProps } from 'antd';
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Row,
-  Select,
-  Upload,
-  message,
-} from 'antd';
-import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { Button, Form, Modal } from 'antd';
+import { useEffect } from 'react';
 
 import { BrandProps } from 'src/constants/types/brand';
 import { CategoryProp } from 'src/constants/types/category';
-import { ProductProps } from 'src/constants/types/product';
-import { formatPrice, formatPriceInput } from 'src/utils/format';
 import { randomString } from 'src/utils/randomString';
-import { DeleteAPI } from 'src/api/config';
 
 import BrandForm from '../Forms/BrandForm';
 import SupplierForm from '../Forms/SupplierForm';
