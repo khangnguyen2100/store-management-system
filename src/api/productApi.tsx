@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 
 import { serialize } from 'src/utils/format';
+import { getIdCh } from 'src/utils/common';
 
 import { request } from './config';
 
@@ -10,13 +11,17 @@ type Props = {
   tinhTrang?: string;
 };
 
-const productApi = {
+export const productApi = {
   getProducts: () => {
-    return request(`/api-san-pham`, {
+    return request(`/api/san-pham`, {
       method: 'GET',
     });
   },
-  postProducts: () => {},
+  getProduct: (id: string) => {
+    return request(`/api/san-pham/${id}?idCh=${getIdCh()}`, {
+      method: 'GET',
+    });
+  },
 };
 
 const useProducts = (params: Props) => {

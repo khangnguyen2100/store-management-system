@@ -7,5 +7,9 @@ export type BillProps = {
   cua_hang: string;
   created_at?: string;
   updated_at?: string;
-  hdct?: any[];
+  hdct?: {
+    soLuong: number;
+    idSp: string;
+    tong: number;
+  }[];
 };

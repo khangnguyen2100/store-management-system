@@ -39,6 +39,7 @@ const ProductList = (props: Props) => {
   const { searchUrl } = props;
   const { data: products, mutate, error, isLoading } = useSWR(searchUrl);
   const [uploading, setUploading] = useState(false);
+  const [isItemLoading, setIsItemLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'add' | 'edit' | null>(null);
   const [editingProduct, setEditingProduct] = useState<ProductProps | null>(
@@ -68,6 +69,7 @@ const ProductList = (props: Props) => {
       key: 5,
       title: 'Số lượng',
       dataIndex: 'soLuong',
+      sorter: (a, b) => Number(a.soLuong) - Number(b.soLuong),
       width: 70,
       align: 'center',
     },
@@ -143,6 +145,7 @@ const ProductList = (props: Props) => {
     setIsModalOpen(true);
   };
   const handleModalOk = async (values: ProductProps) => {
+    setIsItemLoading(prev => !prev);
     try {
       if (modalType === 'add') {
         const newData = new FormData();
@@ -153,6 +156,7 @@ const ProductList = (props: Props) => {
         }
         console.log(await postAPI(`/api/san-pham?idCh=${getIdCh()}`, newData));
         mutate(`/api/sort_search?idCh=${getIdCh()}`);
+        setIsItemLoading(prev => !prev);
         enqueueSnackbar('Thêm sản phẩm thành công', { variant: 'success' });
         setIsModalOpen(false);
       }
@@ -171,6 +175,7 @@ const ProductList = (props: Props) => {
         );
         enqueueSnackbar('Sửa sản phẩm thành công', { variant: 'success' });
         await mutate(`/api/sort_search?idCh=${getIdCh()}`);
+        setIsItemLoading(prev => !prev);
         setIsModalOpen(false);
         return;
       }
@@ -294,6 +299,7 @@ const ProductList = (props: Props) => {
         onCancel={handleModalCancel}
         modalType={modalType}
         editingProduct={editingProduct}
+        loading={isItemLoading}
       />
     </Space>
   );

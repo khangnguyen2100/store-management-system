@@ -18,6 +18,8 @@ type Props = {
   editingItem: CategoryProp | BrandProps | null;
   modalType: string;
   modalFor?: string;
+  isLoading: boolean;
+  isDeleting: boolean;
 };
 
 const ChangeModal = (props: Props) => {
@@ -29,6 +31,8 @@ const ChangeModal = (props: Props) => {
     editingItem,
     modalFor,
     onDelete,
+    isLoading,
+    isDeleting,
   } = props;
   const [form] = Form.useForm();
   const handleSubmitForm = async () => {
@@ -67,6 +71,7 @@ const ChangeModal = (props: Props) => {
               size='large'
               className='bg-btn_bg_green text-white opacity-80 hover:!opacity-100'
               onClick={handleSubmitForm}
+              loading={isLoading}
             >
               Lưu
             </Button>
@@ -84,6 +89,7 @@ const ChangeModal = (props: Props) => {
                 size='large'
                 className='bg-danger text-white opacity-80 hover:!opacity-100'
                 onClick={handleDeleteForm}
+                loading={isDeleting}
               >
                 Xóa
               </Button>

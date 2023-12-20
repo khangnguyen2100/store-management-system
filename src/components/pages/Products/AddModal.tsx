@@ -34,6 +34,7 @@ type Props = {
   onCancel: () => void;
   editingProduct: ProductProps | null;
   modalType: 'add' | 'edit' | null;
+  loading: boolean;
 };
 
 const SUPPLIERSENDPOINT = `/api/nha-cung-cap?idCh=${getIdCh()}`;
@@ -41,7 +42,8 @@ const CATEGORIESENDPOINT = `/api/danh-muc-san-pham?idCh=${getIdCh()}`;
 const BRANDSENDPOINT = `/api/thuong-hieu?idCh=${getIdCh()}`;
 const PRODUCTTYPEENDPOINT = `/api/loai-san-pham`;
 const AddModal = (props: Props) => {
-  const { isOpen, onCancel, onSuccess, modalType, editingProduct } = props;
+  const { isOpen, onCancel, onSuccess, modalType, editingProduct, loading } =
+    props;
   const [form] = Form.useForm();
   const { data: suppliersData, isLoading: supplierLoading } =
     useSWR(SUPPLIERSENDPOINT);
@@ -109,10 +111,14 @@ const AddModal = (props: Props) => {
 
   useEffect(() => {
     if (modalType === 'add') {
+      setShowProfit(false);
+      setFileList([]);
       form.resetFields();
       form.setFieldValue('maSp', randomString('SP'));
     }
     if (modalType === 'edit' && editingProduct) {
+      setCostValue(Number(editingProduct.giaVon));
+      setPriceValue(Number(editingProduct.giaBan));
       setFileList([
         {
           uid: '-1',
@@ -140,6 +146,7 @@ const AddModal = (props: Props) => {
       destroyOnClose
       className='add-product-modal'
       getContainer={false}
+      confirmLoading={loading}
     >
       <Form form={form} layout='vertical' className='flex flex-col gap-y-4'>
         <Card size='small' title='Thông tin chung'>
@@ -167,7 +174,7 @@ const AddModal = (props: Props) => {
                 ]}
                 name={'maSp'}
               >
-                <Input placeholder='Mã sản phẩm' tabIndex={3} />
+                <Input placeholder='Mã sản phẩm' tabIndex={3} disabled />
               </Form.Item>
               <Form.Item
                 label='Danh mục'
@@ -318,7 +325,11 @@ const AddModal = (props: Props) => {
                 <div className='text-typo-3'>
                   Biên lợi nhuận:
                   <span className='font-bold text-typo-1'>
-                    {(((priceValue - costValue) / priceValue) * 100).toFixed(2)}
+                    {(
+                      ((Number(priceValue) - Number(costValue)) /
+                        Number(priceValue)) *
+                      100
+                    ).toFixed(2)}
                     %
                   </span>
                 </div>

@@ -131,6 +131,9 @@ const MyFilters = (props: Props) => {
   const [modalType, setModalType] = useState('');
   const [modalFor, setModalFor] = useState('');
   const [apiURL, setAPIURL] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleFilterChange = (
     name: keyof ProductFilter,
     value: string | string[],
@@ -199,7 +202,9 @@ const MyFilters = (props: Props) => {
                 value: option.value,
                 label: (
                   <div className='group flex w-full justify-between'>
-                    {option.label}
+                    <p className='max-w-[80%]  overflow-hidden text-ellipsis'>
+                      {option.label}
+                    </p>
                     <i
                       className='fa-regular fa-pencil !invisible h-full cursor-pointer p-1 text-base hover:bg-[#e6f8ec] group-hover:!visible'
                       onClick={e => {
@@ -290,14 +295,18 @@ const MyFilters = (props: Props) => {
   const handleModalOk = async (values: any) => {
     try {
       if (modalType === 'add') {
+        setIsLoading(prev => !prev);
         await postAPI(`${apiURL}?idCh=${getIdCh()}`, values);
         setIsOpen(false);
+        setIsLoading(prev => !prev);
         enqueueSnackbar('Thêm thành công', { variant: 'success' });
         handleMutateData(`${apiURL}?idCh=${idCh}`);
       }
       if (modalType === 'edit') {
+        setIsLoading(prev => !prev);
         await patchAPI(`${apiURL}/${values.id}?idCh=${getIdCh()}`, values);
         setIsOpen(false);
+        setIsLoading(prev => !prev);
         enqueueSnackbar('Sửa thành công', { variant: 'success' });
         handleMutateData(`${apiURL}?idCh=${idCh}`);
       }
@@ -308,10 +317,12 @@ const MyFilters = (props: Props) => {
   };
   const handleDelete = async (values: any) => {
     try {
+      setIsDeleting(prev => !prev);
       await DeleteAPI(`${apiURL}/${values.id}?idCh=${idCh}`);
       handleMutateData(`${apiURL}?idCh=${idCh}`);
       setIsOpen(false);
       enqueueSnackbar('Xóa thành công', { variant: 'success' });
+      setIsDeleting(prev => !prev);
     } catch (error) {
       console.log('error:', error);
       enqueueSnackbar('Có lỗi xảy ra', { variant: 'error' });
@@ -345,6 +356,8 @@ const MyFilters = (props: Props) => {
         modalType={modalType}
         editingItem={editingItem}
         onDelete={handleDelete}
+        isLoading={isLoading}
+        isDeleting={isDeleting}
       ></ChangeModal>
     </div>
   );

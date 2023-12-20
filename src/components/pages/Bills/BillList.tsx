@@ -1,20 +1,32 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Button, Space } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import { useState } from 'react';
 
+import { productApi } from 'src/api/productApi';
 import BasicTable from 'src/components/BasicTable/BasicTable';
+import TableAction from 'src/components/GroupButton/TableAction';
 import { BillProps } from 'src/constants/types/bill';
+import { ProductProps } from 'src/constants/types/product';
 import { getIdCh } from 'src/utils/common';
 import { formatPrice, serialize } from 'src/utils/format';
+
+import DetailBillModal from './DetailBillModal';
 
 type Props = {
   data: BillProps[];
   filters: any;
 };
-
+export interface IProductProps extends ProductProps {
+  soLuongTrongBill: number;
+  tongTrongBill: number;
+}
 const BillList = (props: Props) => {
   const { data, filters } = props;
-
+  const [idSpList, setIdSpList] = useState<
+    { idSp: string; soLuongTrongBill: number; tongTrongBill: number }[]
+  >([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const columns: ColumnsType<BillProps> = [
     {
       key: 1,
@@ -56,20 +68,21 @@ const BillList = (props: Props) => {
       dataIndex: 'created_at',
       width: 120,
     },
-    // {
-    //   title: 'Action',
-    //   key: 'action',
-    //   width: 80,
-    //   render: (record: BillProps) => {
-    //     return (
-    //       <TableAction
-    //         onDelete={() => handleDeleteProduct(record.id!)}
-    //         onEdit={() => handleEditProduct(record)}
-    //       />
-    //     );
-    //   },
-    //   align: 'center',
-    // },
+    {
+      title: 'Action',
+      key: 'action',
+      width: 80,
+      render: (record: BillProps) => {
+        return (
+          <TableAction
+            onView={() => {
+              handleViewDetailBill(record.hdct!);
+            }}
+          />
+        );
+      },
+      align: 'center',
+    },
   ];
   const handleTableChange = (pagination: any) => {
     console.log('product list call');
@@ -86,6 +99,26 @@ const BillList = (props: Props) => {
       )}`,
       '_blank',
     );
+  };
+  const handleViewDetailBill = (
+    data: {
+      soLuong: number;
+      idSp: string;
+      tong: number;
+    }[],
+  ) => {
+    const a = data.map(item => {
+      return {
+        idSp: item.idSp,
+        soLuongTrongBill: item.soLuong,
+        tongTrongBill: item.tong,
+      };
+    });
+    setIdSpList(a);
+    setIsModalOpen(true);
+  };
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
   };
   return (
     <Space className='w-full' direction='vertical'>
@@ -106,6 +139,11 @@ const BillList = (props: Props) => {
           </Button>
         }
       />
+      <DetailBillModal
+        isOpen={isModalOpen}
+        data={idSpList}
+        onCancel={handleModalCancel}
+      ></DetailBillModal>
     </Space>
   );
 };

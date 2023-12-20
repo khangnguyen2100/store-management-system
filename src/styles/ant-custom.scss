@@ -85,3 +85,13 @@
 .ant-collapse-expand-icon {
   display: none !important;
 }
+.ant-select-selection-item {
+  .fa-pencil {
+    display: none;
+  }
+}
+.table-cell-img {
+  .ant-image.ant-image-error {
+    display: none !important;
+  }
+}
