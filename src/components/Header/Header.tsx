@@ -133,7 +133,7 @@ function AdminHeader() {
               <Typography
                 className='text-md mb-2 mt-1 cursor-pointer font-medium'
                 onClick={() => {
-                  if (userInfo.loai === 1) {
+                  if (userInfo.loai === '1') {
                     message.info(
                       'Vui lòng nâng cấp tài khoản để thêm cửa hàng',
                     );
