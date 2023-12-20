@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import billApi from 'src/api/billApi';
 import { CartStatus, CartType } from 'src/constants/types/cart';
+import { getIdCh } from 'src/utils/common';
 
 import CartInfo from './CartInfo';
 import PaymentMethod from './PaymentMethod/PaymentMethod';
@@ -108,7 +109,7 @@ const PaymentStepModal = (props: Props) => {
           tong: Number(item.giaBan) * Number(item.quantity),
         })),
         tongTien: totalPrice,
-        idCh: 4,
+        idCh: getIdCh(),
         tongGiamGia: discountPrice,
         ghiChu: noteValue,
       };
