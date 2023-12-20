@@ -76,14 +76,18 @@ const ProductList = (props: Props) => {
       title: 'Ảnh',
       dataIndex: 'img',
       width: 100,
-      render: (thumbnail: string) => (
-        <Image
-          src={getImage(thumbnail)}
-          alt='product img'
-          height={'75px'}
-          className='!w-[75px] rounded-md object-cover'
-        />
-      ),
+      render: (thumbnail: string) => {
+        if (!thumbnail) return <></>;
+        return (
+          <Image
+            src={getImage(thumbnail)}
+            alt='product img'
+            height={'75px'}
+            className='!w-[75px] rounded-md object-cover'
+          />
+        );
+      },
+
       align: 'center',
       className: 'table-cell-img',
     },
@@ -159,7 +163,12 @@ const ProductList = (props: Props) => {
             newData.append(key, value);
           }
         }
-        await postAPI(`/api/san-pham/${values.id}?idCh=${getIdCh()}`, newData);
+        console.log(
+          await postAPI(
+            `/api/san-pham/${values.id}?idCh=${getIdCh()}`,
+            newData,
+          ),
+        );
         enqueueSnackbar('Sửa sản phẩm thành công', { variant: 'success' });
         await mutate(`/api/sort_search?idCh=${getIdCh()}`);
         setIsModalOpen(false);

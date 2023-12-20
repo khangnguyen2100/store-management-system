@@ -151,6 +151,7 @@ function HoriziontalBarChart({ data }: Props) {
             </span>
           </h3>
           <Select
+            placeholder={'Chọn kiểu hiện'}
             className='w-[150px]'
             onSelect={value => {
               handleChangeType(value);

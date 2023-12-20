@@ -1,8 +1,10 @@
 import { Card, Col, Input, Row, Form } from 'antd';
 import { FormInstance } from 'antd/lib';
+import { useEffect } from 'react';
 
 type Props = {
   form: FormInstance;
+  type:string;
 };
 function BrandForm({ form }: Props) {
   return (
