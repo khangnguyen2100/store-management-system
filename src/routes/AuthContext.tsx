@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: Props) => {
       // Navigate to the login page
       navigate(LOGIN);
     } catch (error) {
-      console.error('Logout failed', error);
+      console.error('Đăng xuất thất bại', error);
     }
   };
   const checkLoggedIn = () => {

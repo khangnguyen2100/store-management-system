@@ -69,8 +69,8 @@ const BillList = (props: Props) => {
       width: 120,
     },
     {
-      title: 'Action',
-      key: 'action',
+      title: 'Thao tác',
+      key: 'Thao tác',
       width: 80,
       render: (record: BillProps) => {
         return (

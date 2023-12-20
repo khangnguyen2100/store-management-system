@@ -220,14 +220,14 @@ const ProductList = (props: Props) => {
 
         // Xử lý response thành công
         if (response.status === 200) {
-          message.success(`file uploaded successfully`);
+          message.success(`Nhập hàng thành công`);
           mutate(`/api/sort_search?idCh=${getIdCh()}`);
         } else {
-          message.error(`file upload failed.`);
+          message.error(`Nhập hàng thất bại.`);
         }
       } catch (error) {
         // Xử lý lỗi
-        message.error(`file upload failed.`);
+        message.error(`Nhập hàng thất bại`);
       }
     },
     // onChange(info) {

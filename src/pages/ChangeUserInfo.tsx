@@ -237,7 +237,7 @@ const UserProfilePage = () => {
         message.error('Sửa thông tin thất bại');
       }
     } catch (error) {
-      console.error('Failed to save edits: ', error);
+      console.error('Sửa thông tin thất bại ', error);
     }
   };
 
